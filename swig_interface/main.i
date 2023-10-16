@@ -25,6 +25,11 @@
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRing.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeModel.h"
 
+    #include "/EffekseerAdapters/RefWrappers.h"
+    #include "/EffekseerAdapters/GDXMatrixAdapter.h"
+    #include "/EffekseerAdapters/EffekseerEffectAdapter.h"
+    #include "/EffekseerAdapters/EffekseerManagerAdapter.h"
+
     #define FillMeInAsSizeCannotBeDeterminedAutomatically = 16;
 %}
 
@@ -138,3 +143,12 @@ struct Effekseer::Color;
 %rename("DrawParameter", fullname=1) "Effekseer::Manager::DrawParameter";
 %rename("DrawParameter", fullname=1) "Effekseer::Manager::DrawParameter::DrawParameter";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.Manager.h"
+
+
+// Stop ignoring
+%rename("%s") "";
+// Include everything in EffekseerAdapters
+%include "/cpp/EffekseerAdapters/RefWrappers.h"
+%include "/cpp/EffekseerAdapters/GDXMatrixAdapter.h"
+%include "/cpp/EffekseerAdapters/EffekseerEffectAdapter.h"
+%include "/cpp/EffekseerAdapters/EffekseerManagerAdapter.h"

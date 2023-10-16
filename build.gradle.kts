@@ -80,7 +80,6 @@ val generateWrapperEffekseer by tasks.creating(Exec::class.java) {
     commandLine(
         "swig", "-c++", "-java",
         "-package", "io.github.niraj_rayalla.gdxseer.effekseer",
-        "-I/cpp/swig/",
         "-outdir", javaWrappedEffekseerDir.absolutePath,
         "-o", "${projectDir}/cpp/Effekseer_Swig.cpp",
         "${projectDir}/swig_interface/main.i"
