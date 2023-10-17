@@ -27,7 +27,7 @@ protected:
 
 public:
 	EffekseerManagerAdapter(int32_t spriteMaxCount, bool autoFlip = true);
-	~EffekseerManagerAdapter(int32_t squareMaxCount);
+	~EffekseerManagerAdapter();
 
 	bool GetHasSuccessfullyInitialized();
 
