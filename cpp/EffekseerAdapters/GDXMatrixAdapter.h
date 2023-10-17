@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Effekseer.h>
+#include "../Effekseer/Dev/Cpp/Effekseer/Effekseer.h"
 
 /**
  * Contains static methods that are used to convert matrix data from GDX to Effekseer and vice-versa.

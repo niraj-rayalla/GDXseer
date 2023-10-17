@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Effekseer.h"
+#include "../Effekseer/Dev/Cpp/Effekseer/Effekseer.h"
 
 // TextureRef
 class TextureRefWrapper {
