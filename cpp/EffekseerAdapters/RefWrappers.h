@@ -40,3 +40,17 @@ public:
 
 friend class EffekseerEffectAdapter;
 };
+
+
+// RendererRef
+class EffekseerRendererRefWrapper {
+private:
+    Effekseer::EffekseerRenderer::RendererRef rendererRef = nullptr;
+    EffekseerRendererRefWrapper(Effekseer::EffekseerRenderer::RendererRef rendererRef);
+
+public:
+    bool hasRef = false;
+    ~EffekseerRendererRefWrapper();
+
+    friend class EffekseerManagerAdapter;
+};

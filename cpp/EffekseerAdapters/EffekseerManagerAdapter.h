@@ -2,6 +2,7 @@
 
 #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer.h"
 #include "GDXMatrixAdapter.h"
+#include "RefWrappers.h"
 
 class EffekseerEffectAdapter;
 
@@ -21,11 +22,10 @@ protected:
 	EffekseerRenderer::RendererRef renderer = nullptr;
 	Effekseer::ManagerRef manager = nullptr;
 
-	virutal EffekseerRenderer::RendererRef CreateRenderer() = 0;
+    virtual EffekseerRendererRefWrapper CreateRenderer() = 0;
 #endif
 
 public:
-
 	EffekseerManagerAdapter(int32_t spriteMaxCount, bool autoFlip = true);
 	~EffekseerManagerAdapter(int32_t squareMaxCount);
 

@@ -19,7 +19,7 @@ EffekseerManagerAdapter::EffekseerManagerAdapter(int32_t spriteMaxCount, bool au
     this->setting->SetCoordinateSystem(Effekseer::CoordinateSystem::RH);
     this->manager->SetSetting(setting);
     // Create the Effekseer renderer object to use by calling this virtual method that should be implemented in sub-classes.
-    this->renderer = this->CreateRenderer(squareMaxCount);
+    this->renderer = this->CreateRenderer(squareMaxCount).rendererRef;
 
     // Check successful creation
     if (this->manager == nullptr || this->renderer == nullptr) {
