@@ -1,4 +1,8 @@
-%module GDX
+// Make all generated getCPtr() to be public so that they can be seen in other java generated modules
+SWIG_JAVABODY_PROXY(public, public, SWIGTYPE)
+SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
+
+%module Effekseer
 %{
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.Base.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/SIMD/Vec2f.h"
@@ -24,11 +28,6 @@
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeTrack.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRing.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeModel.h"
-
-    #include "/EffekseerAdapters/RefWrappers.h"
-    #include "/EffekseerAdapters/GDXMatrixAdapter.h"
-    #include "/EffekseerAdapters/EffekseerEffectAdapter.h"
-    #include "/EffekseerAdapters/EffekseerManagerAdapter.h"
 
     #define FillMeInAsSizeCannotBeDeterminedAutomatically = 16;
 %}
@@ -143,12 +142,3 @@ struct Effekseer::Color;
 %rename("DrawParameter", fullname=1) "Effekseer::Manager::DrawParameter";
 %rename("DrawParameter", fullname=1) "Effekseer::Manager::DrawParameter::DrawParameter";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.Manager.h"
-
-
-// Stop ignoring
-%rename("%s") "";
-// Include everything in EffekseerAdapters
-%include "/cpp/EffekseerAdapters/RefWrappers.h"
-%include "/cpp/EffekseerAdapters/GDXMatrixAdapter.h"
-%include "/cpp/EffekseerAdapters/EffekseerEffectAdapter.h"
-%include "/cpp/EffekseerAdapters/EffekseerManagerAdapter.h"

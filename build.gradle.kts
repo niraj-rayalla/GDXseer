@@ -12,7 +12,20 @@ val javaWrappedEffekseerDir = File("${projectDir}/src/main/java/io/github/niraj_
  * Task used to create the directory pointed by [javaWrappedEffekseerDir].
  */
 val createJavaWrappedEffekseerDir by tasks.creating {
+    delete(javaWrappedEffekseerDir)
     javaWrappedEffekseerDir.mkdirs()
+}
+
+/**
+ * The directory all the Swig generated Java classes of the Effekseer adapter logic will be placed.
+ */
+val javaAdapterEffekseerDir = File("${projectDir}/src/main/java/io/github/niraj_rayalla/gdxseer/adapter_effekseer")
+/**
+ * Task used to create the directory pointed by [javaAdapterEffekseerDir].
+ */
+val createJavaAdapterEffekseerDir by tasks.creating {
+    delete(javaAdapterEffekseerDir)
+    javaAdapterEffekseerDir.mkdirs()
 }
 
 /**
@@ -74,16 +87,34 @@ val copyAndTransformEffekseerSourceForSwig by tasks.creating {
 /**
  * Task used to generate the Java logic that wraps the C++ Effekseer logic using Swig.
  */
-val generateWrapperEffekseer by tasks.creating(Exec::class.java) {
-    dependsOn(createJavaWrappedEffekseerDir)
+val generateWrapperEffekseer by tasks.creating {
     dependsOn(copyAndTransformEffekseerSourceForSwig)
-    commandLine(
-        "swig", "-c++", "-java",
-        "-package", "io.github.niraj_rayalla.gdxseer.effekseer",
-        "-outdir", javaWrappedEffekseerDir.absolutePath,
-        "-o", "${projectDir}/cpp/Effekseer_Swig.cpp",
-        "${projectDir}/swig_interface/main.i"
-    )
+
+    // The effekseer logic
+    dependsOn(createJavaWrappedEffekseerDir)
+    val effekseerGenerateTask by tasks.creating(Exec::class.java) {
+        commandLine(
+            "swig", "-c++", "-java",
+            "-package", "io.github.niraj_rayalla.gdxseer.effekseer",
+            "-outdir", javaWrappedEffekseerDir.absolutePath,
+            "-o", "${projectDir}/cpp/Effekseer_Swig.cpp",
+            "${projectDir}/swig_interface/effekseer.i"
+        )
+    }
+    dependsOn(effekseerGenerateTask)
+
+    // The effekseer adapter logic
+    dependsOn(createJavaAdapterEffekseerDir)
+    val adapterEffekseerGenerateTask by tasks.creating(Exec::class.java) {
+        commandLine(
+            "swig", "-c++", "-java",
+            "-package", "io.github.niraj_rayalla.gdxseer.adapter_effekseer",
+            "-outdir", javaAdapterEffekseerDir.absolutePath,
+            "-o", "${projectDir}/cpp/Adapter_Effekseer_Swig.cpp",
+            "${projectDir}/swig_interface/adapter_effekseer.i"
+        )
+    }
+    dependsOn(adapterEffekseerGenerateTask)
 }
 
 //endregion
