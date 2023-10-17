@@ -73,6 +73,7 @@ val copyAndTransformEffekseerSourceForSwig by tasks.creating {
         copy {
             from(sourceCppDir)
                 .into(copiedAndTransformedEffekseerDir)
+                .exclude("3rdParty")
                 .exclude("EditorCommon")
                 .exclude("EffekseerMaterial*")
                 .exclude("EffekseerRendererDX*")
