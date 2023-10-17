@@ -1,6 +1,7 @@
 /cpp/Effekseer/
 /cpp/Adapter_Effekseer_Swig.cpp
 /cpp/Effekseer_Swig.cpp
+/cpp/Effekseer_GL_Swig.cpp
 /src/main/java/io/github/niraj_rayalla/gdxseer/effekseer
 /src/main/java/io/github/niraj_rayalla/gdxseer/adapter_effekseer
 

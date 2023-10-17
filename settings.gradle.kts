@@ -18,4 +18,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "GDXseer"
- 
+include(":GL")

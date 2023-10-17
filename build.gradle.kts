@@ -29,6 +29,18 @@ val createJavaAdapterEffekseerDir by tasks.creating {
 }
 
 /**
+ * The directory all the Swig generated Java classes of the Effekseer GL logic will be placed.
+ */
+val javaEffekseerGLDir = File("${projectDir}/GL/src/main/java/io/github/niraj_rayalla/gdxseer/effekseer_gl")
+/**
+ * Task used to create the directory pointed by [javaEffekseerGLDir].
+ */
+val createJavaEffekseerGLDir by tasks.creating {
+    delete(javaEffekseerGLDir)
+    javaEffekseerGLDir.mkdirs()
+}
+
+/**
  * The directory all the copied and transformed Effekseer source code is located. This is the actual files used by
  * Swig to generate the Java wrappers.
  */
@@ -115,6 +127,19 @@ val generateWrapperEffekseer by tasks.creating {
         )
     }
     dependsOn(adapterEffekseerGenerateTask)
+
+    // The effekseer GL logic
+    dependsOn(createJavaEffekseerGLDir)
+    val effekseerGLGenerateTask by tasks.creating(Exec::class.java) {
+        commandLine(
+            "swig", "-c++", "-java",
+            "-package", "io.github.niraj_rayalla.gdxseer.effekseer_gl",
+            "-outdir", javaEffekseerGLDir.absolutePath,
+            "-o", "${projectDir}/cpp/Effekseer_GL_Swig.cpp",
+            "${projectDir}/swig_interface/effekseer_GL.i"
+        )
+    }
+    dependsOn(effekseerGLGenerateTask)
 }
 
 //endregion
