@@ -69,6 +69,7 @@ val copyAndTransformEffekseerSourceForSwig: Task by tasks.creating {
     }
     dependsOn(deleteTask)
     dependsOn(createCopiedAndTransformedEffekseerDir)
+    createCopiedAndTransformedEffekseerDir.shouldRunAfter(deleteTask)
 
     val sourceCppDir = File("${projectDir}/Effekseer/Dev/Cpp/")
 
@@ -87,7 +88,7 @@ val copyAndTransformEffekseerSourceForSwig: Task by tasks.creating {
         }
     }
     dependsOn(copyTask)
-
+    copyTask.shouldRunAfter(createCopiedAndTransformedEffekseerDir)
 
     val transformTask by tasks.creating(Copy::class.java) {
         // Transform sources
@@ -95,8 +96,7 @@ val copyAndTransformEffekseerSourceForSwig: Task by tasks.creating {
         val EffectNodeRelativeFilePath = "Effekseer/Effekseer/Effekseer.EffectNode.h"
         val transformSearch = "struct alignas(2) TriggerValues"
         val transformReplace = "struct TriggerValues"
-        val copiedEffectNodeIncludePath =
-            File(copiedAndTransformedEffekseerDir, EffectNodeRelativeFilePath)
+        val copiedEffectNodeIncludePath = File(copiedAndTransformedEffekseerDir, EffectNodeRelativeFilePath)
         delete(copiedEffectNodeIncludePath)
         copy {
             from(File(sourceCppDir, EffectNodeRelativeFilePath))
@@ -115,6 +115,7 @@ val copyAndTransformEffekseerSourceForSwig: Task by tasks.creating {
         }
     }
     dependsOn(transformTask)
+    transformTask.shouldRunAfter(copyTask)
 }
 
 /**
@@ -124,8 +125,8 @@ val generateWrapperEffekseer by tasks.creating {
     dependsOn(copyAndTransformEffekseerSourceForSwig)
 
     // The effekseer logic
-    dependsOn(createJavaWrappedEffekseerDir)
     val effekseerGenerateTask by tasks.creating(Exec::class.java) {
+        dependsOn(createJavaWrappedEffekseerDir)
         commandLine(
             "swig", "-c++", "-java",
             "-package", "io.github.niraj_rayalla.gdxseer.effekseer",
@@ -135,10 +136,11 @@ val generateWrapperEffekseer by tasks.creating {
         )
     }
     dependsOn(effekseerGenerateTask)
+    effekseerGenerateTask.shouldRunAfter(copyAndTransformEffekseerSourceForSwig)
 
     // The effekseer adapter logic
-    dependsOn(createJavaAdapterEffekseerDir)
     val adapterEffekseerGenerateTask by tasks.creating(Exec::class.java) {
+        dependsOn(createJavaAdapterEffekseerDir)
         commandLine(
             "swig", "-c++", "-java",
             "-package", "io.github.niraj_rayalla.gdxseer.adapter_effekseer",
@@ -148,10 +150,11 @@ val generateWrapperEffekseer by tasks.creating {
         )
     }
     dependsOn(adapterEffekseerGenerateTask)
+    adapterEffekseerGenerateTask.shouldRunAfter(effekseerGenerateTask)
 
     // The effekseer GL logic
-    dependsOn(createJavaEffekseerGLDir)
     val effekseerGLGenerateTask by tasks.creating(Exec::class.java) {
+        dependsOn(createJavaEffekseerGLDir)
         commandLine(
             "swig", "-c++", "-java",
             "-package", "io.github.niraj_rayalla.gdxseer.effekseer_gl",
@@ -161,6 +164,70 @@ val generateWrapperEffekseer by tasks.creating {
         )
     }
     dependsOn(effekseerGLGenerateTask)
+    effekseerGLGenerateTask.shouldRunAfter(adapterEffekseerGenerateTask)
+}
+
+//endregion
+
+//region CMAKE configuration
+
+/**
+ * The directory to use for Cmake building on the current OS.
+ */
+val desktopCmakeBuildDir = when {
+    org.gradle.internal.os.OperatingSystem.current().isMacOsX -> {
+        File("${projectDir}/cmake-macos")
+    }
+    org.gradle.internal.os.OperatingSystem.current().isLinux -> {
+        File("${projectDir}/cmake-linux")
+    }
+    else -> {
+        File("${projectDir}/cmake-build")
+    }
+}
+
+/**
+ * Used to create [desktopCmakeBuildDir]. This doesn't delete the directory if it already exists.
+ */
+val createDesktopCmakeBuildDir by tasks.creating {
+    doLast {
+        desktopCmakeBuildDir.mkdirs()
+    }
+}
+
+/**
+ * Calls cmake to configure for cmake building of the desktop library on the current OS.
+ */
+val configureDesktopBuilding by tasks.creating(Exec::class.java) {
+    dependsOn(generateWrapperEffekseer)
+    dependsOn(createDesktopCmakeBuildDir)
+    val commandLineArgs = ArrayList<String>().apply {
+        add("cmake")
+        if (org.gradle.internal.os.OperatingSystem.current().isMacOsX) {
+            add("-D")
+            add("CMAKE_OSX_ARCHITECTURES=x86_64;arm64")
+        }
+        add("-B")
+        add(desktopCmakeBuildDir.absolutePath)
+    }
+    commandLine(commandLineArgs)
+}
+
+//endregion
+
+//region CMAKE Build
+
+/**
+ * Builds the desktop GDXseer library.
+ */
+val buildDesktopLibrary by tasks.creating(Exec::class.java) {
+    dependsOn(configureDesktopBuilding)
+    dependsOn(tasks.jar)
+    commandLine(
+        "cmake",
+        "--build", desktopCmakeBuildDir.absolutePath,
+        "--config", "Release"
+    )
 }
 
 //endregion
