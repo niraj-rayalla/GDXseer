@@ -15,11 +15,11 @@ EffekseerManagerAdapter::EffekseerManagerAdapter(int32_t spriteMaxCount, bool au
     // Create the Effekseer manager object
     this->manager = ::Effekseer::Manager::Create(spriteMaxCount, autoFlip);
     // Create the setting object
-    this->setting = ::Effekseer:Setting::Create();
+    this->setting = ::Effekseer::Setting::Create();
     this->setting->SetCoordinateSystem(Effekseer::CoordinateSystem::RH);
     this->manager->SetSetting(setting);
     // Create the Effekseer renderer object to use by calling this virtual method that should be implemented in sub-classes.
-    this->renderer = this->CreateRenderer(squareMaxCount).rendererRef;
+    this->renderer = this->CreateRenderer(spriteMaxCount).rendererRef;
 
     // Check successful creation
     if (this->manager == nullptr || this->renderer == nullptr) {
@@ -65,10 +65,10 @@ void EffekseerManagerAdapter::LaunchWorkerThreads(uint32_t threadCount) {
     manager->LaunchWorkerThreads(threadCount);
 }
 
-CoordinateSystem EffekseerManagerAdapter::GetCoordinateSystem(); {
+Effekseer::CoordinateSystem EffekseerManagerAdapter::GetCoordinateSystem() {
     return manager->GetCoordinateSystem();
 }
-void EffekseerManagerAdapter::SetCoordinateSystem(CoordinateSystem coordinateSystem) {
+void EffekseerManagerAdapter::SetCoordinateSystem(Effekseer::CoordinateSystem coordinateSystem) {
     return manager->SetCoordinateSystem(coordinateSystem);
 }
 
@@ -77,10 +77,10 @@ int EffekseerManagerAdapter::Play(EffekseerEffectAdapter *effect) {
         return -1;
     }
 
-    return manager->Play(effect->GetInternal(), 0f, 0f, 0f);
+    return manager->Play(effect->GetInternal(), 0.f, 0.f, 0.f);
 }
 
-int EffekseerManagerAdapter::Play(EffekseerEffectAdapter *effect, Vector3D* position, int32_t startFrame = 0) {
+int EffekseerManagerAdapter::Play(EffekseerEffectAdapter *effect, Vector3D& position, int32_t startFrame) {
     if (manager == nullptr) {
         return -1;
     }
@@ -145,7 +145,7 @@ float* EffekseerManagerAdapter::GetMatrix(int handle) {
         return nullptr;
     }
 
-    auto f = Vector4Map::setConvert43(manager->GetMatrix(handle));
+    auto f = GDXMatrixAdapter::convertMatrix43ToGDX(manager->GetMatrix(handle));
     return f;
 }
 
@@ -154,7 +154,7 @@ void EffekseerManagerAdapter::SetMatrix(int handle, float *matrix43) {
         return;
     }
 
-    auto mat43 = Vector4Map::getConvert43(matrix43);
+    auto mat43 = GDXMatrixAdapter::convertMatrix43ToEffekseer(matrix43);
     manager->SetMatrix(handle, mat43);
 }
 
@@ -183,7 +183,7 @@ float* EffekseerManagerAdapter::GetBaseMatrix(int handle) {
         return nullptr;
     }
 
-    auto f = Vector4Map::setConvert43(manager->GetBaseMatrix(handle));
+    auto f = GDXMatrixAdapter::convertMatrix43ToGDX(manager->GetBaseMatrix(handle));
     return f;
 }
 
@@ -192,7 +192,7 @@ void EffekseerManagerAdapter::SetBaseMatrix(int handle, float *matrix43) {
         return;
     }
 
-    auto mat43 = Vector4Map::getConvert43(matrix43);
+    auto mat43 = GDXMatrixAdapter::convertMatrix43ToEffekseer(matrix43);
     mat43.Value[3][1] = mat43.Value[3][1] /2;
     manager->SetBaseMatrix(handle, mat43);
 }
@@ -279,8 +279,8 @@ void EffekseerManagerAdapter::SetTargetLocation(int handle, const Vector3D& loca
 
 void EffekseerManagerAdapter::SetProjectionMatrix(float *matrix44, float *matrix44C, bool view, float width, float height) {
     // disto->update();
-    projectionmatrix = Vector4Map::getConvert44( matrix44 );
-    cameramatrix = Vector4Map::getConvert44(matrix44C);
+    projectionmatrix = GDXMatrixAdapter::convertMatrix44ToEffekseer( matrix44 );
+    cameramatrix = GDXMatrixAdapter::convertMatrix44ToEffekseer(matrix44C);
 
 
     if (manager == nullptr) {
@@ -314,7 +314,7 @@ void EffekseerManagerAdapter::SetDynamicInput(int handle, int32_t index, float v
 
 void EffekseerManagerAdapter::SendTrigger(int handle, int32_t index) {
     if (manager == nullptr) {
-        return 0.0f;
+        return;
     }
 
     return manager->SendTrigger(handle, index);

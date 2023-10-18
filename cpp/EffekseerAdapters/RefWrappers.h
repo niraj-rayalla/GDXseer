@@ -54,4 +54,5 @@ public:
     ~EffekseerRendererRefWrapper();
 
     friend class EffekseerManagerAdapter;
+    friend class EffekseerGLManagerAdapter;
 };

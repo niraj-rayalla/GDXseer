@@ -36,7 +36,7 @@ MaterialRefWrapper::~MaterialRefWrapper() {
 
 
 
-EffekseerRendererRefWrapper::EffekseerRendererRefWrapper(Effekseer::EffekseerRenderer::RendererRef rendererRef) {
+EffekseerRendererRefWrapper::EffekseerRendererRefWrapper(EffekseerRenderer::RendererRef rendererRef) {
     hasRef = rendererRef != nullptr;
     this->rendererRef = rendererRef;
 }

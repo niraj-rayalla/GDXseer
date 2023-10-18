@@ -1,10 +1,9 @@
 #pragma once
 
 #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer.h"
-#include "GDXMatrixAdapter.h"
 #include "RefWrappers.h"
-
-class EffekseerEffectAdapter;
+#include "GDXMatrixAdapter.h"
+#include "EffekseerEffectAdapter.h"
 
 typedef ::Effekseer::Vector3D Vector3D;
 typedef ::Effekseer::Color Color;
@@ -22,7 +21,7 @@ protected:
 	EffekseerRenderer::RendererRef renderer = nullptr;
 	Effekseer::ManagerRef manager = nullptr;
 #endif
-    virtual EffekseerRendererRefWrapper CreateRenderer() = 0;
+    virtual EffekseerRendererRefWrapper CreateRenderer(int32_t spriteMaxCount) = 0;
 
 public:
 	EffekseerManagerAdapter(int32_t spriteMaxCount, bool autoFlip = true);
@@ -36,7 +35,7 @@ public:
 	void SetCoordinateSystem(Effekseer::CoordinateSystem coordinateSystem);
 
 	int Play(EffekseerEffectAdapter *effect);
-	int Play(EffekseerEffectAdapter *effect, Vector3D* position, int32_t startFrame = 0);
+	int Play(EffekseerEffectAdapter *effect, Vector3D& position, int32_t startFrame = 0);
 	void StopEffect(int handle);
 	void StopAllEffects();
 	void StopRoot(int handle);
