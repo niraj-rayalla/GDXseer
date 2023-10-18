@@ -29,8 +29,6 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeTrack.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRing.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeModel.h"
-
-    #define FillMeInAsSizeCannotBeDeterminedAutomatically = 16;
 %}
 
 

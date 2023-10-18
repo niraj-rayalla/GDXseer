@@ -13,7 +13,7 @@ typedef ::Effekseer::Manager::DrawParameter DrawParameter;
 
 class EffekseerManagerAdapter {
 private:
-	SettingRef setting = nullptr;
+    Effekseer::SettingRef setting = nullptr;
 	float remainingDeltaTime = 0.0f;
 	bool hasSuccessfullyInitialized = false;
 
@@ -21,9 +21,8 @@ protected:
 #ifndef SWIG
 	EffekseerRenderer::RendererRef renderer = nullptr;
 	Effekseer::ManagerRef manager = nullptr;
-
-    virtual EffekseerRendererRefWrapper CreateRenderer() = 0;
 #endif
+    virtual EffekseerRendererRefWrapper CreateRenderer() = 0;
 
 public:
 	EffekseerManagerAdapter(int32_t spriteMaxCount, bool autoFlip = true);
@@ -33,8 +32,8 @@ public:
 
 	void LaunchWorkerThreads(uint32_t threadCount);
 
-	CoordinateSystem GetCoordinateSystem();
-	void SetCoordinateSystem(CoordinateSystem coordinateSystem);
+    Effekseer::CoordinateSystem GetCoordinateSystem();
+	void SetCoordinateSystem(Effekseer::CoordinateSystem coordinateSystem);
 
 	int Play(EffekseerEffectAdapter *effect);
 	int Play(EffekseerEffectAdapter *effect, Vector3D* position, int32_t startFrame = 0);
