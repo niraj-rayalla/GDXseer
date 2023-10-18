@@ -6,7 +6,7 @@ EffekseerGLManagerAdapter::EffekseerGLManagerAdapter(
     this->openGLDeviceType = openGLDeviceType;
 }
 
-EffekseerRendererRefWrapper EffekseerGLManagerAdapter::CreateRenderer() {
-    RendererRef rendererRef = EffekseerRendererGL::Renderer::Create(spriteMaxCount, this->openglDeviceType);
+EffekseerRendererRefWrapper EffekseerGLManagerAdapter::CreateRenderer(int32_t spriteMaxCount) {
+    EffekseerRenderer::RendererRef rendererRef = EffekseerRendererGL::Renderer::Create(spriteMaxCount, this->openGLDeviceType);
     return EffekseerRendererRefWrapper(rendererRef);
 }

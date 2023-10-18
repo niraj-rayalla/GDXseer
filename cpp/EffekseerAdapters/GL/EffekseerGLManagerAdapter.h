@@ -8,7 +8,7 @@ private:
     EffekseerRendererGL::OpenGLDeviceType openGLDeviceType;
 
 protected:
-    EffekseerRendererRefWrapper CreateRenderer() override;
+    EffekseerRendererRefWrapper CreateRenderer(int32_t spriteMaxCount) override;
 
 public:
     EffekseerGLManagerAdapter(int32_t spriteMaxCount, EffekseerRendererGL::OpenGLDeviceType openGLDeviceType, bool autoFlip = true);
