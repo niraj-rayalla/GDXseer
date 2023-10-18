@@ -46,8 +46,8 @@ friend class EffekseerEffectAdapter;
 // RendererRef
 class EffekseerRendererRefWrapper {
 private:
-    Effekseer::EffekseerRenderer::RendererRef rendererRef = nullptr;
-    EffekseerRendererRefWrapper(Effekseer::EffekseerRenderer::RendererRef rendererRef);
+    EffekseerRenderer::RendererRef rendererRef = nullptr;
+    EffekseerRendererRefWrapper(EffekseerRenderer::RendererRef rendererRef);
 
 public:
     bool hasRef = false;
