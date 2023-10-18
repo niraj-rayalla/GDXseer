@@ -1,3 +1,7 @@
+// RectF with only the fields, constructor, and destructor
+%rename("RectF", fullname=1) "Effekseer::RectF";
+%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.RectF.h"
+
 // Vector3D with only the fields, constructor, and destructor
 %rename("Vector2D", fullname=1) "Effekseer::Vector2D";
 %rename("x", fullname=1) "Effekseer::Vector2D::X";

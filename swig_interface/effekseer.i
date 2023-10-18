@@ -5,6 +5,7 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 %module Effekseer
 %{
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.Base.h"
+    #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.RectF.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/SIMD/Vec2f.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/SIMD/Vec3f.h"
     #include "Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.InternalStruct.h"
