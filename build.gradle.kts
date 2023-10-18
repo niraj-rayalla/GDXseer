@@ -62,14 +62,18 @@ val createCopiedAndTransformedEffekseerDir by tasks.creating {
 /**
  * Task used to copy the Effekseer source and do any transformations before getting Swigged.
  */
-val copyAndTransformEffekseerSourceForSwig by tasks.creating {
-    doLast {
+val copyAndTransformEffekseerSourceForSwig: Task by tasks.creating {
+    val deleteTask by tasks.creating {
         // Delete existing copy
         delete(copiedAndTransformedEffekseerDir)
-        createCopiedAndTransformedEffekseerDir
+    }
+    dependsOn(deleteTask)
+    dependsOn(createCopiedAndTransformedEffekseerDir)
 
+    val sourceCppDir = File("${projectDir}/Effekseer/Dev/Cpp/")
+
+    val copyTask by tasks.creating(Copy::class.java) {
         // Get a new copy of Effekseer source
-        val sourceCppDir = File("${projectDir}/Effekseer/Dev/Cpp/")
         copy {
             from(sourceCppDir)
                 .into(copiedAndTransformedEffekseerDir)
@@ -81,7 +85,11 @@ val copyAndTransformEffekseerSourceForSwig by tasks.creating {
                 .exclude("Test*")
                 .exclude("Viewer")
         }
+    }
+    dependsOn(copyTask)
 
+
+    val transformTask by tasks.creating(Copy::class.java) {
         // Transform sources
         var wasTransformed = false
         val EffectNodeRelativeFilePath = "Effekseer/Effekseer/Effekseer.EffectNode.h"
@@ -106,6 +114,7 @@ val copyAndTransformEffekseerSourceForSwig by tasks.creating {
             throw GradleException("Failed to find \"$transformSearch\" in $copiedEffectNodeIncludePath so that it can be replaced with \"$transformReplace\" for SWIG generation. This is needed to avoid this error: \"Swig: Syntax error in input\".")
         }
     }
+    dependsOn(transformTask)
 }
 
 /**
