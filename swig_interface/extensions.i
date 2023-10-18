@@ -8,6 +8,23 @@
     void setEasing(Effekseer::easing_color value) { self->easing.all = value; }
     Effekseer::FCurveVectorColor* getFCurveRGBA() { return self->fcurve_rgba.FCurve; }
     void setFCurveRGBA(Effekseer::FCurveVectorColor* value) { self->fcurve_rgba.FCurve = value; }
+    Effekseer::Gradient* getGradient() { return self->gradient.get(); }
+};
+
+// TranslationParameter
+%extend Effekseer::TranslationParameter {
+    Effekseer::FCurveVector3D* getTranslationFCurve() { return self->TranslationFCurve.get(); }
+};
+
+// TranslationParameter
+%extend Effekseer::RotationParameter {
+    Effekseer::FCurveVector3D* getRotationFCurve() { return self->RotationFCurve.get(); }
+};
+
+// TranslationParameter
+%extend Effekseer::ScalingParameter {
+    Effekseer::FCurveVector3D* getScalingFCurve() { return self->ScalingFCurve.get(); }
+    Effekseer::FCurveScalar* getScalingSingleFCurve() { return self->ScalingSingleFCurve.get(); }
 };
 
 // UVParameter
@@ -25,51 +42,51 @@
     void setAnimationFrameCountX(int32_t value) { self->Animation.FrameCountX = value; }
     int32_t getAnimationFrameCountY() { return self->Animation.FrameCountY; }
     void setAnimationFrameCountY(int32_t value) { self->Animation.FrameCountY = value; }
-    UVAnimationLoopType getAnimationLoopType() {
-        switch (value) {
+    Effekseer::UVAnimationLoopType getAnimationLoopType() {
+        switch (self->Animation.LoopType) {
             case 0:
-                return UVAnimationLoopType.LOOPTYPE_ONCE;
+                return Effekseer::UVAnimationLoopType::LOOPTYPE_ONCE;
             case 1:
-                return UVAnimationLoopType.LOOPTYPE_LOOP;
+                return Effekseer::UVAnimationLoopType::LOOPTYPE_LOOP;
             case 2:
-                return UVAnimationLoopType.LOOPTYPE_REVERSELOOP;
+                return Effekseer::UVAnimationLoopType::LOOPTYPE_REVERSELOOP;
             case 0x7fffffff:
-                return UVAnimationLoopType.LOOPTYPE_DWORD;
+                return Effekseer::UVAnimationLoopType::LOOPTYPE_DWORD;
             default:
-                return UVAnimationLoopType.LOOPTYPE_DWORD;
+                return Effekseer::UVAnimationLoopType::LOOPTYPE_DWORD;
         }
     }
-    void setAnimationLoopType(UVAnimationLoopType value) {
+    void setAnimationLoopType(Effekseer::UVAnimationLoopType value) {
         switch (value) {
-            case 0:
-                self->Animation.LoopType = Animation.LOOPTYPE_ONCE;
+            case Effekseer::UVAnimationLoopType::LOOPTYPE_ONCE:
+                self->Animation.LoopType = self->Animation.LOOPTYPE_ONCE;
                 break;
-            case 1:
-                self->Animation.LoopType = Animation.LOOPTYPE_LOOP;
+            case Effekseer::UVAnimationLoopType::LOOPTYPE_LOOP:
+                self->Animation.LoopType = self->Animation.LOOPTYPE_LOOP;
                 break;
-            case 2:
-                self->Animation.LoopType = Animation.LOOPTYPE_REVERSELOOP;
+            case Effekseer::UVAnimationLoopType::LOOPTYPE_REVERSELOOP:
+                self->Animation.LoopType = self->Animation.LOOPTYPE_REVERSELOOP;
                 break;
-            case 0x7fffffff:
-                self->Animation.LoopType = Animation.LOOPTYPE_DWORD;
+            case Effekseer::UVAnimationLoopType::LOOPTYPE_DWORD:
+                self->Animation.LoopType = self->Animation.LOOPTYPE_DWORD;
                 break;
         }
     }
-    UVAnimationInterpolationType getAnimationInterpolationType() {
-        switch (value) {
+    Effekseer::UVAnimationInterpolationType getAnimationInterpolationType() {
+        switch (self->Animation.InterpolationType) {
             case 0:
-                return UVAnimationInterpolationType.NONE;
+                return Effekseer::UVAnimationInterpolationType::NONE;
             case 1:
-                return UVAnimationInterpolationType.LERP;
+                return Effekseer::UVAnimationInterpolationType::LERP;
         }
     }
-    void setAnimationInterpolationType(UVAnimationInterpolationType value) {
+    void setAnimationInterpolationType(Effekseer::UVAnimationInterpolationType value) {
         switch (value) {
-            case 0:
-                self->Animation.InterpolationType = Animation.NONE;
+            case Effekseer::UVAnimationInterpolationType::NONE:
+                self->Animation.InterpolationType = self->Animation.NONE;
                 break;
-            case 1:
-                self->Animation.InterpolationType = Animation.LERP;
+            case Effekseer::UVAnimationInterpolationType::LERP:
+                self->Animation.InterpolationType = self->Animation.LERP;
                 break;
         }
     }
@@ -85,15 +102,15 @@
     void setScrollSpeed(Effekseer::random_vector2d value) { self->Scroll.Speed = value; }
 
     // FCurve
-    FCurveVector2D* getFCurvePosition() { return self->FCurve.Position; }
-    void setFCurvePosition(FCurveVector2D* value) { self->FCurve.Position = value; }
-    FCurveVector2D* getFCurveSize() { return self->FCurve.Size; }
-    void setFCurveSize(FCurveVector2D* value) { self->FCurve.Size = value; }
+    Effekseer::FCurveVector2D* getFCurvePosition() { return self->FCurve.Position; }
+    void setFCurvePosition(Effekseer::FCurveVector2D* value) { self->FCurve.Position = value; }
+    Effekseer::FCurveVector2D* getFCurveSize() { return self->FCurve.Size; }
+    void setFCurveSize(Effekseer::FCurveVector2D* value) { self->FCurve.Size = value; }
 };
 
 // ParameterRendererCommon
 %extend Effekseer::ParameterRendererCommon {
-    UVParameter getUVParameter(int index) { return self->UVs[index]; }
+        Effekseer::UVParameter getUVParameter(int index) { return self->UVs[index]; }
 };
 
 // ParameterGenerationLocation
@@ -149,6 +166,10 @@
 
 // EffectNode
 %extend Effekseer::EffectNode {
+    //
+    // Children
+    //
+
     Effekseer::EffectNodeImplemented* getChild(int index) {
         if (index >= self->GetChildrenCount())
             return nullptr;
@@ -186,10 +207,100 @@
     }
 };
 
+// EffectNodeImplemented
+%extend Effekseer::EffectNodeImplemented {
+    //
+    // Parameters
+    //
+
+    Effekseer::TranslationParameter* getTranslationParam() {
+        return &(self->TranslationParam);
+    }
+
+    Effekseer::LocalForceFieldParameter* getLocalForceField() {
+        return &(self->LocalForceField);
+    }
+
+    Effekseer::RotationParameter* getRotationParam() {
+        return &(self->RotationParam);
+    }
+
+    Effekseer::ScalingParameter* getScalingParam() {
+        return &(self->ScalingParam);
+    }
+
+    Effekseer::ParameterAlphaCutoff* getAlphaCutoff() {
+        return &(self->AlphaCutoff);
+    }
+};
+
+// EffectNodeSprite
+%extend Effekseer::EffectNodeSprite {
+    Effekseer::AllTypeColorParameter* getSpriteAllColor() {
+        return &(self->SpriteAllColor);
+    }
+};
+
+// EffectNodeRibbon
+%extend Effekseer::EffectNodeRibbon {
+    Effekseer::AllTypeColorParameter* getRibbonAllColor() {
+        return &(self->RibbonAllColor);
+    }
+};
+
+// EffectNodeTrack
+%extend Effekseer::EffectNodeTrack {
+    Effekseer::AllTypeColorParameter* getTrackColorLeft() {
+        return &(self->TrackColorLeft);
+    }
+
+    Effekseer::AllTypeColorParameter* getTrackColorCenter() {
+        return &(self->TrackColorCenter);
+    }
+
+    Effekseer::AllTypeColorParameter* getTrackColorRight() {
+        return &(self->TrackColorRight);
+    }
+
+    Effekseer::AllTypeColorParameter* getTrackColorLeftMiddle() {
+        return &(self->TrackColorLeftMiddle);
+    }
+
+    Effekseer::AllTypeColorParameter* getTrackColorCenterMiddle() {
+        return &(self->TrackColorCenterMiddle);
+    }
+
+    Effekseer::AllTypeColorParameter* getTrackColorRightMiddle() {
+        return &(self->TrackColorRightMiddle);
+    }
+};
+
+// EffectNodeRing
+%extend Effekseer::EffectNodeRing {
+    Effekseer::AllTypeColorParameter* getOuterColor() {
+        return &(self->OuterColor);
+    }
+
+    Effekseer::AllTypeColorParameter* getCenterColor() {
+        return &(self->CenterColor);
+    }
+
+    Effekseer::AllTypeColorParameter* getInnerColor() {
+        return &(self->InnerColor);
+    }
+};
+
+// EffectNodeModel
+%extend Effekseer::EffectNodeModel {
+    Effekseer::AllTypeColorParameter* getAllColor() {
+        return &(self->AllColor);
+    }
+};
+
 // LocalForceFieldParameter
 %extend Effekseer::LocalForceFieldParameter {
-    Effekseer::LocalForceFieldElementParameter getLocalForceFieldAtIndex(int index) {
-        return self->LocalForceFields[index];
+    Effekseer::LocalForceFieldElementParameter* getLocalForceFieldAtIndex(int index) {
+        return &(self->LocalForceFields[index]);
     }
 };
 

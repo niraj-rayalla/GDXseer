@@ -11,6 +11,10 @@ namespace std {
 %rename("NodeRendererDepthParameter", fullname=1) "Effekseer::NodeRendererDepthParameter";
 %rename("NodeRendererFlipbookParameter", fullname=1) "Effekseer::NodeRendererFlipbookParameter";
 %rename("NodeRendererBasicParameter", fullname=1) "Effekseer::NodeRendererBasicParameter";
+%rename("NodeRendererBasicParameter", fullname=1) "Effekseer::NodeRendererBasicParameter";
+%rename("Gradient", fullname=1) "Effekseer::Gradient";
+%rename("ColorKey", fullname=1) "Effekseer::Gradient::ColorKey";
+%rename("AlphaKey", fullname=1) "Effekseer::Gradient::AlphaKey";
 // std wrappers
 namespace Effekseer {
     //! the maximum number of texture slot including textures system specified
@@ -21,7 +25,8 @@ namespace Effekseer {
 namespace std {
    %template(ArrayTextureIndexes) array<int32_t, Effekseer::TextureSlotMax>;
    %template(ArrayTextureFilters) array<Effekseer::TextureFilterType, Effekseer::TextureSlotMax>;
-   %template(ArrayTextureWraps) array<Effekseer::TextureWrapType, Effekseer::TextureSlotMax>;
+   %template(ArrayGradientColors) array<Effekseer::Gradient::ColorKey, 8>;
+   %template(ArrayGradientAlphas) array<Effekseer::Gradient::AlphaKey, 8>;
 };
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.Base.Pre.h"
 

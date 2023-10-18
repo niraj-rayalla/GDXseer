@@ -4,14 +4,14 @@
 %rename("FalloffParameter", fullname=1) "Effekseer::FalloffParameter";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Effekseer.Parameters.h"
 
-// All classes in Parameter/BasicSettings.h
-%rename("ParameterCommonValues", fullname=1) "Effekseer::ParameterCommonValues";
-%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/BasicSettings.h"
-
 // All structs in Parameter/DynamicParameter.h
 %rename("DynamicFactorParameter", fullname=1) "Effekseer::DynamicFactorParameter";
 %rename("RefMinMax", fullname=1) "Effekseer::RefMinMax";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/DynamicParameter.h"
+
+// All classes in Parameter/BasicSettings.h
+%rename("ParameterCommonValues", fullname=1) "Effekseer::ParameterCommonValues";
+%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/BasicSettings.h"
 
 // ParameterEasingFloat in Parameter/Easing.h
 %rename("ParameterEasingFloat", fullname=1) "Effekseer::ParameterEasingFloat";
@@ -79,26 +79,31 @@ namespace Effekseer {
 
 // All classes/structs in Parameter/AllTypeColor.h
 %rename("AllTypeColorParameter", fullname=1) "Effekseer::AllTypeColorParameter";
+%rename($ignore, fullname=1) "Effekseer::AllTypeColorParameter::gradient";
 %rename("InstanceAllTypeColorState", fullname=1) "Effekseer::InstanceAllTypeColorState";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/AllTypeColor.h"
 
+%inline %{
+namespace Effekseer {
+    enum class UVAnimationLoopType : int32_t
+    {
+        LOOPTYPE_ONCE = 0,
+        LOOPTYPE_LOOP = 1,
+        LOOPTYPE_REVERSELOOP = 2,
+
+        LOOPTYPE_DWORD = 0x7fffffff,
+    };
+    enum class UVAnimationInterpolationType : int32_t
+    {
+        NONE = 0,
+        LERP = 1,
+    };
+}
+%}
 // All classes/structs in Parameter/UV.h
 %rename("UVAnimationType", fullname=1) "Effekseer::UVAnimationType";
 %rename("UVParameter", fullname=1) "Effekseer::UVParameter";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/UV.h"
-enum class UVAnimationLoopType : int32_t
-{
-    LOOPTYPE_ONCE = 0,
-    LOOPTYPE_LOOP = 1,
-    LOOPTYPE_REVERSELOOP = 2,
-
-    LOOPTYPE_DWORD = 0x7fffffff,
-};
-enum class UVAnimationInterpolationType : int32_t
-{
-    NONE = 0,
-    LERP = 1,
-};
 
 // All classes/structs in Parameter/LOD.h
 %rename("ParameterLODs", fullname=1) "Effekseer::ParameterLODs";
@@ -116,6 +121,7 @@ enum class UVAnimationInterpolationType : int32_t
 %rename("ParameterTranslationNurbsCurve", fullname=1) "Effekseer::ParameterTranslationNurbsCurve";
 %rename("ParameterTranslationViewOffset", fullname=1) "Effekseer::ParameterTranslationViewOffset";
 %rename("TranslationParameter", fullname=1) "Effekseer::TranslationParameter";
+%rename($ignore, fullname=1) "Effekseer::TranslationParameter::TranslationFCurve";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Translation.h"
 
 // All classes/structs in Parameter/Rotation.h
@@ -125,6 +131,7 @@ enum class UVAnimationInterpolationType : int32_t
 %rename("ParameterRotationAxisPVA", fullname=1) "Effekseer::ParameterRotationAxisPVA";
 %rename("ParameterRotationAxisEasing", fullname=1) "Effekseer::ParameterRotationAxisEasing";
 %rename("RotationParameter", fullname=1) "Effekseer::RotationParameter";
+%rename($ignore, fullname=1) "Effekseer::RotationParameter::RotationFCurve";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Rotation.h"
 
 // All classes/structs in Parameter/Scaling.h
@@ -133,6 +140,8 @@ enum class UVAnimationInterpolationType : int32_t
 %rename("ParameterScalingEasing", fullname=1) "Effekseer::ParameterScalingEasing";
 %rename("ParameterScalingSinglePVA", fullname=1) "Effekseer::ParameterScalingSinglePVA";
 %rename("ScalingParameter", fullname=1) "Effekseer::ScalingParameter";
+%rename($ignore, fullname=1) "Effekseer::ScalingParameter::ScalingFCurve";
+%rename($ignore, fullname=1) "Effekseer::ScalingParameter::ScalingSingleFCurve";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Scaling.h"
 
 // All classes/structs in Parameter/SpawnMethod.h

@@ -116,16 +116,15 @@ struct Effekseer::Color;
 
 %include "effekseer_base.i"
 
-%include "effekseer_parameters.i"
-
 // All needed enum classes and structs in Effekseer.FCurves.h
-%rename("EffectNodeImplemented", fullname=1) "Effekseer::EffectNodeImplemented";
 %rename("FCurve", fullname=1) "Effekseer::FCurve";
 %rename("FCurveScalar", fullname=1) "Effekseer::FCurveScalar";
 %rename("FCurveVector2D", fullname=1) "Effekseer::FCurveVector2D";
 %rename("FCurveVector3D", fullname=1) "Effekseer::FCurveVector3D";
 %rename("FCurveVectorColor", fullname=1) "Effekseer::FCurveVectorColor";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.FCurves.h"
+
+%include "effekseer_parameters.i"
 
 %include "effekseer_noise.i"
 
