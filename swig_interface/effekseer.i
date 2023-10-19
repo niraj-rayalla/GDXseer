@@ -34,26 +34,6 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
 %include "shared_swig_declaration.i"
 
-%include "stdint.i"
-
-%include "typemaps.i"
-%include "various.i"
-%include "std_vector.i"
-%include "std_array.i"
-
-%include "carrays.i"
-
-%include "operator_overload.i"
-
-%apply float[] {float *};
-
-
-%apply char *BYTE { char* data };
-
-
-%include "./ibyte.i"
-%apply unsigned char *UBYTE { unsigned char *data };
-
 // void* from c++ to Object in Java
 /*
 %typemap(jni) void* "java.lang.Object"

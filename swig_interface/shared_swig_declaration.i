@@ -59,7 +59,25 @@ static int SWIG_JavaArrayInDouble (JNIEnv *jenv, jdouble **jarr, double **carr, 
 static void SWIG_JavaArrayArgoutDouble (JNIEnv *jenv, jdouble *jarr, double *carr, jdoubleArray input);
 static jdoubleArray SWIG_JavaArrayOutDouble (JNIEnv *jenv, double *result, jsize sz);
 %}
-// Include the function declaration in char16.i
+
+// Include the function declaration in char16.i and the typemaps in it
 %{
 int char16_len(const char16_t* s);
 %}
+%include "char16_typemap.i"
+
+%include "stdint.i"
+
+%include "typemaps.i"
+%include "various.i"
+%include "std_vector.i"
+%include "std_array.i"
+%include "carrays.i"
+%include "./ibyte.i"
+
+%include "operator_overload.i"
+
+// Some applies
+%apply float[] {float *};
+%apply char *BYTE { char* data };
+%apply unsigned char *UBYTE { unsigned char *data };
