@@ -32,12 +32,12 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 %}
 
 
+%include "shared_swig_declaration.i"
+
 %include "stdint.i"
 
 %include "typemaps.i"
-%include "./char16.i"
 %include "various.i"
-%include "arrays_java.i"
 %include "std_vector.i"
 %include "std_array.i"
 
