@@ -216,6 +216,8 @@ val createDesktopCmakeBuildDir by tasks.creating {
 val configureDesktopBuilding by tasks.creating(Exec::class.java) {
     dependsOn(generateWrapperEffekseer)
     dependsOn(createDesktopCmakeBuildDir)
+    createDesktopCmakeBuildDir.shouldRunAfter(generateWrapperEffekseer)
+
     val commandLineArgs = ArrayList<String>().apply {
         add("cmake")
         if (org.gradle.internal.os.OperatingSystem.current().isMacOsX) {
@@ -238,6 +240,8 @@ val configureDesktopBuilding by tasks.creating(Exec::class.java) {
 val buildDesktopLibrary by tasks.creating(Exec::class.java) {
     dependsOn(configureDesktopBuilding)
     dependsOn(tasks.jar)
+    tasks.jar.get().shouldRunAfter(configureDesktopBuilding)
+
     commandLine(
         "cmake",
         "--build", desktopCmakeBuildDir.absolutePath,

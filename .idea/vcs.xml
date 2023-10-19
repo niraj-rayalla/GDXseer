@@ -3,17 +3,31 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Effekseer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/AltseedRHI" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/AltseedRHI/Downloads/AltseedPlatform" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/AltseedRHI/Downloads/AltseedPlatform/Downloads/glfw" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/AltseedRHI/Downloads/libpng" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/AltseedRHI/Downloads/zlib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/ImGradientHDR" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/LLGI" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/LLGI/examples/thirdparty/glfw" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/LLGI/thirdparty/SPIRV-Cross" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/LLGI/thirdparty/glslang" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/easy_profiler" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/glslang" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/imgui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/imgui-node-editor" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/libpng" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/nativefiledialog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/spdlog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Dev/Cpp/3rdParty/stb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Downloads/OpenSoundMixer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Downloads/glew" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Downloads/glfw" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Downloads/libgd" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/Downloads/zlib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/ResourceData" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Effekseer/TestData" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cpp/Effekseer" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/AltseedRHI" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/ImGradientHDR" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/LLGI" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/easy_profiler" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/glslang" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/imgui" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/imgui-node-editor" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/libpng" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/nativefiledialog" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/spdlog" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer/Dev/Cpp/3rdParty/stb" vcs="Git" />
   </component>
 </project>
