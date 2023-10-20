@@ -127,19 +127,6 @@ val generateWrapperEffekseer by tasks.creating {
     dependsOn(createJavaWrappedEffekseerDir)
     createJavaWrappedEffekseerDir.shouldRunAfter(copyAndTransformEffekseerSourceForSwig)
 
-    // The shared Swig logic
-    val sharedSwigGenerateTask by tasks.creating(Exec::class.java) {
-        commandLine(
-            "swig", "-c++", "-java",
-            "-package", "io.github.niraj_rayalla.gdxseer.effekseer",
-            "-outdir", javaWrappedEffekseerDir.absolutePath,
-            "-o", "${projectDir}/cpp/Shared_Swig.cpp",
-            "${projectDir}/swig_interface/shared_swig.i"
-        )
-    }
-    dependsOn(sharedSwigGenerateTask)
-    sharedSwigGenerateTask.shouldRunAfter(createJavaWrappedEffekseerDir)
-
     // The effekseer logic
     val effekseerGenerateTask by tasks.creating(Exec::class.java) {
         commandLine(
@@ -151,7 +138,7 @@ val generateWrapperEffekseer by tasks.creating {
         )
     }
     dependsOn(effekseerGenerateTask)
-    effekseerGenerateTask.shouldRunAfter(sharedSwigGenerateTask)
+    effekseerGenerateTask.shouldRunAfter(createJavaWrappedEffekseerDir)
 
     // The effekseer adapter logic
     val adapterEffekseerGenerateTask by tasks.creating(Exec::class.java) {

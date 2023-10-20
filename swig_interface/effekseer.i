@@ -32,7 +32,7 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 %}
 
 
-%include "shared_swig_declaration.i"
+%include "shared_swig.i"
 
 // void* from c++ to Object in Java
 /*

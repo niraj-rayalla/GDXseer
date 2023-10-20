@@ -13,8 +13,6 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Effekseer ${CMAKE_CURRENT_BINARY
 add_library(
         ${PROJECT_NAME}
         SHARED
-        Shared_Swig.cpp
-
         Effekseer_Swig.cpp
 
         EffekseerAdapters/RefWrappers.cpp
