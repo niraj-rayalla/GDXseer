@@ -2,6 +2,10 @@ plugins {
     kotlin("jvm")
 }
 
+dependencies {
+    implementation("com.badlogicgames.gdx:gdx:1.12.0")
+}
+
 //region Java Wrapping of Effekseer C++ using Swig
 
 /**
