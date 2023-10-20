@@ -11,6 +11,10 @@ typedef ::Effekseer::Color Color;
 typedef ::Effekseer::Manager::UpdateParameter UpdateParameter;
 typedef ::Effekseer::Manager::DrawParameter DrawParameter;
 
+EffekseerRendererRefWrapper EffekseerManagerAdapter::NonPureVirtualCreateRenderer(int32_t spriteMaxCount) {
+    return this->CreateRenderer(spriteMaxCount);
+}
+
 EffekseerManagerAdapter::EffekseerManagerAdapter(int32_t spriteMaxCount, bool autoFlip) {
     // Create the Effekseer manager object
     this->manager = ::Effekseer::Manager::Create(spriteMaxCount, autoFlip);
@@ -19,7 +23,7 @@ EffekseerManagerAdapter::EffekseerManagerAdapter(int32_t spriteMaxCount, bool au
     this->setting->SetCoordinateSystem(Effekseer::CoordinateSystem::RH);
     this->manager->SetSetting(setting);
     // Create the Effekseer renderer object to use by calling this virtual method that should be implemented in sub-classes.
-    this->renderer = this->CreateRenderer(spriteMaxCount).rendererRef;
+    this->renderer = this->NonPureVirtualCreateRenderer(spriteMaxCount).rendererRef;
 
     // Check successful creation
     if (this->manager == nullptr || this->renderer == nullptr) {

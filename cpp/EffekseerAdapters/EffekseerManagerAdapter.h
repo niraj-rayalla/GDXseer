@@ -15,6 +15,7 @@ private:
     Effekseer::SettingRef setting = nullptr;
 	float remainingDeltaTime = 0.0f;
 	bool hasSuccessfullyInitialized = false;
+    virtual EffekseerRendererRefWrapper NonPureVirtualCreateRenderer(int32_t spriteMaxCount);
 
 protected:
 #ifndef SWIG
@@ -25,7 +26,7 @@ protected:
 
 public:
 	EffekseerManagerAdapter(int32_t spriteMaxCount, bool autoFlip = true);
-	~EffekseerManagerAdapter();
+	virtual ~EffekseerManagerAdapter();
 
 	bool GetHasSuccessfullyInitialized();
 
