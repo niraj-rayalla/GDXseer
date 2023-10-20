@@ -2,8 +2,10 @@ plugins {
     kotlin("jvm")
 }
 
+val gdxVersion: String by project
+
 dependencies {
-    implementation("com.badlogicgames.gdx:gdx:1.12.0")
+    implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
 }
 
 //region Java Wrapping of Effekseer C++ using Swig
@@ -188,7 +190,7 @@ val desktopCmakeBuildDir = when {
         File("${projectDir}/cmake-linux")
     }
     else -> {
-        File("${projectDir}/cmake-build")
+        File("${projectDir}/cmake-windows")
     }
 }
 
