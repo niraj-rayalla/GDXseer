@@ -26,8 +26,9 @@ import io.github.niraj_rayalla.gdxseer.effekseer.EffekseerManagerParameters.Draw
  *  [onPostDraw]
  */
 abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
+    protected val maxSpriteCount: Int,
+    protected val autoFlip: Boolean = true,
     camera: Camera,
-    maxSpriteCount: Int,
     /**
      * An optional [RenderContext] used to reduce graphics calls.
      */
