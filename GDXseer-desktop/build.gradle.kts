@@ -7,6 +7,22 @@ dependencies {
 }
 
 /**
+ * Make the jar a fat jar.
+ */
+tasks.withType<Jar> {
+    // To avoid the duplicate handling strategy error
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // To add all of the dependencies
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.compileClasspath)
+    from({
+        configurations.compileClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
+
+/**
  * Copies the native libraries needed into the jar.
  */
 val copyNativeLibs by tasks.creating(Copy::class.java) {
