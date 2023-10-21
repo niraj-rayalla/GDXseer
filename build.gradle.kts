@@ -256,6 +256,10 @@ val configureDesktopBuilding by tasks.creating(Exec::class.java) {
 val buildDesktopNativeLibrary by tasks.creating(Exec::class.java) {
     dependsOn(configureDesktopBuilding)
 
+    // Build the core jar
+    dependsOn(tasks.jar)
+    tasks.jar.get().shouldRunAfter(configureDesktopBuilding)
+
     // Build the GL C++ library
     commandLine(
         "cmake",
