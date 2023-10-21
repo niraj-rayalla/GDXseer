@@ -20,6 +20,7 @@ import io.github.niraj_rayalla.gdxseer.managedeffekseer.EffekseerManagedField
  * All GDX relevant logic lives in this class, but not all properties and methods of the Effekseer manager object are available here. Use [effekseerEffectAdapter],
  * which is the [EffekseerEffectAdapter] being wrapped by this class, to access all of the JVM accessible Effekseer logic.
  */
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
 
     companion object {
@@ -336,28 +337,28 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      */
     fun getAssetDescriptorWithoutLoading(effectFileHandle: FileHandle, loadedListener: LoadedListener?): AssetDescriptor<EffekseerParticleAssetLoader.Companion.Result> {
         // Create the asset descriptor for sending to the given AssetManager
-        val assetDescriptor = EffekseerParticleAssetLoader.getMainFileAssetDescriptor(effectFileHandle, this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification);
+        val assetDescriptor = EffekseerParticleAssetLoader.getMainFileAssetDescriptor(effectFileHandle, this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification)
 
         // Listen for finished loading
         assetDescriptor.params.loadedCallback = LoadedCallback { assetManager, _, _ ->
             // Reset the tracked asset manager
-            assetManagerBeingLoadedIn = null;
+            assetManagerBeingLoadedIn = null
             // Load the data into the effect
-            val loadedData = assetManager.get(assetDescriptor);
-            loadFromEffectAssetResult(loadedData);
+            val loadedData = assetManager.get(assetDescriptor)
+            loadFromEffectAssetResult(loadedData)
 
             // Call listener
-            loadedListener?.onEffectLoaded();
+            loadedListener?.onEffectLoaded()
         }
 
-        return assetDescriptor;
+        return assetDescriptor
     }
 
     /**
      * Loads the particle loaded effect data ([EffekseerParticleAssetLoader.Result]) into this instance.
      */
     fun loadFromEffectAssetResult(result: EffekseerParticleAssetLoader.Companion.Result) {
-        result.loadIntoEffect(this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification);
+        result.loadIntoEffect(this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification)
     }
 
     /**
@@ -365,12 +366,12 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      */
     fun asyncLoad(assetManager: AssetManager, effectFileHandle: FileHandle, loadedListener: LoadedListener) {
         // Track the asset manager for updating load state
-        this.assetManagerBeingLoadedIn = assetManager;
+        this.assetManagerBeingLoadedIn = assetManager
 
-        val assetDescriptor = this.getAssetDescriptorWithoutLoading(effectFileHandle, loadedListener);
+        val assetDescriptor = this.getAssetDescriptorWithoutLoading(effectFileHandle, loadedListener)
 
         // Now start the load
-        assetManager.load(assetDescriptor);
+        assetManager.load(assetDescriptor)
     }
 
     /**
@@ -378,17 +379,17 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      */
     fun asyncLoad(assetManager: AssetManager, path: String, loadedListener: LoadedListener) {
         // Get the file handle
-        val effectFileHandle = assetManager.fileHandleResolver.resolve(path);
+        val effectFileHandle = assetManager.fileHandleResolver.resolve(path)
 
         // Call load() with the generated file handle
-        this.asyncLoad(assetManager, effectFileHandle, loadedListener);
+        this.asyncLoad(assetManager, effectFileHandle, loadedListener)
     }
 
     /**
      * Synchronously loads the given effect file.
      */
     fun syncLoad(assetManager: AssetManager, effectFileHandle: FileHandle) {
-        EffekseerParticleAssetLoader.syncLoad(assetManager, effectFileHandle, this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification);
+        EffekseerParticleAssetLoader.syncLoad(assetManager, effectFileHandle, this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification)
     }
 
     /**
@@ -396,10 +397,10 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      */
     fun syncLoad(assetManager: AssetManager, path: String) {
         // Get the file handle
-        val effectFileHandle = assetManager.fileHandleResolver.resolve(path);
+        val effectFileHandle = assetManager.fileHandleResolver.resolve(path)
 
         // Call load() with the generated file handle
-        this.syncLoad(assetManager, effectFileHandle);
+        this.syncLoad(assetManager, effectFileHandle)
     }
 
     //endregion
@@ -413,16 +414,16 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
         // Add this effect to the manager class if not already added
         this.addToManager()
         this.isInPlayingState = true
-        this.handle = this.manager.effekseerManagerAdapter.Play(this.effekseerEffectAdapter);
+        this.handle = this.manager.effekseerManagerAdapter.Play(this.effekseerEffectAdapter)
 
         if (this.isGetTransformMatrixFromEffekseerQueued) {
             // Get the initial transforms from Effekseer
-            this.getTransformFromEffekseer();
-            this.isGetTransformMatrixFromEffekseerQueued = false;
+            this.getTransformFromEffekseer()
+            this.isGetTransformMatrixFromEffekseerQueued = false
         }
-        this.queueUpdateTransformMatrix();
+        this.queueUpdateTransformMatrix()
 
-        return this.handle;
+        return this.handle
     }
 
     /**
@@ -444,23 +445,23 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      */
     fun stop() {
         if (this.isInPlayingState) {
-            this.manager.effekseerManagerAdapter.StopEffect(this.handle);
+            this.manager.effekseerManagerAdapter.StopEffect(this.handle)
             this.isInPlayingState = false
         }
         // Removes this effect from the manager class if added
-        this.removeFromManager();
+        this.removeFromManager()
     }
 
     fun setTargetLocation(x: Float, y: Float, z: Float) {
-        this.manager.effekseerManagerAdapter.SetTargetLocation(this.handle, x, y, z);
+        this.manager.effekseerManagerAdapter.SetTargetLocation(this.handle, x, y, z)
     }
 
     fun setTargetLocation(location: Vector3D) {
-        this.manager.effekseerManagerAdapter.SetTargetLocation(this.handle, location);
+        this.manager.effekseerManagerAdapter.SetTargetLocation(this.handle, location)
     }
 
     fun getDynamicInput(index: Int): Float {
-        return this.manager.effekseerManagerAdapter.GetDynamicInput(this.handle, index);
+        return this.manager.effekseerManagerAdapter.GetDynamicInput(this.handle, index)
     }
 
     fun setDynamicInput(index: Int, value: Float) {

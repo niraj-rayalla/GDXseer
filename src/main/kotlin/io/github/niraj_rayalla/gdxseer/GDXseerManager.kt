@@ -25,6 +25,7 @@ import io.github.niraj_rayalla.gdxseer.effekseer.EffekseerManagerParameters.Draw
  *  [onPreDraw],
  *  [onPostDraw]
  */
+@Suppress("MemberVisibilityCanBePrivate")
 abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
     protected val maxSpriteCount: Int,
     protected val autoFlip: Boolean = true,
@@ -44,9 +45,9 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
     //region Abstract
 
     /**
-     * The name of [MA] being used for logging. Can just be the class name.
+     * @return The name of [MA] being used for logging. Can just be the class name.
      */
-    abstract val effekseerManagerAdapterName: String
+    abstract fun getEffekseerManagerAdapterName(): String
 
     /**
      * @return A new instance of [MA] to be used for this [GDXseerManager].
@@ -61,7 +62,7 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
      * The [EffekseerManagerAdapter] instance that is being managed by this [GDXseerManager]. [EffekseerManagerAdapter] is the instance that actually
      * tells the Effekseer library what to do. All the remaining non-wrapped methods not in [GDXseerManager] will be in this [EffekseerManagerAdapter] instance.
      */
-    val effekseerManagerAdapter: MA
+    val effekseerManagerAdapter: MA = this.createEffekseerManagerAdapter()
 
     /**
      * The [Camera] instance being used in GDX to render the scene.
@@ -102,12 +103,9 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
     //region Init
 
     init {
-        // Create the manager adapter to use
-        this.effekseerManagerAdapter = this.createEffekseerManagerAdapter()
-
         // Check that the manager adapter has successfully initialized
         if (!this.effekseerManagerAdapter.GetHasSuccessfullyInitialized()) {
-            throw RuntimeException("Failed to initialize the Effekseer manager instance of type ${this.effekseerManagerAdapterName} and max sprite count of " + maxSpriteCount)
+            throw RuntimeException("Failed to initialize the Effekseer manager instance of type ${this.getEffekseerManagerAdapterName()} and max sprite count of " + maxSpriteCount)
         }
     }
 

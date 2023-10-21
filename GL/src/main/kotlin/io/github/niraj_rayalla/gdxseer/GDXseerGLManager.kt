@@ -21,9 +21,24 @@ class GDXseerGLManager(
      */
     renderContext: RenderContext?
 ): GDXseerManager<EffekseerGLManagerAdapter>(maxSpriteCount, autoFlip, camera, renderContext) {
-    override val effekseerManagerAdapterName: String = GDXseerGLManager::class.simpleName!!
+
+    //region Properties
+
+    private val effekseerManagerAdapterName: String by lazy {
+        GDXseerGLManager::class.simpleName!!
+    }
+
+    //endregion
+
+    //region Overrides
+
+    override fun getEffekseerManagerAdapterName(): String {
+        return this.effekseerManagerAdapterName
+    }
 
     override fun createEffekseerManagerAdapter(): EffekseerGLManagerAdapter {
         return EffekseerGLManagerAdapter(this.maxSpriteCount, this.openGLDeviceType)
     }
+
+    //endregion
 }
