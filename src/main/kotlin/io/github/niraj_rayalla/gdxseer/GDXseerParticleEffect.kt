@@ -114,7 +114,7 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
     /**
      * @return The root node instance of this particle effect.
      */
-    val rootNode: EffectNodeRoot?
+    val rootNode: EffectNodeRoot
         get() {
             return this.rootNodeField.value
         }
