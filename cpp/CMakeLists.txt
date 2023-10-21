@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.16)
 
 project(GDXseer_Effekseer)
 
+OPTION(GDXSEER_RENDERER "The type of backend renderer to use for GDXseer. Can be GL or Metal." "GL")
+MESSAGE("Using GDXseer Backend Renderer: " ${GDXSEER_RENDERER})
+
 set(BUILD_EXAMPLES OFF)
 set(BUILD_DX12 OFF)
 set(CMAKE_EXE_LINKER_FLAGS "-ljvm")
@@ -21,8 +24,8 @@ add_library(
         EffekseerAdapters/EffekseerEffectAdapter.cpp
         Adapter_Effekseer_Swig.cpp
 
-        EffekseerAdapters/GL/EffekseerGLManagerAdapter.cpp
-        Effekseer_GL_Swig.cpp
+        EffekseerAdapters/${GDXSEER_RENDERER}/Effekseer${GDXSEER_RENDERER}ManagerAdapter.cpp
+        Effekseer_${GDXSEER_RENDERER}_Swig.cpp
 )
 
 # Need JNI
@@ -45,25 +48,29 @@ endif()
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
         EffekseerAdapters/
-        EffekseerAdapters/GL/
+        EffekseerAdapters/${GDXSEER_RENDERER}/
 )
 target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
         ../Effekseer/Dev/Cpp/Effekseer/
-        ../Effekseer/Dev/Cpp/EffekseerRendererGL/
+        ../Effekseer/Dev/Cpp/EffekseerRenderer${GDXSEER_RENDERER}/
         EffekseerAdapters/
-        EffekseerAdapters/GL/
+        EffekseerAdapters/${GDXSEER_RENDERER}/
         ${JNI_INCLUDE_DIRS}
 )
 
 # Link the sub-libraries needed for this project
 # First get any extra Apple frameworks to link if building for MacOS or iOS
 if(APPLE)
-    if ((DEFINED CMAKE_SYSTEM_NAME) AND (${CMAKE_SYSTEM_NAME} STREQUAL "iOS"))
-        set(APPLE_FRAMEWORKS "-framework OpenGLES")
+    if (${GDXSEER_RENDERER} STREQUAL "GL")
+        if ((DEFINED CMAKE_SYSTEM_NAME) AND (${CMAKE_SYSTEM_NAME} STREQUAL "iOS"))
+            set(APPLE_FRAMEWORKS "-framework OpenGLES")
+        else()
+            set(APPLE_FRAMEWORKS "-framework OpenGL")
+        endif()
     else()
-        set(APPLE_FRAMEWORKS "-framework OpenGL")
+        set(APPLE_FRAMEWORKS "")
     endif()
 elseif()
     set(APPLE_FRAMEWORKS "")
@@ -74,12 +81,12 @@ target_link_libraries(
         PRIVATE
         ${APPLE_FRAMEWORKS}
         Effekseer
-        EffekseerRendererGL
+        EffekseerRenderer${GDXSEER_RENDERER}
 )
 
 # Build Effekseer and renderer logic first before this project
 add_dependencies(
         ${PROJECT_NAME}
         Effekseer
-        EffekseerRendererGL
+        EffekseerRenderer${GDXSEER_RENDERER}
 )

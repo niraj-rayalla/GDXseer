@@ -217,6 +217,8 @@ val configureDesktopBuilding by tasks.creating(Exec::class.java) {
             add("-D")
             add("CMAKE_OSX_ARCHITECTURES=x86_64;arm64")
         }
+        add("-D")
+        add("GDXSEER_RENDERER=GL")
         add("-B")
         add(desktopCmakeBuildDir.absolutePath)
     }
