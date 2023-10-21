@@ -14,6 +14,7 @@ package io.github.niraj_rayalla.gdxseer.utils
  *
  * @since 1.8
  */
+@Suppress("unused")
 fun interface Function<T, R> {
     /**
      * Applies this function to the given argument.
@@ -70,7 +71,7 @@ fun interface Function<T, R> {
          * @param T the type of the input and output objects to the function
          * @return a function that always returns its input argument
          */
-        fun <T> identity(): Function<T, T>? {
+        fun <T> identity(): Function<T, T> {
             return Function { t: T -> t }
         }
     }

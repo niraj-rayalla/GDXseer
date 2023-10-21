@@ -24,6 +24,7 @@ import java.io.File
 /**
  * Loads the particle effect and its dependencies and produces a [Result] which can then load the assets into a given [EffekseerEffectAdapter].
  */
+@Suppress("unused")
 class EffekseerParticleAssetLoader: AsynchronousAssetLoader<EffekseerParticleAssetLoader.Companion.Result, EffekseerParticleAssetLoader.Companion.Parameters> {
 
     companion object {

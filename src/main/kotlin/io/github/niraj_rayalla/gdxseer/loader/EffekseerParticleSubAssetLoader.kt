@@ -15,6 +15,7 @@ import io.github.niraj_rayalla.gdxseer.adapter_effekseer.TextureRefWrapper
 /**
  * Loads the assets needed for particle effects. Should be started by [EffekseerParticleAssetLoader].
  */
+@Suppress("unused")
 class EffekseerParticleSubAssetLoader(resolver: FileHandleResolver?): AsynchronousAssetLoader<EffekseerParticleSubAssetLoader.Companion.Result, EffekseerParticleSubAssetLoader.Companion.Parameters>(resolver) {
 
     companion object {

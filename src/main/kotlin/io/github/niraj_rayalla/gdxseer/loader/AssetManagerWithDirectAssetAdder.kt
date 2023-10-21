@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver
 /**
  * An [AssetManager] that implements [DirectAssetAdder].
  */
+@Suppress("unused")
 class AssetManagerWithDirectAssetAdder: AssetManager, DirectAssetAdder {
 
     //region Constructors
