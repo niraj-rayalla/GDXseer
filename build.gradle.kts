@@ -3,6 +3,7 @@ plugins {
 }
 
 val gdxVersion: String by project
+val libraryVersion: String = "1.0.0"
 
 dependencies {
     implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
@@ -272,6 +273,45 @@ val buildDesktopNativeLibrary by tasks.creating(Exec::class.java) {
  */
 val buildDesktopLibrary by tasks.creating {
     dependsOn(":GDXseer-desktop:jar")
+}
+
+//endregion
+
+//region Local Maven Installs
+
+/**
+ * Installs the final core GDXseer library to local maven. Does not depend on the build task so the build task must be called before this, if the library hasn't been built yet.
+ */
+val localMavenInstallCore by tasks.creating(Exec::class.java) {
+    commandLine(
+        "mvn",
+        "install:install-file",
+        "-Dfile=./build/libs/GDXseer.jar",
+        "-DgroupId=io.github.niraj_rayalla",
+        "-DartifactId=GDXseer",
+        "-Dversion=$libraryVersion",
+        "-Dpackaging=jar",
+        "-DgeneratePom=true"
+    )
+}
+
+/**
+ * Installs the final desktop GDXseer library to local maven.
+ * Does not depend on the build task [buildDesktopLibrary] so the build task must be called before this, if the library hasn't been built yet.
+ * Does depend on [localMavenInstallCore] so it's not necessary to call that.
+ */
+val localMavenInstallDesktop by tasks.creating(Exec::class.java) {
+    dependsOn(localMavenInstallCore)
+    commandLine(
+        "mvn",
+        "install:install-file",
+        "-Dfile=./GDXseer-desktop/build/libs/GDXseer-desktop.jar",
+        "-DgroupId=io.github.niraj_rayalla",
+        "-DartifactId=GDXseer-desktop",
+        "-Dversion=$libraryVersion",
+        "-Dpackaging=jar",
+        "-DgeneratePom=true"
+    )
 }
 
 //endregion
