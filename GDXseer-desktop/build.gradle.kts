@@ -18,7 +18,10 @@ tasks.withType<Jar> {
 
     dependsOn(configurations.compileClasspath)
     from({
-        configurations.compileClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        configurations.compileClasspath.get().filter {
+            // Only include the GDXseer GL jar since all other jars are already included in the core library
+            it.name == "GL.jar"
+        }.map { zipTree(it) }
     })
 }
 
