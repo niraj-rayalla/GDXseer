@@ -10,8 +10,8 @@ import io.github.niraj_rayalla.gdxseer.utils.Function
  * Requires a getter and setter that will get/set the value in Effekseer.
  */
 class EffekseerManagedField<T: Any?>(
-    private val getter: Function<Unit, T?>,
-    private val setter: Function<T?, Unit>
+    private val getter: Function<Unit, T>,
+    private val setter: Function<T, Unit>
 ) {
 
     //region State
@@ -24,17 +24,26 @@ class EffekseerManagedField<T: Any?>(
         private set
 
     /**
+     * The value of the field.
+     */
+    private var valueInstance: T? = null
+
+    //endregion
+
+    //region Properties
+
+    /**
      * Gets/Sets the value for the wrapped field from/to Effekseer.
      */
-    var value: T? = null
+    var value: T
         get() {
             if (!this.isValueSet) {
-                field = this.getter.apply(Unit)
+                this.valueInstance = this.getter.apply(Unit)
             }
-            return field
+            return this.valueInstance!!
         }
         set(value) {
-            field = value
+            this.valueInstance = value
             this.isValueSet = true
             this.setter.apply(value)
         }
