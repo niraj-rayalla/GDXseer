@@ -24,7 +24,7 @@ class GDXseerGLManager(
 
     //region Properties
 
-    private val effekseerManagerAdapterName: String by lazy {
+    private val effekseerManagerAdapterNameInstance: String by lazy {
         GDXseerGLManager::class.simpleName!!
     }
 
@@ -33,7 +33,7 @@ class GDXseerGLManager(
     //region Overrides
 
     override fun getEffekseerManagerAdapterName(): String {
-        return this.effekseerManagerAdapterName
+        return this.effekseerManagerAdapterNameInstance
     }
 
     override fun createEffekseerManagerAdapter(): EffekseerGLManagerAdapter {
