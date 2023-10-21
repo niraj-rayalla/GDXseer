@@ -8,6 +8,26 @@ dependencies {
     implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
 }
 
+/**
+ * Make the jar a fat jar.
+ */
+tasks.withType<Jar> {
+    // To avoid the duplicate handling strategy error
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // To add all of the dependencies
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.compileClasspath)
+    from({
+        configurations.compileClasspath.get().filter {
+            // Include all jars except for the GDX jars since the user of the library can already include the GDX library
+            it.name.endsWith("jar") && !it.name.contains("gdx-")
+        }.map { zipTree(it) }
+    })
+}
+
+
 //region Java Wrapping of Effekseer C++ using Swig
 
 /**
