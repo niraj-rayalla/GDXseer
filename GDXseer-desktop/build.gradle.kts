@@ -10,6 +10,8 @@ dependencies {
  * Copies the native libraries needed into the jar.
  */
 val copyNativeLibs by tasks.creating(Copy::class.java) {
+    dependsOn(":buildDesktopNativeLibrary")
+
     when {
         org.gradle.internal.os.OperatingSystem.current().isMacOsX -> {
             from("$rootDir/cmake-macos/cpp/libGDXseer_Effekseer.dylib")
@@ -22,10 +24,13 @@ val copyNativeLibs by tasks.creating(Copy::class.java) {
         }
     }
 
-    into("$rootDir/gdx-effekseer-desktop/src/main/resources")
+
+    val resourcesDir = File("$rootDir/GDXseer-desktop/src/main/resources")
+    resourcesDir.mkdirs()
+    into(resourcesDir)
 }
 
 /**
  * Run the jar task after [copyNativeLibs].
  */
-tasks.jar.get().mustRunAfter(copyNativeLibs)
+tasks.processResources.get().dependsOn(copyNativeLibs)

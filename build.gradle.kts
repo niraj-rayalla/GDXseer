@@ -227,21 +227,31 @@ val configureDesktopBuilding by tasks.creating(Exec::class.java) {
 
 //endregion
 
-//region CMAKE Build
+//region CMAKE Builds
 
 /**
- * Builds the desktop GDXseer library.
+ * Builds the desktop GDXseer C++ library.
  */
-val buildDesktopLibrary by tasks.creating(Exec::class.java) {
+val buildDesktopNativeLibrary by tasks.creating(Exec::class.java) {
     dependsOn(configureDesktopBuilding)
-    dependsOn(tasks.jar)
-    tasks.jar.get().shouldRunAfter(configureDesktopBuilding)
 
+    // Build the GL C++ library
     commandLine(
         "cmake",
         "--build", desktopCmakeBuildDir.absolutePath,
         "--config", "Release"
     )
+}
+
+//endregion
+
+//region Final Builds
+
+/**
+ * Builds the C++ and Jar for the desktop library.
+ */
+val buildDesktopLibrary by tasks.creating {
+    dependsOn(":GDXseer-desktop:jar")
 }
 
 //endregion
