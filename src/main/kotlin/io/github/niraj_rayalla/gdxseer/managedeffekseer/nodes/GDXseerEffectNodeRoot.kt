@@ -6,5 +6,4 @@ import io.github.niraj_rayalla.gdxseer.effekseer.EffectNodeRoot
 /**
  * A [GDXseerEffectNode] for [EffectNodeRoot].
  */
-class GDXseerEffectNodeRoot(source: EffectNodeRoot, particleEffect: GDXseerParticleEffect): GDXseerEffectNode<EffectNodeRoot>(source, particleEffect) {
-}
+class GDXseerEffectNodeRoot(source: EffectNodeRoot, particleEffect: GDXseerParticleEffect): GDXseerEffectNode<EffectNodeRoot>(source, particleEffect)
