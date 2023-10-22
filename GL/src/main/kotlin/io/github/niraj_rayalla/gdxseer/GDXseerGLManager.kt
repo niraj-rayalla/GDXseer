@@ -8,18 +8,19 @@ import io.github.niraj_rayalla.gdxseer.effekseer_gl.OpenGLDeviceType
 /**
  * [GDXseerManager] with GL backend renderer.
  */
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 class GDXseerGLManager(
-    /**
-     * The version of Open GL to use.
-     */
-    val openGLDeviceType: OpenGLDeviceType,
+    maxSpriteCount: Int,
     autoFlip: Boolean = true,
     camera: Camera,
-    maxSpriteCount: Int,
     /**
      * An optional [RenderContext] used to reduce graphics calls.
      */
-    renderContext: RenderContext?
+    renderContext: RenderContext?,
+    /**
+     * The version of Open GL to use.
+     */
+    val openGLDeviceType: OpenGLDeviceType
 ): GDXseerManager<EffekseerGLManagerAdapter>(maxSpriteCount, autoFlip, camera, renderContext) {
 
     //region Properties
