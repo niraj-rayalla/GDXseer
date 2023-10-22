@@ -11,19 +11,24 @@ typedef ::Effekseer::Color Color;
 typedef ::Effekseer::Manager::UpdateParameter UpdateParameter;
 typedef ::Effekseer::Manager::DrawParameter DrawParameter;
 
-EffekseerRendererRefWrapper EffekseerManagerAdapter::NonPureVirtualCreateRenderer(int32_t spriteMaxCount) {
-    return this->CreateRenderer(spriteMaxCount);
-}
-
 EffekseerManagerAdapter::EffekseerManagerAdapter(int32_t spriteMaxCount, bool autoFlip) {
+    this->spriteMaxCount = spriteMaxCount;
     // Create the Effekseer manager object
     this->manager = ::Effekseer::Manager::Create(spriteMaxCount, autoFlip);
     // Create the setting object
     this->setting = ::Effekseer::Setting::Create();
     this->setting->SetCoordinateSystem(Effekseer::CoordinateSystem::RH);
     this->manager->SetSetting(setting);
+}
+
+EffekseerManagerAdapter::~EffekseerManagerAdapter() {
+    manager.Reset();
+    renderer.Reset();
+}
+
+void EffekseerManagerAdapter::Initialize() {
     // Create the Effekseer renderer object to use by calling this virtual method that should be implemented in sub-classes.
-    this->renderer = this->NonPureVirtualCreateRenderer(spriteMaxCount).rendererRef;
+    this->renderer = CreateRenderer(this->spriteMaxCount).rendererRef;
 
     // Check successful creation
     if (this->manager == nullptr || this->renderer == nullptr) {
@@ -50,11 +55,6 @@ EffekseerManagerAdapter::EffekseerManagerAdapter(int32_t spriteMaxCount, bool au
 
     // Done initialization
     this->hasSuccessfullyInitialized = true;
-}
-
-EffekseerManagerAdapter::~EffekseerManagerAdapter() {
-    manager.Reset();
-    renderer.Reset();
 }
 
 bool EffekseerManagerAdapter::GetHasSuccessfullyInitialized() {

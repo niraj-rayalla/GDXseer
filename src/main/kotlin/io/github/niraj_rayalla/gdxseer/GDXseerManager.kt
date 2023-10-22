@@ -110,7 +110,7 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
      * Call before any use of this manager object.
      */
     fun initialize() {
-        this.effekseerManagerAdapter = this.createEffekseerManagerAdapter()
+        this.effekseerManagerAdapter = this.createEffekseerManagerAdapter().apply { Initialize() }
 
         // Check that the manager adapter has successfully initialized
         if (!this.effekseerManagerAdapter.GetHasSuccessfullyInitialized()) {
