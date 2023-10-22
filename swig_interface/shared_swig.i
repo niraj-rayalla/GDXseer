@@ -10,6 +10,8 @@
 %include "carrays.i"
 %include "./ibyte.i"
 
+%include "swigmove.i"
+
 // Some applies
 %apply float[] {float *};
 %apply char *BYTE { char* data };
