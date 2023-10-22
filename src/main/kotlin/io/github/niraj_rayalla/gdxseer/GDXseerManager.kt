@@ -15,6 +15,9 @@ import io.github.niraj_rayalla.gdxseer.effekseer.EffekseerManagerParameters.Draw
 /**
  * The base abstract class used to manage an Effekseer manager instance (by wrapping an [EffekseerManagerAdapter]) and includes relevant GDX logic. This is the main entry class
  * for making use of Effekseer particle effects.
+ *
+ * MUST CALL [initialize] before an instance of this class is used.
+ *
  * All GDX relevant logic lives in this class, but not all properties and methods of the Effekseer manager object are available here. Use [effekseerManagerAdapter],
  * which is the [EffekseerManagerAdapter] being wrapped by this class, to access all of the JVM accessible Effekseer logic.
  *
@@ -62,7 +65,8 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
      * The [EffekseerManagerAdapter] instance that is being managed by this [GDXseerManager]. [EffekseerManagerAdapter] is the instance that actually
      * tells the Effekseer library what to do. All the remaining non-wrapped methods not in [GDXseerManager] will be in this [EffekseerManagerAdapter] instance.
      */
-    val effekseerManagerAdapter: MA = this.createEffekseerManagerAdapter()
+    lateinit var effekseerManagerAdapter: MA
+        private set
 
     /**
      * The [Camera] instance being used in GDX to render the scene.
@@ -102,7 +106,12 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
 
     //region Init
 
-    init {
+    /**
+     * Call before any use of this manager object.
+     */
+    fun initialize() {
+        this.effekseerManagerAdapter = this.createEffekseerManagerAdapter()
+
         // Check that the manager adapter has successfully initialized
         if (!this.effekseerManagerAdapter.GetHasSuccessfullyInitialized()) {
             throw RuntimeException("Failed to initialize the Effekseer manager instance of type ${this.getEffekseerManagerAdapterName()} and max sprite count of " + maxSpriteCount)
