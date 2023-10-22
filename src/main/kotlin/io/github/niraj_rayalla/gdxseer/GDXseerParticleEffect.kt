@@ -9,10 +9,10 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Disposable
 import io.github.niraj_rayalla.gdxseer.adapter_effekseer.EffekseerEffectAdapter
 import io.github.niraj_rayalla.gdxseer.adapter_effekseer.EffekseerManagerAdapter
-import io.github.niraj_rayalla.gdxseer.effekseer.EffectNodeRoot
 import io.github.niraj_rayalla.gdxseer.effekseer.Vector3D
 import io.github.niraj_rayalla.gdxseer.loader.EffekseerParticleAssetLoader
 import io.github.niraj_rayalla.gdxseer.managedeffekseer.EffekseerManagedField
+import io.github.niraj_rayalla.gdxseer.managedeffekseer.nodes.GDXseerEffectNodeRoot
 
 /**
  * The class that manages an Effekseer particle effect object (by wrapping an [EffekseerEffectAdapter]) and includes relevant GDX logic. This is the class for representing
@@ -100,8 +100,8 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
 
     //region Managed Fields
 
-    private val rootNodeField: EffekseerManagedField<EffectNodeRoot> = EffekseerManagedField(
-        { effekseerEffectAdapter.GetRootNode() },
+    private val rootNodeField: EffekseerManagedField<GDXseerEffectNodeRoot> = EffekseerManagedField(
+        { GDXseerEffectNodeRoot(effekseerEffectAdapter.GetRootNode(), this) },
         {
             // Can't set root node
         },
@@ -115,7 +115,7 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
     /**
      * @return The root node instance of this particle effect.
      */
-    val rootNode: EffectNodeRoot
+    val rootNode: GDXseerEffectNodeRoot
         get() {
             return this.rootNodeField.value
         }
