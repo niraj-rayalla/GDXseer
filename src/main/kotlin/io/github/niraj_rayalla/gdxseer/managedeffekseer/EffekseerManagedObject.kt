@@ -1,5 +1,6 @@
 package io.github.niraj_rayalla.gdxseer.managedeffekseer
 
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
 
 /**
@@ -20,9 +21,80 @@ import com.badlogic.gdx.utils.Disposable
  *
  * This also extends [Disposable] so that any extra native objects being cached can be freed when [dispose] is called. Call [dispose] when this object is no longer needed.
  */
-abstract class EffekseerManagedObject<Source: Any>: Disposable {
+abstract class EffekseerManagedObject<Source: Any>(expectedNumManagedFields: Int): Disposable {
+
+    //region Abstract
+
     /**
      * The generated Effekseer Java class that this [EffekseerManagedObject] manages.
      */
     abstract val source: Source
+
+    //endregion
+
+    //region State
+
+    /**
+     * The list of [EffekseerManagedField]s in this [EffekseerManagedObject].
+     */
+    private var managedFields: Array<EffekseerManagedField<*>>? = if (expectedNumManagedFields <= 0) null else Array<EffekseerManagedField<*>>(false, expectedNumManagedFields)
+
+    private var isDisposing: Boolean = false
+
+    //endregion
+
+    //region Overrides
+
+    override fun dispose() {
+        this.isDisposing = true
+
+        // Dispose source
+        val source = this.source
+        if (source is EffekseerManagedObject<*>) {
+            source.dispose()
+        }
+
+        // Dispose managed fields
+        this.managedFields?.also {
+            for (managedField in it) {
+                managedField.dispose()
+            }
+            it.clear()
+        }
+
+        this.isDisposing = false
+    }
+
+    //endregion
+
+    //region Internal Methods
+
+    /**
+     * Tracks the given [EffekseerManagedField] to this [EffekseerManagedObject] if it doesn't already have a parent.
+     */
+    internal fun removeManagedField(managedField: EffekseerManagedField<*>) {
+        // Only remove if this object is not disposing, since the managed fields list will get cleared anyway by the end of this object dispose if being disposed
+        if (!this.isDisposing) {
+            this.managedFields?.also {
+                it.removeValue(managedField, true)
+            }
+        }
+    }
+
+    /**
+     * Tracks the given [EffekseerManagedField] to this [EffekseerManagedObject] if it doesn't already have a parent.
+     */
+    internal fun addManagedField(managedField: EffekseerManagedField<*>) {
+        if (managedField.parentManagedObject == null) {
+            managedField.parentManagedObject = this
+
+            this.managedFields?.add(managedField) ?: {
+                this.managedFields = Array<EffekseerManagedField<*>>(false, 6).also {
+                    it.add(managedField)
+                }
+            }
+        }
+    }
+
+    //endregion
 }

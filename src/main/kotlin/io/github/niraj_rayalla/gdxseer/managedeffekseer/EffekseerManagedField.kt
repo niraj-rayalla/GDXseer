@@ -1,5 +1,6 @@
 package io.github.niraj_rayalla.gdxseer.managedeffekseer
 
+import com.badlogic.gdx.utils.Disposable
 import io.github.niraj_rayalla.gdxseer.utils.Function
 
 /**
@@ -8,11 +9,17 @@ import io.github.niraj_rayalla.gdxseer.utils.Function
  * Instead, calling [value] will initially cache the value and any future sets can be done through this class instead, using [value], so that this object will
  * contain a reference to the actual data object at all times.
  * Requires a getter and setter that will get/set the value in Effekseer.
+ *
+ * If this is a field in a [EffekseerManagedObject], set [parentManagedObject] to the reference of that object.
  */
 class EffekseerManagedField<T: Any?>(
     private val getter: Function<Unit, T>,
-    private val setter: Function<T, Unit>
-) {
+    private val setter: Function<T, Unit>,
+    /**
+     * If not null, the [EffekseerManagedObject] that contains this.
+     */
+    internal var parentManagedObject: EffekseerManagedObject<*>?
+): Disposable {
 
     //region State
 
@@ -47,6 +54,26 @@ class EffekseerManagedField<T: Any?>(
             this.isValueSet = true
             this.setter.apply(value)
         }
+
+    //endregion
+
+    //region Overrides
+
+    override fun dispose() {
+        this.isValueSet = false
+        // Dispose the value and reset it
+        this.valueInstance?.also {
+            this.valueInstance = null
+            if (it is EffekseerManagedObject<*>) {
+                it.dispose()
+            }
+        }
+        // Remove from parent managed object and reset
+        this.parentManagedObject?.also {
+            this.parentManagedObject = null
+            it.removeManagedField(this)
+        }
+    }
 
     //endregion
 
