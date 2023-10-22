@@ -16,10 +16,19 @@ object GDXseer {
         val className = "io.github.niraj_rayalla.gdxseer.$platformType.NativeLibsLoader"
 
         try {
-            ClassReflection.forName(className).getMethod("load").invoke(null)
+            val nativeLibsLoaderClass = ClassReflection.forName(className)
+            val nativeLibsLoaderCompanionClass = ClassReflection.forName("${className}\$Companion")
+
+            // Companion instance
+            val nativeLibsLoaderClassCompanionField = nativeLibsLoaderClass.getDeclaredField("Companion")
+            nativeLibsLoaderClassCompanionField.isAccessible = true
+            val nativeLibsLoaderClassCompanionInstance = nativeLibsLoaderClassCompanionField.get(null)
+
+            // Companion class
+            nativeLibsLoaderCompanionClass.getMethod("load").invoke(nativeLibsLoaderClassCompanionInstance)
         }
         catch (e: Exception) {
-            throw RuntimeException("Failed to load the native libraries needed for GDXseer with GDX app type of $appType.")
+            throw RuntimeException("Failed to load the native libraries needed for GDXseer with GDX app type of $appType.", e)
         }
     }
 
