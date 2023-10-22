@@ -3,6 +3,8 @@ package io.github.niraj_rayalla.gdxseer.managedeffekseer.nodes
 import com.badlogic.gdx.utils.Array
 import io.github.niraj_rayalla.gdxseer.GDXseerParticleEffect
 import io.github.niraj_rayalla.gdxseer.effekseer.DynamicFactorParameter
+import io.github.niraj_rayalla.gdxseer.effekseer.EffectBasicRenderParameter
+import io.github.niraj_rayalla.gdxseer.effekseer.EffectModelParameter
 import io.github.niraj_rayalla.gdxseer.effekseer.EffectNodeImplemented
 import io.github.niraj_rayalla.gdxseer.effekseer.EffectNodeType
 import io.github.niraj_rayalla.gdxseer.effekseer.FalloffParameter
@@ -45,6 +47,13 @@ open class GDXseerEffectNode<N: EffectNodeImplemented>(
     //endregion
 
     //region Managed Fields
+
+    val basicRenderParameter: EffekseerManagedField<EffectBasicRenderParameter> by lazy {
+        EffekseerManagedField(
+            { this.source.basicRenderParameter },
+            { this.source.basicRenderParameter = it },
+            this)
+    }
 
     val commonValues: EffekseerManagedField<ParameterCommonValues> by lazy {
         EffekseerManagedField(
@@ -121,6 +130,10 @@ open class GDXseerEffectNode<N: EffectNodeImplemented>(
             { this.source.dynamicFactor },
             { this.source.dynamicFactor = it },
             this)
+    }
+
+    val modelParameter: EffectModelParameter by lazy {
+        this.source.effectModelParameter
     }
 
     val translationParam: TranslationParameter by lazy {
