@@ -1,3 +1,36 @@
+// Color
+%extend Effekseer::Color {
+    void set(uint8_t r, uint8_t g, uint8_t b) {
+        self->R = r;
+        self->G = g;
+        self->B = b;
+    }
+
+    void set(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+        self->R = r;
+        self->G = g;
+        self->B = b;
+        self->A = a;
+    }
+};
+
+// Vector2D
+%extend Effekseer::Vector2D {
+    void set(float x, float y) {
+        self->X = x;
+        self->Y = y;
+    }
+};
+
+// Vector3D
+%extend Effekseer::Vector3D {
+    void set(float x, float y, float z) {
+        self->X = x;
+        self->Y = y;
+        self->Z = z;
+    }
+};
+
 // AllTypeColorParameter
 %extend Effekseer::AllTypeColorParameter {
     Effekseer::Color getFixed() { return self->fixed.all; }
