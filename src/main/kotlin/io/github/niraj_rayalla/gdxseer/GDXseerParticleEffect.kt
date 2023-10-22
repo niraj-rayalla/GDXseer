@@ -104,7 +104,8 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
         { effekseerEffectAdapter.GetRootNode() },
         {
             // Can't set root node
-        }
+        },
+        null
     )
 
     //endregion
@@ -287,6 +288,7 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
     override fun dispose() {
         this.stop()
         this.effekseerEffectAdapter.delete()
+        this.rootNodeField.dispose()
     }
 
     //endregion
