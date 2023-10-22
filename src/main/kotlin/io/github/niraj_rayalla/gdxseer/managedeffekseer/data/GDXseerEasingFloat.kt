@@ -11,7 +11,7 @@ import io.github.niraj_rayalla.gdxseer.managedeffekseer.EffekseerManagedObject
 @Suppress("unused")
 class GDXseerEasingFloat(override val source: InternalStructEasingFloat): EffekseerManagedObject<InternalStructEasingFloat>(2) {
 
-    //region Field Wrappers
+    //region Managed Fields
 
     val start: EffekseerManagedField<InternalStructRandomFloat> = EffekseerManagedField(
         { this.source.start },

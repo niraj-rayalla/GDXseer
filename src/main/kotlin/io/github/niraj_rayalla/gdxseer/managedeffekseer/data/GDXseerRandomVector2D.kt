@@ -11,7 +11,7 @@ import io.github.niraj_rayalla.gdxseer.managedeffekseer.EffekseerManagedObject
 @Suppress("unused")
 class GDXseerRandomVector2D(override val source: InternalStructRandomVector2D = InternalStructRandomVector2D()): EffekseerManagedObject<InternalStructRandomVector2D>(2) {
 
-    //region Field Wrappers
+    //region Managed Fields
 
     val min: EffekseerManagedField<InternalStructVector2D> = EffekseerManagedField(
         { this.source.min },

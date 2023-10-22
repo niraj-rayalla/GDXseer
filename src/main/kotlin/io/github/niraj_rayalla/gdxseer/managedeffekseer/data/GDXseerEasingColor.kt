@@ -10,7 +10,7 @@ import io.github.niraj_rayalla.gdxseer.managedeffekseer.EffekseerManagedObject
 @Suppress("unused")
 class GDXseerEasingColor(override val source: InternalStructEasingColor): EffekseerManagedObject<InternalStructEasingColor>(2) {
 
-    //region Field Wrappers
+    //region Managed Fields
 
     val start: EffekseerManagedField<GDXseerRandomColor> = EffekseerManagedField(
         { GDXseerRandomColor(this.source.start) },

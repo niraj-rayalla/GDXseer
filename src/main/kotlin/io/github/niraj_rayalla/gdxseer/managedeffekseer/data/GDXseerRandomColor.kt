@@ -11,7 +11,7 @@ import io.github.niraj_rayalla.gdxseer.managedeffekseer.EffekseerManagedObject
 @Suppress("unused")
 class GDXseerRandomColor(override val source: InternalStructRandomColor = InternalStructRandomColor()): EffekseerManagedObject<InternalStructRandomColor>(2) {
 
-    //region Field Wrappers
+    //region Managed Fields
 
     val min: EffekseerManagedField<Color> = EffekseerManagedField(
         { this.source.min },

@@ -10,7 +10,7 @@ import io.github.niraj_rayalla.gdxseer.managedeffekseer.EffekseerManagedObject
 @Suppress("unused")
 class GDXseerEasingVector3D(override val source: InternalStructEasingVector3D): EffekseerManagedObject<InternalStructEasingVector3D>(2) {
 
-    //region Field Wrappers
+    //region Managed Fields
 
     val start: EffekseerManagedField<GDXseerRandomVector3D> = EffekseerManagedField(
         { GDXseerRandomVector3D(this.source.start) },
