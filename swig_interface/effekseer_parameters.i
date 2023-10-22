@@ -39,7 +39,7 @@ namespace Effekseer {
     };
 
     // ParameterEasing<float>
-    %rename(ParameterEasingFloatBaseCore) ParameterEasing<float>;
+    %rename(ParameterEasingFloatBase) ParameterEasing<float>;
     struct ParameterEasing<float> {
         RefMinMax RefEqS;
         RefMinMax RefEqE;
@@ -57,7 +57,7 @@ namespace Effekseer {
         virtual float GetValue(const InstanceEasing<float>& instance, float time) const = 0;
     };
     // ParameterEasing<SIMD::Vec3f>
-    %rename(ParameterEasingSIMDVec3BaseCore) ParameterEasing<SIMD::Vec3f>;
+    %rename(ParameterEasingSIMDVec3Base) ParameterEasing<SIMD::Vec3f>;
     struct ParameterEasing<SIMD::Vec3f> {
         RefMinMax RefEqS;
         RefMinMax RefEqE;

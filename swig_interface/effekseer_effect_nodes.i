@@ -23,8 +23,8 @@
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRoot.h"
 
 // Sprite node
-%rename("SpriteColorParameterCore", fullname=1) "Effekseer::SpriteColorParameter";
-%rename("SpritePositionParameterCore", fullname=1) "Effekseer::SpritePositionParameter";
+%rename("SpriteColorParameter", fullname=1) "Effekseer::SpriteColorParameter";
+%rename("SpritePositionParameter", fullname=1) "Effekseer::SpritePositionParameter";
 %rename("EffectNodeSprite", fullname=1) "Effekseer::EffectNodeSprite";
 %rename($ignore, fullname=1) "Effekseer::EffectNodeSprite::SpriteAllColor";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeSprite.h"
@@ -34,8 +34,8 @@
 
 // Ribbon node
 // Don't know why NodeParameter and InstanceParameter are not being wrapped
-%rename("RibbonColorParameterCore", fullname=1) "Effekseer::RibbonColorParameter";
-%rename("RibbonPositionParameterCore", fullname=1) "Effekseer::RibbonPositionParameter";
+%rename("RibbonColorParameter", fullname=1) "Effekseer::RibbonColorParameter";
+%rename("RibbonPositionParameter", fullname=1) "Effekseer::RibbonPositionParameter";
 %rename("EffectNodeRibbon", fullname=1) "Effekseer::EffectNodeRibbon";
 %rename($ignore, fullname=1) "Effekseer::EffectNodeRibbon::RibbonAllColor";
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRibbon.h"
@@ -45,7 +45,7 @@
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Renderer/Effekseer.RibbonRenderer.h"
 
 // Track node
-%rename("TrackSizeParameterCore", fullname=1) "Effekseer::TrackSizeParameter";
+%rename("TrackSizeParameter", fullname=1) "Effekseer::TrackSizeParameter";
 %rename("EffectNodeTrack", fullname=1) "Effekseer::EffectNodeTrack";
 %rename($ignore, fullname=1) "Effekseer::EffectNodeTrack::TrackColorLeft";
 %rename($ignore, fullname=1) "Effekseer::EffectNodeTrack::TrackColorCenter";
@@ -62,13 +62,13 @@
 %include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Renderer/Effekseer.TrackRenderer.h"
 
 // Ring node
-%rename("RingSingleParameterCore", fullname=1) "Effekseer::RingSingleParameter";
-%rename("RingLocationParameterCore", fullname=1) "Effekseer::RingLocationParameter";
-%rename("RingColorParameterCore", fullname=1) "Effekseer::RingColorParameter";
-%rename("RingSingleValuesCore", fullname=1) "Effekseer::RingSingleValues";
-%rename("RingLocationValuesCore", fullname=1) "Effekseer::RingLocationValues";
-%rename("RingColorValuesCore", fullname=1) "Effekseer::RingColorValues";
-%rename("RingShapeParameterCore", fullname=1) "Effekseer::RingShapeParameter";
+%rename("RingSingleParameter", fullname=1) "Effekseer::RingSingleParameter";
+%rename("RingLocationParameter", fullname=1) "Effekseer::RingLocationParameter";
+%rename("RingColorParameter", fullname=1) "Effekseer::RingColorParameter";
+%rename("RingSingleValues", fullname=1) "Effekseer::RingSingleValues";
+%rename("RingLocationValues", fullname=1) "Effekseer::RingLocationValues";
+%rename("RingColorValues", fullname=1) "Effekseer::RingColorValues";
+%rename("RingShapeParameter", fullname=1) "Effekseer::RingShapeParameter";
 %rename("EffectNodeRing", fullname=1) "Effekseer::EffectNodeRing";
 %rename($ignore, fullname=1) "Effekseer::EffectNodeRing::OuterColor";
 %rename($ignore, fullname=1) "Effekseer::EffectNodeRing::CenterColor";
