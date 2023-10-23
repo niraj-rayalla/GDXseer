@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection
 /**
  * Used to run any initialization needed for GDXseer.
  */
+@Suppress("unused")
 object GDXseer {
 
     //region Private Methods
