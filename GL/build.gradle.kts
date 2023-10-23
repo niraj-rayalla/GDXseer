@@ -8,3 +8,8 @@ dependencies {
     api(rootProject)
     implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
 }
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}

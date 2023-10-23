@@ -11,6 +11,10 @@ dependencies {
     implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
 
 //region Java Wrapping of Effekseer C++ using Swig
 

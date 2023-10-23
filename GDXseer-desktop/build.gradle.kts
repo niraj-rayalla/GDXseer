@@ -6,6 +6,11 @@ dependencies {
     implementation(project(":GL"))
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 /**
  * Make the jar a fat jar.
  */
