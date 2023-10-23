@@ -42,7 +42,7 @@ object GDXseer {
      */
     fun init() {
         when (val appType = Gdx.app.type) {
-            ApplicationType.Android -> throw UnsupportedOperationException("GDXseer is not yet supported for Android.")
+            ApplicationType.Android -> System.loadLibrary("GDXseer_Effekseer")
             ApplicationType.Desktop, ApplicationType.HeadlessDesktop -> loadNativeLibsUsingLoader(appType)
             ApplicationType.iOS -> throw UnsupportedOperationException("GDXseer is not yet supported for iOS.")
             else -> throw UnsupportedOperationException("GDXseer is not supported for the operating system it's being run on.")

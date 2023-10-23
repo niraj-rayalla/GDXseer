@@ -8,7 +8,7 @@
 /cmake-windows/
 /cmake-macos/
 /cmake-linux/
-/cmake-android/
+/android-build/
 /cmake-ios/
 
 *.iml

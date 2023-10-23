@@ -1,3 +1,5 @@
+@file:Suppress("LocalVariableName")
+
 plugins {
     kotlin("jvm")
 }
@@ -7,25 +9,6 @@ val libraryVersion: String = "1.0.0"
 
 dependencies {
     implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
-}
-
-/**
- * Make the jar a fat jar.
- */
-tasks.withType<Jar> {
-    // To avoid the duplicate handling strategy error
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    // To add all of the dependencies
-    from(sourceSets.main.get().output)
-
-    dependsOn(configurations.compileClasspath)
-    from({
-        configurations.compileClasspath.get().filter {
-            // Include all jars except for the GDX jars since the user of the library can already include the GDX library
-            it.name.endsWith("jar") && !it.name.contains("gdx-")
-        }.map { zipTree(it) }
-    })
 }
 
 
@@ -268,6 +251,71 @@ val buildDesktopNativeLibrary by tasks.creating(Exec::class.java) {
     )
 }
 
+/**
+ * Builds the Android GDXseer C++ library.
+ */
+val buildAndroidNativeLibrary by tasks.creating {
+    dependsOn(generateWrapperEffekseer)
+
+    // Build the core jar
+    dependsOn(tasks.jar)
+    tasks.jar.get().shouldRunAfter(generateWrapperEffekseer)
+
+    // Get the build project path
+    val androidBuildProjectPath = projectDir.absolutePath
+    val androidBuildScriptPath = File(projectDir, "cpp/Android_mk/Android.mk").absolutePath
+    val androidNativeLibOutPath = File(projectDir, "android-build").absolutePath
+
+    // Returns a new task for building the GDXseer Android native library for the given CPU architecture
+    fun buildForArch(arch: String): Task {
+        return tasks.create("buildAndroidNativeLibrary_$arch") {
+
+            val clean = tasks.create("buildAndroidNativeLibrary_${arch}_clean", Exec::class.java) {
+                // Clean
+                commandLine(
+                    "ndk-build", "clean",
+                    "APP_BUILD_SCRIPT=$androidBuildScriptPath",
+                    "NDK_PROJECT_PATH=$androidBuildProjectPath",
+                    "NDK_APPLICATION_MK=cpp/Android_mk/${arch}.mk"
+                )
+            }
+
+            dependsOn(clean)
+
+            val build = tasks.create("buildAndroidNativeLibrary_${arch}_build", Exec::class.java) {
+                // Build the GL C++ library
+                commandLine(
+                    "ndk-build", "-j4",
+                    "APP_BUILD_SCRIPT=$androidBuildScriptPath",
+                    "NDK_PROJECT_PATH=$androidBuildProjectPath",
+                    "NDK_APPLICATION_MK=cpp/Android_mk/${arch}.mk",
+                    "NDK_OUT=$androidNativeLibOutPath",
+                    "NDK_LIBS_OUT=$androidNativeLibOutPath/libs/"
+                )
+            }
+
+            dependsOn(build)
+            build.shouldRunAfter(clean)
+        }
+    }
+
+    val build_x86 = buildForArch("x86")
+    dependsOn(build_x86)
+    build_x86.shouldRunAfter(tasks.jar.get())
+
+    val build_x86_64 = buildForArch("x86_64")
+    dependsOn(build_x86_64)
+    build_x86_64.shouldRunAfter(build_x86)
+
+    val build_armeabi_v7a = buildForArch("armeabi-v7a")
+    dependsOn(build_armeabi_v7a)
+    build_armeabi_v7a.shouldRunAfter(build_x86_64)
+
+    val build_arm64_v8a = buildForArch("arm64-v8a")
+    dependsOn(build_arm64_v8a)
+    build_arm64_v8a.shouldRunAfter(build_armeabi_v7a)
+}
+
 //endregion
 
 //region Final Builds
@@ -277,6 +325,13 @@ val buildDesktopNativeLibrary by tasks.creating(Exec::class.java) {
  */
 val buildDesktopLibrary by tasks.creating {
     dependsOn(":GDXseer-desktop:jar")
+}
+
+/**
+ * Builds the C++ and Jar for the Android library.
+ */
+val buildAndroidLibrary by tasks.creating {
+    dependsOn(":GDXseer-android:jar")
 }
 
 //endregion
@@ -312,6 +367,25 @@ val localMavenInstallDesktop by tasks.creating(Exec::class.java) {
         "-Dfile=./GDXseer-desktop/build/libs/GDXseer-desktop.jar",
         "-DgroupId=io.github.niraj_rayalla",
         "-DartifactId=GDXseer-desktop",
+        "-Dversion=$libraryVersion",
+        "-Dpackaging=jar",
+        "-DgeneratePom=true"
+    )
+}
+
+/**
+ * Installs the final Android GDXseer library to local maven.
+ * Does not depend on the build task [buildAndroidLibrary] so the build task must be called before this, if the library hasn't been built yet.
+ * Does depend on [localMavenInstallCore] so it's not necessary to call that.
+ */
+val localMavenInstallAndroid by tasks.creating(Exec::class.java) {
+    dependsOn(localMavenInstallCore)
+    commandLine(
+        "mvn",
+        "install:install-file",
+        "-Dfile=./GDXseer-android/build/libs/GDXseer-android.jar",
+        "-DgroupId=io.github.niraj_rayalla",
+        "-DartifactId=GDXseer-android",
         "-Dversion=$libraryVersion",
         "-Dpackaging=jar",
         "-DgeneratePom=true"

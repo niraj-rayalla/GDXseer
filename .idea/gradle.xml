@@ -11,6 +11,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/GDXseer-android" />
             <option value="$PROJECT_DIR$/GDXseer-desktop" />
             <option value="$PROJECT_DIR$/GL" />
           </set>
