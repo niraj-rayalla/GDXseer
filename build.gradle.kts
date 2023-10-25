@@ -414,9 +414,9 @@ val buildAndroidNativeLibrary by tasks.creating {
 }
 
 /**
- * @return A task for building the IOS library with options [isForSimulator] and [isUsingMetal]. Also signs the built native library if it's for device.
+ * @return A task for building the IOS library with options [isForSimulator] and [isUsingMetal].
  */
-fun getBuildAndSignDeviceNativeIOSBuildTask(isForSimulator: Boolean, isUsingMetal: Boolean): Task {
+fun getBuildNativeIOSTask(isForSimulator: Boolean, isUsingMetal: Boolean): Task {
     val taskNamePostfix = "IOS${if (isForSimulator) "Simulator" else "Device"}${if (isUsingMetal) "Metal" else "GL"}NativeLibrary"
     return tasks.create("build$taskNamePostfix", Exec::class.java) {
         val configureIOSBuildingTask = if (isForSimulator) {
@@ -444,12 +444,12 @@ fun getBuildAndSignDeviceNativeIOSBuildTask(isForSimulator: Boolean, isUsingMeta
 /**
  * Builds the iOS GL GDXseer C++ library for use on a iOS device. Also signs the library.
  */
-val buildIOSDeviceGLNativeLibrary = getBuildAndSignDeviceNativeIOSBuildTask(isForSimulator = false, isUsingMetal = false)
+val buildIOSDeviceGLNativeLibrary = getBuildNativeIOSTask(isForSimulator = false, isUsingMetal = false)
 
 /**
  * Builds the iOS GL GDXseer C++ library for use on a iOS simulator.
  */
-val buildIOSSimulatorGLNativeLibrary = getBuildAndSignDeviceNativeIOSBuildTask(isForSimulator = true, isUsingMetal = false)
+val buildIOSSimulatorGLNativeLibrary = getBuildNativeIOSTask(isForSimulator = true, isUsingMetal = false)
 
 /**
  * Builds the device and simulator GL library for iOS, and then their corresponding unsigned frameworks, and finally from that the unsigned xcframework.
