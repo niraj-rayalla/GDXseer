@@ -544,19 +544,6 @@ val buildIOSGLFrameworks by tasks.creating {
     signIOSGLXCFramework2.mustRunAfter(signIOSGLXCFramework)
 }
 
-/*
-// Adhoc sign if for device
-if (!isForSimulator) {
-    val signTask = tasks.create("sign$taskNamePostfix", Exec::class.java) {
-        commandLine(
-            "codesign", "-s", "niraj.rayalla@gmail.com", "${getIOSCmakeBuildDir(isForSimulator, isUsingMetal).absolutePath}/cpp/libGDXseer_Effekseer.dylib"
-        )
-    }
-    dependsOn(signTask)
-    signTask.shouldRunAfter(buildTask)
-}
- */
-
 //endregion
 
 //region Final Builds
