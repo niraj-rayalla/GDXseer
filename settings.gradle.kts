@@ -21,3 +21,4 @@ rootProject.name = "GDXseer"
 include(":GL")
 include(":GDXseer-desktop")
 include(":GDXseer-android")
+include(":GDXseer-ios-GL")

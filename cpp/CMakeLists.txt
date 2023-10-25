@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(GDXseer_Effekseer)
 
 OPTION(GDXSEER_RENDERER "The type of backend renderer to use for GDXseer. Can be GL or Metal." "GL")
+OPTION(iOS_JAVA_HOME "The JDK home to use for iOS when trying to find JNI. Example: /Users/username/jdk-13.0.2.jdk/Contents/Home/")
 MESSAGE("Using GDXseer Backend Renderer: " ${GDXSEER_RENDERER})
 
 set(BUILD_EXAMPLES OFF)
@@ -29,6 +30,13 @@ add_library(
 )
 
 # Need JNI
+if ((DEFINED CMAKE_SYSTEM_NAME) AND (${CMAKE_SYSTEM_NAME} STREQUAL "iOS"))
+    set(JAVA_AWT_LIBRARY ${iOS_JAVA_HOME}/lib/libjawt.dylib)
+    set(JAVA_JVM_LIBRARY ${iOS_JAVA_HOME}/lib/server/libjvm.dylib)
+    set(JAVA_INCLUDE_PATH ${iOS_JAVA_HOME}/include)
+    set(JAVA_INCLUDE_PATH2 ${iOS_JAVA_HOME}/include/darwin)
+    set(JAVA_AWT_INCLUDE_PATH ${iOS_JAVA_HOME}/include)
+endif()
 find_package(JNI)
 
 # Definitions

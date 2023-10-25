@@ -12,7 +12,7 @@ object GDXseer {
 
     //region Private Methods
 
-    private fun loadNativeLibsUsingLoader(appType: ApplicationType) {
+    private fun loadNativeLibsUsingLoader(appType: ApplicationType, iOSIsOnSimulator: Boolean? = null) {
         val platformType: String = if (appType == ApplicationType.iOS) "ios" else "desktop"
         val className = "io.github.niraj_rayalla.gdxseer.$platformType.NativeLibsLoader"
 
@@ -26,9 +26,15 @@ object GDXseer {
             val nativeLibsLoaderClassCompanionInstance = nativeLibsLoaderClassCompanionField.get(null)
 
             // Companion class
-            nativeLibsLoaderCompanionClass.getMethod("load").invoke(nativeLibsLoaderClassCompanionInstance)
+            if (iOSIsOnSimulator != null) {
+                nativeLibsLoaderCompanionClass.getMethod("load", Boolean::class.java).invoke(nativeLibsLoaderClassCompanionInstance, iOSIsOnSimulator)
+            }
+            else {
+                nativeLibsLoaderCompanionClass.getMethod("load").invoke(nativeLibsLoaderClassCompanionInstance)
+            }
         }
         catch (e: Exception) {
+            e.printStackTrace()
             throw RuntimeException("Failed to load the native libraries needed for GDXseer with GDX app type of $appType.", e)
         }
     }
@@ -45,7 +51,11 @@ object GDXseer {
         when (val appType = Gdx.app.type) {
             ApplicationType.Android -> System.loadLibrary("GDXseer_Effekseer")
             ApplicationType.Desktop, ApplicationType.HeadlessDesktop -> loadNativeLibsUsingLoader(appType)
-            ApplicationType.iOS -> throw UnsupportedOperationException("GDXseer is not yet supported for iOS.")
+            ApplicationType.iOS -> {
+                // No need to manually load the native library directly using java, since RoboVM will automatically load the generated frameworks.
+                // Uncomment to manually load the native library using Java like in the desktop app.
+                // loadNativeLibsUsingLoader(appType, iOSIsOnSimulator)
+            }
             else -> throw UnsupportedOperationException("GDXseer is not supported for the operating system it's being run on.")
         }
     }
