@@ -13,16 +13,13 @@ import io.github.niraj_rayalla.gdxseer.effekseer.*;
 import io.github.niraj_rayalla.gdxseer.adapter_effekseer.*;
 %}
 
-%module EffekseerGL
+%module EffekseerMetal
 %{
-#include "../Effekseer/Dev/Cpp/EffekseerRendererGL/EffekseerRenderer/EffekseerRendererGL.Base.Pre.h"
-#include "EffekseerAdapters/GL/EffekseerGLManagerAdapter.h"
+#include "../Effekseer/Dev/Cpp/EffekseerRendererMetal/EffekseerRendererMetal.h"
+#include "EffekseerAdapters/Metal/EffekseerMetalManagerAdapter.h"
 %}
 
 // Stop ignoring
 %rename("%s") "";
 
-%rename("OpenGLDeviceType", fullname=1) "EffekseerRendererGL::OpenGLDeviceType";
-%include "Effekseer/Dev/Cpp/EffekseerRendererGL/EffekseerRenderer/EffekseerRendererGL.Base.Pre.h"
-
-%include "/cpp/EffekseerAdapters/GL/EffekseerGLManagerAdapter.h"
+%include "/cpp/EffekseerAdapters/Metal/EffekseerMetalManagerAdapter.h"

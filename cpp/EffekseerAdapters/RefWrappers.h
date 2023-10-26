@@ -55,4 +55,5 @@ public:
 
     friend class EffekseerManagerAdapter;
     friend class EffekseerGLManagerAdapter;
+    friend class EffekseerMetalManagerAdapter;
 };

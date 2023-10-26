@@ -13,6 +13,12 @@ set(CMAKE_EXE_LINKER_FLAGS "-ljvm")
 # Add the original Effekseer source directory
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Effekseer ${CMAKE_CURRENT_BINARY_DIR}/Effekseer)
 
+if (${GDXSEER_RENDERER} STREQUAL "Metal")
+    set(GDXSEER_RENDERER_C_FILE_TYPE mm)
+else()
+    set(GDXSEER_RENDERER_C_FILE_TYPE cpp)
+endif()
+
 # Create the library
 add_library(
         ${PROJECT_NAME}
@@ -25,8 +31,8 @@ add_library(
         EffekseerAdapters/EffekseerEffectAdapter.cpp
         Adapter_Effekseer_Swig.cpp
 
-        EffekseerAdapters/${GDXSEER_RENDERER}/Effekseer${GDXSEER_RENDERER}ManagerAdapter.cpp
-        Effekseer_${GDXSEER_RENDERER}_Swig.cpp
+        EffekseerAdapters/${GDXSEER_RENDERER}/Effekseer${GDXSEER_RENDERER}ManagerAdapter.${GDXSEER_RENDERER_C_FILE_TYPE}
+        Effekseer_${GDXSEER_RENDERER}_Swig.${GDXSEER_RENDERER_C_FILE_TYPE}
 )
 
 # Need JNI
@@ -78,7 +84,7 @@ if(APPLE)
             set(APPLE_FRAMEWORKS "-framework OpenGL")
         endif()
     else()
-        set(APPLE_FRAMEWORKS "")
+        set(APPLE_FRAMEWORKS "-framework Foundation -framework Metal")
     endif()
 elseif()
     set(APPLE_FRAMEWORKS "")

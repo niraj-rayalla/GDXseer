@@ -2,6 +2,7 @@
 /cpp/Adapter_Effekseer_Swig.cpp
 /cpp/Effekseer_Swig.cpp
 /cpp/Effekseer_GL_Swig.cpp
+/cpp/Effekseer_Metal_Swig.mm
 /src/main/java/io/github/niraj_rayalla/gdxseer/effekseer
 /src/main/java/io/github/niraj_rayalla/gdxseer/adapter_effekseer
 

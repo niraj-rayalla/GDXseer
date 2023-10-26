@@ -64,6 +64,20 @@ val createJavaEffekseerGLDir by tasks.creating {
 }
 
 /**
+ * The directory all the Swig generated Java classes of the Effekseer Metal logic will be placed.
+ */
+val javaEffekseerMetalDir = File("${projectDir}/Metal/src/main/java/io/github/niraj_rayalla/gdxseer/effekseer_metal")
+/**
+ * Task used to create the directory pointed by [javaEffekseerMetalDir].
+ */
+val createJavaEffekseerMetalDir by tasks.creating {
+    doLast {
+        delete(javaEffekseerMetalDir)
+        javaEffekseerMetalDir.mkdirs()
+    }
+}
+
+/**
  * The directory all the copied and transformed Effekseer source code is located. This is the actual files used by
  * Swig to generate the Java wrappers.
  */
@@ -184,6 +198,29 @@ val generateWrapperEffekseer by tasks.creating {
     }
     dependsOn(effekseerGLGenerateTask)
     effekseerGLGenerateTask.shouldRunAfter(adapterEffekseerGenerateTask)
+
+    // The effekseer Metal logic
+    val effekseerMetalGenerateTask by tasks.creating(Exec::class.java) {
+        dependsOn(createJavaEffekseerMetalDir)
+        commandLine(
+            "swig", "-c++", "-java",
+            "-package", "io.github.niraj_rayalla.gdxseer.effekseer_metal",
+            "-outdir", javaEffekseerMetalDir.absolutePath,
+            "-o", "${projectDir}/cpp/Effekseer_Metal_Swig.mm",
+            "${projectDir}/swig_interface/effekseer_Metal.i"
+        )
+    }
+    dependsOn(effekseerMetalGenerateTask)
+    effekseerMetalGenerateTask.shouldRunAfter(effekseerGLGenerateTask)
+
+    // Delete the copied code
+    val deleteCopiedEffekseerSource by tasks.creating {
+        doLast {
+            delete(File("${projectDir}/cpp/Effekseer/"))
+        }
+    }
+    dependsOn(deleteCopiedEffekseerSource)
+    deleteCopiedEffekseerSource.shouldRunAfter(effekseerMetalGenerateTask)
 }
 
 //endregion
@@ -295,10 +332,8 @@ fun getConfigureIOSBuildTask(isForSimulator: Boolean, isUsingMetal: Boolean): Ta
             add("CMAKE_OSX_ARCHITECTURES=x86_64;arm64")
             add("-D")
             add("GDXSEER_RENDERER=${if (isUsingMetal) "Metal" else "GL"}")
-            if (!isUsingMetal) {
-                add("-D")
-                add("USE_OPENGLES3=ON")
-            }
+            add("-D")
+            add("USE_OPENGLES3=ON")
             add("-B")
             add(getIOSCmakeBuildDir(isForSimulator, isUsingMetal).absolutePath)
         }
