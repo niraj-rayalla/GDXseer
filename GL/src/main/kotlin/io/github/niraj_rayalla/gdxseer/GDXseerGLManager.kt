@@ -38,7 +38,7 @@ class GDXseerGLManager(
     }
 
     override fun createEffekseerManagerAdapter(): EffekseerGLManagerAdapter {
-        return EffekseerGLManagerAdapter(this.maxSpriteCount, this.openGLDeviceType)
+        return EffekseerGLManagerAdapter(this.maxSpriteCount, this.openGLDeviceType, this.autoFlip)
     }
 
     //endregion
