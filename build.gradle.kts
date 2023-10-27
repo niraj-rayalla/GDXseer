@@ -487,97 +487,120 @@ val buildIOSDeviceGLNativeLibrary = getBuildNativeIOSTask(isForSimulator = false
 val buildIOSSimulatorGLNativeLibrary = getBuildNativeIOSTask(isForSimulator = true, isUsingMetal = false)
 
 /**
- * Builds the device and simulator GL library for iOS, and then their corresponding unsigned frameworks, and finally from that the unsigned xcframework.
+ * @return A task for building the IOS library frameworks with option [isUsingMetal].
  */
-val buildIOSGLFrameworks by tasks.creating {
-    dependsOn(buildIOSDeviceGLNativeLibrary)
-    dependsOn(buildIOSSimulatorGLNativeLibrary)
+fun getBuildNativeIOSFrameworks(isUsingMetal: Boolean, deviceBuildSharedLibraryTask: Task, simulatorBuildSharedLibraryTask: Task): Task {
+    val renderer = if (isUsingMetal) "Metal" else "GL"
+    return tasks.create("buildIOS${renderer}Frameworks") {
+        dependsOn(deviceBuildSharedLibraryTask)
+        dependsOn(simulatorBuildSharedLibraryTask)
 
-    val cleanIOSGLFrameworks: Task by tasks.creating {
-        doLast {
-            delete("./GDXseer-ios-GL/build")
-            delete("./GDXseer-ios-GL/build_device")
-            delete("./GDXseer-ios-GL/build_simulator")
+        val cleanIOSFrameworks = tasks.create("cleanIOS${renderer}Frameworks") {
+            doLast {
+                delete("./GDXseer-ios-$renderer/build")
+                delete("./GDXseer-ios-$renderer/build_device")
+                delete("./GDXseer-ios-$renderer/build_simulator")
+            }
         }
-    }
-    dependsOn(cleanIOSGLFrameworks)
-    cleanIOSGLFrameworks.mustRunAfter(buildIOSDeviceGLNativeLibrary).mustRunAfter(buildIOSSimulatorGLNativeLibrary)
+        dependsOn(cleanIOSFrameworks)
+        cleanIOSFrameworks.mustRunAfter(deviceBuildSharedLibraryTask).mustRunAfter(simulatorBuildSharedLibraryTask)
 
-    // Device framework
-    val buildIOSGLDeviceFramework by tasks.creating(Exec::class.java) {
-        commandLine(
-            "xcodebuild",
-            "-project", "./GDXseer-ios-GL/GDXseer_device.xcodeproj",
-            "-scheme", "GDXseer",
-            "-configuration", "Release",
-            "-destination=\"generic/platform=iOS\"",
-            "-derivedDataPath", "./GDXseer-ios-GL/build_device",
-            "-archivePath", "./GDXseer-ios-GL/build_device",
-            "ONLY_ACTIVE_ARCH=NO",
-            "SKIP_INTSALL=NO",
-            "BUILD_LIBRARY_FOR_DISTRBUTION=YES",
-            "-sdk", "iphoneos"
-        )
-    }
-    dependsOn(buildIOSGLDeviceFramework)
-    buildIOSGLDeviceFramework.mustRunAfter(cleanIOSGLFrameworks)
-    // Simulator framework
-    val buildIOSGLSimulatorFramework by tasks.creating(Exec::class.java) {
-        commandLine(
-            "xcodebuild",
-            "-project", "./GDXseer-ios-GL/GDXseer_simulator.xcodeproj",
-            "-scheme", "GDXseer",
-            "-configuration", "Release",
-            "-destination=\"generic/platform=iOS Simulator\"",
-            "-derivedDataPath", "./GDXseer-ios-GL/build_simulator",
-            "-archivePath", "./GDXseer-ios-GL/build_simulator",
-            "ONLY_ACTIVE_ARCH=NO",
-            "SKIP_INTSALL=NO",
-            "BUILD_LIBRARY_FOR_DISTRBUTION=YES",
-            "-sdk", "iphonesimulator"
-        )
-    }
-    dependsOn(buildIOSGLSimulatorFramework)
-    buildIOSGLSimulatorFramework.mustRunAfter(cleanIOSGLFrameworks)
+        // Device framework
+        val buildIOSDeviceFramework = tasks.create("buildIOS${renderer}DeviceFramework", Exec::class.java) {
+            commandLine(
+                "xcodebuild",
+                "-project", "./GDXseer-ios-$renderer/GDXseer_device.xcodeproj",
+                "-scheme", "GDXseer",
+                "-configuration", "Release",
+                "-destination=\"generic/platform=iOS\"",
+                "-derivedDataPath", "./GDXseer-ios-$renderer/build_device",
+                "-archivePath", "./GDXseer-ios-$renderer/build_device",
+                "ONLY_ACTIVE_ARCH=NO",
+                "SKIP_INTSALL=NO",
+                "BUILD_LIBRARY_FOR_DISTRBUTION=YES",
+                "-sdk", "iphoneos"
+            )
+        }
+        dependsOn(buildIOSDeviceFramework)
+        buildIOSDeviceFramework.mustRunAfter(cleanIOSFrameworks)
+        // Simulator framework
+        val buildIOSSimulatorFramework = tasks.create("buildIOS${renderer}SimulatorFramework", Exec::class.java) {
+            commandLine(
+                "xcodebuild",
+                "-project", "./GDXseer-ios-$renderer/GDXseer_simulator.xcodeproj",
+                "-scheme", "GDXseer",
+                "-configuration", "Release",
+                "-destination=\"generic/platform=iOS Simulator\"",
+                "-derivedDataPath", "./GDXseer-ios-$renderer/build_simulator",
+                "-archivePath", "./GDXseer-ios-$renderer/build_simulator",
+                "ONLY_ACTIVE_ARCH=NO",
+                "SKIP_INTSALL=NO",
+                "BUILD_LIBRARY_FOR_DISTRBUTION=YES",
+                "-sdk", "iphonesimulator"
+            )
+        }
+        dependsOn(buildIOSSimulatorFramework)
+        buildIOSSimulatorFramework.mustRunAfter(cleanIOSFrameworks)
 
-    // XCFramework of both the device and simulator frameworks
-    val buildIOSGLXCFramework by tasks.creating(Exec::class.java) {
-        commandLine(
-            "xcodebuild", "-create-xcframework",
-            "-framework", "./GDXseer-ios-GL/build_device/Build/Products/Release-iphoneos/GDXseer.framework",
-            "-framework", "./GDXseer-ios-GL/build_simulator/Build/Products/Release-iphonesimulator/GDXseer.framework",
-            "-output", "./GDXseer-ios-GL/build/GDXseer.xcframework"
-        )
-    }
-    dependsOn(buildIOSGLXCFramework)
-    buildIOSGLXCFramework.mustRunAfter(buildIOSGLDeviceFramework).mustRunAfter(buildIOSGLSimulatorFramework)
+        // XCFramework of both the device and simulator frameworks
+        val buildIOSXCFramework = tasks.create("buildIOS${renderer}XCFramework", Exec::class.java) {
+            commandLine(
+                "xcodebuild", "-create-xcframework",
+                "-framework", "./GDXseer-ios-$renderer/build_device/Build/Products/Release-iphoneos/GDXseer.framework",
+                "-framework", "./GDXseer-ios-$renderer/build_simulator/Build/Products/Release-iphonesimulator/GDXseer.framework",
+                "-output", "./GDXseer-ios-$renderer/build/GDXseer.xcframework"
+            )
+        }
+        dependsOn(buildIOSXCFramework)
+        buildIOSXCFramework.mustRunAfter(buildIOSDeviceFramework).mustRunAfter(buildIOSSimulatorFramework)
 
-    // Get the code sign identity
-    fun getCodeSignIdentityFromLocalProperties(): String? {
-        val localProperties = Properties()
-        localProperties.load(FileInputStream(rootProject.file("local.properties")))
-        return localProperties.getProperty("iOS_CODE_SIGN_IDENTITY")
-    }
-    val codeSignIdentity = getCodeSignIdentityFromLocalProperties() ?: "-"
+        // Get the code sign identity
+        fun getCodeSignIdentityFromLocalProperties(): String? {
+            val localProperties = Properties()
+            localProperties.load(FileInputStream(rootProject.file("local.properties")))
+            return localProperties.getProperty("iOS_CODE_SIGN_IDENTITY")
+        }
+        val codeSignIdentity = getCodeSignIdentityFromLocalProperties() ?: "-"
 
-    // Sign the built XCFramework
-    val signIOSGLXCFramework by tasks.creating(Exec::class.java) {
-        commandLine(
-            "codesign", "-s", codeSignIdentity, "./GDXseer-ios-GL/build/GDXseer.xcframework"
-        )
-    }
-    dependsOn(signIOSGLXCFramework)
-    signIOSGLXCFramework.mustRunAfter(buildIOSGLXCFramework)
+        // Sign the built XCFramework
+        val signIOSXCFramework = tasks.create("signIOS${renderer}XCFramework", Exec::class.java) {
+            commandLine(
+                "codesign", "-s", codeSignIdentity, "./GDXseer-ios-$renderer/build/GDXseer.xcframework"
+            )
+        }
+        dependsOn(signIOSXCFramework)
+        signIOSXCFramework.mustRunAfter(buildIOSXCFramework)
 
-    // Sign the built XCFramework
-    val signIOSGLXCFramework2 by tasks.creating(Exec::class.java) {
-        commandLine(
-            "codesign", "-s", codeSignIdentity, "./GDXseer-ios-GL/build/GDXseer.xcframework/ios-arm64/GDXseer.framework/Frameworks/libGDXseer_Effekseer.dylib"
-        )
+        // Sign the built XCFramework
+        val signIOSSharedLib = tasks.create("signIOS${renderer}SharedLib", Exec::class.java) {
+            commandLine(
+                "codesign", "-s", codeSignIdentity, "./GDXseer-ios-$renderer/build/GDXseer.xcframework/ios-arm64/GDXseer.framework/Frameworks/libGDXseer_Effekseer.dylib"
+            )
+        }
+        dependsOn(signIOSSharedLib)
+        signIOSSharedLib.mustRunAfter(signIOSXCFramework)
     }
-    dependsOn(signIOSGLXCFramework2)
-    signIOSGLXCFramework2.mustRunAfter(signIOSGLXCFramework)
 }
+
+/**
+ * Builds the device and simulator GL library for iOS, and then their corresponding unsigned frameworks, and finally from that the signed xcframework.
+ */
+val buildIOSGLFrameworks: Task = getBuildNativeIOSFrameworks(false, buildIOSDeviceGLNativeLibrary, buildIOSSimulatorGLNativeLibrary)
+
+/**
+ * Builds the iOS Metal GDXseer C++ library for use on a iOS device. Also signs the library.
+ */
+val buildIOSDeviceMetalNativeLibrary = getBuildNativeIOSTask(isForSimulator = false, isUsingMetal = true)
+
+/**
+ * Builds the iOS Metal GDXseer C++ library for use on a iOS simulator.
+ */
+val buildIOSSimulatorMetalNativeLibrary = getBuildNativeIOSTask(isForSimulator = true, isUsingMetal = true)
+
+/**
+ * Builds the device and simulator Metal library for iOS, and then their corresponding unsigned frameworks, and finally from that the signed xcframework.
+ */
+val buildIOSMetalFrameworks: Task = getBuildNativeIOSFrameworks(true, buildIOSDeviceMetalNativeLibrary, buildIOSSimulatorMetalNativeLibrary)
 
 //endregion
 
@@ -602,6 +625,13 @@ val buildAndroidLibrary by tasks.creating {
  */
 val buildIOSGLLibrary by tasks.creating {
     dependsOn(":GDXseer-ios-GL:jar")
+}
+
+/**
+ * Builds the C++ and Jar for the iOS Metal library.
+ */
+val buildIOSMetalLibrary by tasks.creating {
+    dependsOn(":GDXseer-ios-Metal:jar")
 }
 
 //endregion
@@ -675,6 +705,25 @@ val localMavenInstallIOSGL by tasks.creating(Exec::class.java) {
         "-Dfile=./GDXseer-ios-GL/build/libs/GDXseer-ios-GL.jar",
         "-DgroupId=io.github.niraj_rayalla",
         "-DartifactId=GDXseer-ios-GL",
+        "-Dversion=$libraryVersion",
+        "-Dpackaging=jar",
+        "-DgeneratePom=true"
+    )
+}
+
+/**
+ * Installs the final iOS using Metal GDXseer library to local maven.
+ * Does not depend on the build task [buildIOSGLLibrary] so the build task must be called before this, if the library hasn't been built yet.
+ * Does depend on [localMavenInstallCore] so it's not necessary to call that.
+ */
+val localMavenInstallIOSMetal by tasks.creating(Exec::class.java) {
+    dependsOn(localMavenInstallCore)
+    commandLine(
+        "mvn",
+        "install:install-file",
+        "-Dfile=./GDXseer-ios-Metal/build/libs/GDXseer-ios-Metal.jar",
+        "-DgroupId=io.github.niraj_rayalla",
+        "-DartifactId=GDXseer-ios-Metal",
         "-Dversion=$libraryVersion",
         "-Dpackaging=jar",
         "-DgeneratePom=true"

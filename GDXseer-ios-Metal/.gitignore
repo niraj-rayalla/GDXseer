@@ -1,0 +1,6 @@
+/build
+/build*
+/GDXseer_device.xcodeproj/xcuserdata
+/GDXseer_device.xcodeproj/project.xcworkspace/xcuserdata
+/GDXseer_simulator.xcodeproj/xcuserdata
+/GDXseer_simulator.xcodeproj/project.xcworkspace/xcuserdata

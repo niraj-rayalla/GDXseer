@@ -1,0 +1,8 @@
+<config>
+    <frameworkPaths>
+        <path>libs</path>
+    </frameworkPaths>
+    <frameworks>
+        <framework>GDXseer</framework>
+    </frameworks>
+</config>
