@@ -69,6 +69,9 @@ target_include_directories(
         PUBLIC
         ../Effekseer/Dev/Cpp/Effekseer/
         ../Effekseer/Dev/Cpp/EffekseerRenderer${GDXSEER_RENDERER}/
+        ../Effekseer/Dev/Cpp/3rdParty/LLGI/src/
+        ../Effekseer/Dev/Cpp/3rdParty/LLGI/src/Metal/
+        ../Effekseer/Dev/Cpp/EffekseerRendererLLGI/
         EffekseerAdapters/
         EffekseerAdapters/${GDXSEER_RENDERER}/
         ${JNI_INCLUDE_DIRS}
