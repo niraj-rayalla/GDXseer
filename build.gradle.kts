@@ -724,7 +724,7 @@ val localMavenInstallIOSMetal by tasks.creating(Exec::class.java) {
         "-Dfile=./GDXseer-ios-Metal/build/libs/GDXseer-ios-Metal.jar",
         "-DgroupId=io.github.niraj_rayalla",
         "-DartifactId=GDXseer-ios-Metal",
-        "-Dversion=$libraryVersion",
+        "-Dversion=${libraryVersion}-WIP",
         "-Dpackaging=jar",
         "-DgeneratePom=true"
     )
