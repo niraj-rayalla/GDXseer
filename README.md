@@ -162,7 +162,21 @@ If you're using RoboVM-Metal backend:
     (particleEffect.rootNode.getChild(0) as GDXseerEffectNodeSprite).fixed.value = io.github.niraj_rayalla.gdxseer.effekseer.Color(r, g, b, a)
     particleEffect.stop()
     ```
-6. Dispose the effects and manager when no longer needed:
+6. Rendering the particle effects:
+   ```
+   fun render() {
+      ...
+   
+      manager.draw(Gdx.graphics.getDeltaTime())
+   
+      --OR--
+   
+      manager.update(Gdx.graphics.getDeltaTime())
+      // Can call this draw as many times as needed. For example one draw for post-processing and then the normal draw.
+      manager.drawAfterUpdate()
+   }
+   ```  
+7. Dispose the effects and manager when no longer needed:
     ```
     // Dispose a single effect
     particleEffect.dispose()
