@@ -374,19 +374,80 @@ val configureIOSSimulatorMetalBuilding = getConfigureIOSBuildTask(isForSimulator
 /**
  * Builds the desktop GDXseer C++ library.
  */
-val buildDesktopNativeLibrary by tasks.creating(Exec::class.java) {
+val buildDesktopNativeLibrary: Task by tasks.creating {
     dependsOn(configureDesktopBuilding)
 
     // Build the core jar
     dependsOn(tasks.jar)
     tasks.jar.get().shouldRunAfter(configureDesktopBuilding)
 
+    // Windows process source code
+    val windowsIncludeAlgorithmLine = "#include <algorithm>"
+    var hasProcessedWindowsNativeSourceCode = false
+    val windowsProcessFile = File("Effekseer/Dev/Cpp/Effekseer/Effekseer/Network/Effekseer.Session.cpp")
+    val windowsProcessNativeSourceCode: Task by tasks.creating {
+        doLast {
+            if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
+                val lines = windowsProcessFile.readLines()
+                val hasIncludeAlgorithmLine = lines.indexOf(windowsIncludeAlgorithmLine)
+                if (hasIncludeAlgorithmLine < 0) {
+                    val stringBuilder = StringBuilder()
+                    var hasFoundIncludeLine = false
+                    var hasFoundEndOfIncludeLines = false
+                    for (line in lines) {
+                        var shouldIncludeAlgorithmLine = false
+                        if (line.startsWith("#include")) {
+                            hasFoundIncludeLine = true
+                        }
+                        else if (hasFoundIncludeLine && !hasFoundEndOfIncludeLines) {
+                            hasFoundEndOfIncludeLines = true
+                            shouldIncludeAlgorithmLine = true
+                        }
+
+                        if (shouldIncludeAlgorithmLine) {
+                            stringBuilder.appendLine(windowsIncludeAlgorithmLine)
+                        }
+
+                        stringBuilder.appendLine(line)
+                    }
+                    windowsProcessFile.writeText(stringBuilder.toString())
+
+                    hasProcessedWindowsNativeSourceCode = true
+                }
+            }
+        }
+    }
+    dependsOn(windowsProcessNativeSourceCode)
+    windowsProcessNativeSourceCode.shouldRunAfter(tasks.jar)
+
     // Build the GL C++ library
-    commandLine(
-        "cmake",
-        "--build", desktopCmakeBuildDir.absolutePath,
-        "--config", "Release"
-    )
+    val cmakeDesktopNativeLibrary by tasks.creating(Exec::class.java) {
+        commandLine(
+            "cmake",
+            "--build", desktopCmakeBuildDir.absolutePath,
+            "--config", "Release"
+        )
+    }
+    dependsOn(cmakeDesktopNativeLibrary)
+    cmakeDesktopNativeLibrary.shouldRunAfter(windowsProcessNativeSourceCode)
+
+    // Window undo process source code
+    val windowsUndoProcessNativeSourceCode: Task by tasks.creating {
+        doLast {
+            if (hasProcessedWindowsNativeSourceCode) {
+                val lines = windowsProcessFile.readLines()
+                val stringBuilder = StringBuilder()
+                for (line in lines) {
+                    if (line != windowsIncludeAlgorithmLine) {
+                        stringBuilder.appendLine(line)
+                    }
+                }
+                windowsProcessFile.writeText(stringBuilder.toString())
+            }
+        }
+    }
+    dependsOn(windowsUndoProcessNativeSourceCode)
+    windowsUndoProcessNativeSourceCode.shouldRunAfter(cmakeDesktopNativeLibrary)
 }
 
 /**
