@@ -313,9 +313,15 @@ fun getConfigureIOSBuildTask(isForSimulator: Boolean, isUsingMetal: Boolean): Ta
         createDirTask.shouldRunAfter(generateWrapperEffekseer)
 
         fun getIosJavaHomeFromLocalProperties(): String? {
-            val localProperties = Properties()
-            localProperties.load(FileInputStream(rootProject.file("local.properties")))
-            return localProperties.getProperty("iOS_JAVA_HOME")
+            return try {
+                val localProperties = Properties()
+                localProperties.load(FileInputStream(rootProject.file("local.properties")))
+                localProperties.getProperty("iOS_JAVA_HOME")
+            }
+            catch (e: Exception) {
+                logger.warn("Failed to find iOS_JAVA_HOME in local.properties. Defaulting to JAVA_HOME.")
+                null
+            }
         }
 
         val commandLineArgs = ArrayList<String>().apply {
@@ -556,9 +562,15 @@ fun getBuildNativeIOSFrameworks(isUsingMetal: Boolean, deviceBuildSharedLibraryT
 
         // Get the code sign identity
         fun getCodeSignIdentityFromLocalProperties(): String? {
-            val localProperties = Properties()
-            localProperties.load(FileInputStream(rootProject.file("local.properties")))
-            return localProperties.getProperty("iOS_CODE_SIGN_IDENTITY")
+            return try {
+                val localProperties = Properties()
+                localProperties.load(FileInputStream(rootProject.file("local.properties")))
+                localProperties.getProperty("iOS_CODE_SIGN_IDENTITY")
+            }
+            catch (e: Exception) {
+                logger.warn("Failed to find iOS_CODE_SIGN_IDENTITY in local.properties. Defaulting to Adhoc signing.")
+                null
+            }
         }
         val codeSignIdentity = getCodeSignIdentityFromLocalProperties() ?: "-"
 
