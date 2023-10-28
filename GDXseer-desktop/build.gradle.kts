@@ -44,7 +44,7 @@ val copyNativeLibs by tasks.creating(Copy::class.java) {
             from("$rootDir/cmake-linux/cpp/libGDXseer_Effekseer.so")
         }
         else -> {
-            from("$rootDir/cmake-windows/cpp/GDXseer_Effekseer.dll")
+            from("$rootDir/cmake-windows/cpp/Release/GDXseer_Effekseer.dll")
         }
     }
 
