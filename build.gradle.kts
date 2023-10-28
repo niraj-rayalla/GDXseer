@@ -711,12 +711,14 @@ val buildIOSMetalLibrary by tasks.creating {
 
 //region Local Maven Installs
 
+val mavenCommand = if (org.gradle.internal.os.OperatingSystem.current().isWindows) "mvn.cmd" else "mvn"
+
 /**
  * Installs the final core GDXseer library to local maven. Does not depend on the build task so the build task must be called before this, if the library hasn't been built yet.
  */
 val localMavenInstallCore by tasks.creating(Exec::class.java) {
     commandLine(
-        "mvn",
+        mavenCommand,
         "install:install-file",
         "\"-Dfile=./build/libs/GDXseer.jar\"",
         "\"-DgroupId=io.github.niraj_rayalla\"",
@@ -735,7 +737,7 @@ val localMavenInstallCore by tasks.creating(Exec::class.java) {
 val localMavenInstallDesktop by tasks.creating(Exec::class.java) {
     dependsOn(localMavenInstallCore)
     commandLine(
-        "mvn",
+        mavenCommand,
         "install:install-file",
         "\"-Dfile=./GDXseer-desktop/build/libs/GDXseer-desktop.jar\"",
         "\"-DgroupId=io.github.niraj_rayalla\"",
@@ -754,7 +756,7 @@ val localMavenInstallDesktop by tasks.creating(Exec::class.java) {
 val localMavenInstallAndroid by tasks.creating(Exec::class.java) {
     dependsOn(localMavenInstallCore)
     commandLine(
-        "mvn",
+        mavenCommand,
         "install:install-file",
         "\"-Dfile=./GDXseer-android/build/libs/GDXseer-android.jar\"",
         "\"-DgroupId=io.github.niraj_rayalla\"",
@@ -773,7 +775,7 @@ val localMavenInstallAndroid by tasks.creating(Exec::class.java) {
 val localMavenInstallIOSGL by tasks.creating(Exec::class.java) {
     dependsOn(localMavenInstallCore)
     commandLine(
-        "mvn",
+        mavenCommand,
         "install:install-file",
         "\"-Dfile=./GDXseer-ios-GL/build/libs/GDXseer-ios-GL.jar\"",
         "\"-DgroupId=io.github.niraj_rayalla\"",
@@ -792,7 +794,7 @@ val localMavenInstallIOSGL by tasks.creating(Exec::class.java) {
 val localMavenInstallIOSMetal by tasks.creating(Exec::class.java) {
     dependsOn(localMavenInstallCore)
     commandLine(
-        "mvn",
+        mavenCommand,
         "install:install-file",
         "\"-Dfile=./GDXseer-ios-Metal/build/libs/GDXseer-ios-Metal.jar\"",
         "\"-DgroupId=io.github.niraj_rayalla\"",
