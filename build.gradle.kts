@@ -718,12 +718,12 @@ val localMavenInstallCore by tasks.creating(Exec::class.java) {
     commandLine(
         "mvn",
         "install:install-file",
-        "-Dfile=./build/libs/GDXseer.jar",
-        "-DgroupId=io.github.niraj_rayalla",
-        "-DartifactId=GDXseer",
-        "-Dversion=$libraryVersion",
-        "-Dpackaging=jar",
-        "-DgeneratePom=true"
+        "\"-Dfile=./build/libs/GDXseer.jar\"",
+        "\"-DgroupId=io.github.niraj_rayalla\"",
+        "\"-DartifactId=GDXseer\"",
+        "\"-Dversion=$libraryVersion\"",
+        "\"-Dpackaging=jar\"",
+        "\"-DgeneratePom=true\""
     )
 }
 
@@ -737,12 +737,12 @@ val localMavenInstallDesktop by tasks.creating(Exec::class.java) {
     commandLine(
         "mvn",
         "install:install-file",
-        "-Dfile=./GDXseer-desktop/build/libs/GDXseer-desktop.jar",
-        "-DgroupId=io.github.niraj_rayalla",
-        "-DartifactId=GDXseer-desktop",
-        "-Dversion=$libraryVersion",
-        "-Dpackaging=jar",
-        "-DgeneratePom=true"
+        "\"-Dfile=./GDXseer-desktop/build/libs/GDXseer-desktop.jar\"",
+        "\"-DgroupId=io.github.niraj_rayalla\"",
+        "\"-DartifactId=GDXseer-desktop\"",
+        "\"-Dversion=$libraryVersion\"",
+        "\"-Dpackaging=jar\"",
+        "\"-DgeneratePom=true\""
     )
 }
 
@@ -756,12 +756,12 @@ val localMavenInstallAndroid by tasks.creating(Exec::class.java) {
     commandLine(
         "mvn",
         "install:install-file",
-        "-Dfile=./GDXseer-android/build/libs/GDXseer-android.jar",
-        "-DgroupId=io.github.niraj_rayalla",
-        "-DartifactId=GDXseer-android",
-        "-Dversion=$libraryVersion",
-        "-Dpackaging=jar",
-        "-DgeneratePom=true"
+        "\"-Dfile=./GDXseer-android/build/libs/GDXseer-android.jar\"",
+        "\"-DgroupId=io.github.niraj_rayalla\"",
+        "\"-DartifactId=GDXseer-android\"",
+        "\"-Dversion=$libraryVersion\"",
+        "\"-Dpackaging=jar\"",
+        "\"-DgeneratePom=true\""
     )
 }
 
@@ -775,12 +775,12 @@ val localMavenInstallIOSGL by tasks.creating(Exec::class.java) {
     commandLine(
         "mvn",
         "install:install-file",
-        "-Dfile=./GDXseer-ios-GL/build/libs/GDXseer-ios-GL.jar",
-        "-DgroupId=io.github.niraj_rayalla",
-        "-DartifactId=GDXseer-ios-GL",
-        "-Dversion=$libraryVersion",
-        "-Dpackaging=jar",
-        "-DgeneratePom=true"
+        "\"-Dfile=./GDXseer-ios-GL/build/libs/GDXseer-ios-GL.jar\"",
+        "\"-DgroupId=io.github.niraj_rayalla\"",
+        "\"-DartifactId=GDXseer-ios-GL\"",
+        "\"-Dversion=$libraryVersion\"",
+        "\"-Dpackaging=jar\"",
+        "\"-DgeneratePom=true\""
     )
 }
 
@@ -794,12 +794,12 @@ val localMavenInstallIOSMetal by tasks.creating(Exec::class.java) {
     commandLine(
         "mvn",
         "install:install-file",
-        "-Dfile=./GDXseer-ios-Metal/build/libs/GDXseer-ios-Metal.jar",
-        "-DgroupId=io.github.niraj_rayalla",
-        "-DartifactId=GDXseer-ios-Metal",
-        "-Dversion=${libraryVersion}-WIP",
-        "-Dpackaging=jar",
-        "-DgeneratePom=true"
+        "\"-Dfile=./GDXseer-ios-Metal/build/libs/GDXseer-ios-Metal.jar\"",
+        "\"-DgroupId=io.github.niraj_rayalla\"",
+        "\"-DartifactId=GDXseer-ios-Metal\"",
+        "\"-Dversion=${libraryVersion}-WIP\"",
+        "\"-Dpackaging=jar\"",
+        "\"-DgeneratePom=true\""
     )
 }
 
