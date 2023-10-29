@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Effekseer/Dev/Cpp/Effekseer/Effekseer.h"
-#include "../Effekseer/Dev/Cpp/EffekseerRendererCommon/EffekseerRenderer.Renderer.h"
+#include <Effekseer/Dev/Cpp/Effekseer/Effekseer.h>
+#include <Effekseer/Dev/Cpp/EffekseerRendererCommon/EffekseerRenderer.Renderer.h>
 
 // TextureRef
 class TextureRefWrapper {

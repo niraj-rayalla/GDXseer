@@ -15,7 +15,7 @@ import io.github.niraj_rayalla.gdxseer.adapter_effekseer.*;
 
 %module EffekseerMetal
 %{
-#include "../Effekseer/Dev/Cpp/EffekseerRendererMetal/EffekseerRendererMetal.h"
+#include <Effekseer/Dev/Cpp/EffekseerRendererMetal/EffekseerRendererMetal.h>
 #include "EffekseerAdapters/Metal/EffekseerMetalManagerAdapter.h"
 %}
 

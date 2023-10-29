@@ -4,13 +4,13 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
 %module Effekseer
 %{
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.Base.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.RectF.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/SIMD/Vec2f.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/SIMD/Vec3f.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.InternalStruct.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Effekseer.Parameters.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/DynamicParameter.h"
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.Base.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.RectF.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/SIMD/Vec2f.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/SIMD/Vec3f.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.InternalStruct.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Effekseer.Parameters.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/DynamicParameter.h>
     // Undefine min/max function
     #ifdef max
         #undef max
@@ -18,17 +18,17 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
     #ifdef min
         #undef min
     #endif
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Easing.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.FCurves.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Noise/CurlNoise.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/ForceField/ForceFields.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNode.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRoot.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeSprite.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRibbon.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeTrack.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRing.h"
-    #include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeModel.h"
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Easing.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.FCurves.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Noise/CurlNoise.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/ForceField/ForceFields.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNode.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRoot.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeSprite.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRibbon.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeTrack.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRing.h>
+    #include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeModel.h>
 %}
 
 

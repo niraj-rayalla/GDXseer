@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../EffekseerManagerAdapter.h"
-#include "../../Effekseer/Dev/Cpp/EffekseerRendererGL/EffekseerRendererGL.h"
+#include <Effekseer/Dev/Cpp/EffekseerRendererGL/EffekseerRendererGL.h>
 
 class EffekseerGLManagerAdapter : public EffekseerManagerAdapter {
 private:

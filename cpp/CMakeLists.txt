@@ -67,6 +67,7 @@ include_directories(
 target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
+        ../
         ../Effekseer/Dev/Cpp/Effekseer/
         ../Effekseer/Dev/Cpp/EffekseerRenderer${GDXSEER_RENDERER}/
         ../Effekseer/Dev/Cpp/3rdParty/LLGI/src/

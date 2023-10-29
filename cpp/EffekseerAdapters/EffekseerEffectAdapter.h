@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Effekseer/Dev/Cpp/Effekseer/Effekseer.h"
+#include <Effekseer/Dev/Cpp/Effekseer/Effekseer.h>
 #include "RefWrappers.h"
 // Undefine min/max function
 #ifdef max
@@ -9,8 +9,8 @@
 #ifdef min
     #undef min
 #endif
-#include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNode.h"
-#include "../Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRoot.h"
+#include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNode.h>
+#include <Effekseer/Dev/Cpp/Effekseer/Effekseer/Effekseer.EffectNodeRoot.h>
 
 class EffekseerManagerAdapter;
 

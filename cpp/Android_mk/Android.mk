@@ -14,6 +14,7 @@ LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv3
 
 
 LOCAL_C_INCLUDES += \
+	$(LOCAL_PATH) \
 	$(LOCAL_PATH)/Effekseer/Dev/Cpp/Effekseer \
 	$(LOCAL_PATH)/Effekseer/Dev/Cpp/EffekseerRendererCommon \
 	$(LOCAL_PATH)/Effekseer/Dev/Cpp/EffekseerRendererGL 

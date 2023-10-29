@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Effekseer/Dev/Cpp/Effekseer/Effekseer.h"
+#include <Effekseer/Dev/Cpp/Effekseer/Effekseer.h>
 #include "RefWrappers.h"
 #include "GDXMatrixAdapter.h"
 #include "EffekseerEffectAdapter.h"

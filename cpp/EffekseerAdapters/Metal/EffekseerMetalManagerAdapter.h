@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../EffekseerManagerAdapter.h"
-#include "../../Effekseer/Dev/Cpp/EffekseerRendererMetal/EffekseerRendererMetal.h"
-#include "../EffekseerManagerAdapter.h"
+#include <Effekseer/Dev/Cpp/EffekseerRendererMetal/EffekseerRendererMetal.h>
 #include <LLGI.Base.h>
 #include <LLGI.Compiler.h>
 #include <LLGI.Graphics.h>

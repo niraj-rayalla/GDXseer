@@ -15,7 +15,7 @@ import io.github.niraj_rayalla.gdxseer.adapter_effekseer.*;
 
 %module EffekseerGL
 %{
-#include "../Effekseer/Dev/Cpp/EffekseerRendererGL/EffekseerRenderer/EffekseerRendererGL.Base.Pre.h"
+#include <Effekseer/Dev/Cpp/EffekseerRendererGL/EffekseerRenderer/EffekseerRendererGL.Base.Pre.h>
 #include "EffekseerAdapters/GL/EffekseerGLManagerAdapter.h"
 %}
 
