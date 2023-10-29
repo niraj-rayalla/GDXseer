@@ -29,17 +29,17 @@ All shown source code below is in Kotlin. All shown gradle script content uses t
 Make sure you're using libGDX version 1.12.0.
 
 ### Core:
-`api("io.github.niraj_rayalla:GDXseer:1.0.0")`
+`api("io.github.niraj-rayalla:GDXseer:1.0.0")`
 ### Desktop:
-`api("io.github.niraj_rayalla:GDXseer-desktop:1.0.0")`
+`api("io.github.niraj-rayalla:GDXseer-desktop:1.0.0")`
 ### Android:
 ```
 val native by configurations.creating
 
 android {
    dependencies {
-      api("io.github.niraj_rayalla:GDXseer-android:1.0.0")
-      native("io.github.niraj_rayalla:GDXseer-android:$gdxseerVersion")
+      api("io.github.niraj-rayalla:GDXseer-android:1.0.0")
+      native("io.github.niraj-rayalla:GDXseer-android:$gdxseerVersion")
    }
 }
 
@@ -96,13 +96,13 @@ tasks.whenTaskAdded {
 ### iOS:
 If you're using RoboVM backend:
 
-`api("io.github.niraj_rayalla:GDXseer-ios-GL:1.0.0")`
+`api("io.github.niraj-rayalla:GDXseer-ios-GL:1.0.0")`
 
 OR
 
 If you're using RoboVM-Metal backend:
 
-`api("io.github.niraj_rayalla:GDXseer-ios-Metal:1.0.0-WIP")`
+`api("io.github.niraj-rayalla:GDXseer-ios-Metal:1.0.0-WIP")`
 
 ## iOS `robovm.xml`:
 If you're using RoboVM backend:
