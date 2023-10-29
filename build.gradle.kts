@@ -450,6 +450,8 @@ val buildDesktopNativeLibrary: Task by tasks.creating {
     windowsUndoProcessNativeSourceCode.shouldRunAfter(cmakeDesktopNativeLibrary)
 }
 
+val ndkBuildCommand = if (org.gradle.internal.os.OperatingSystem.current().isWindows) "ndk-build.cmd" else "ndk-build"
+
 /**
  * Builds the Android GDXseer C++ library.
  */
@@ -472,7 +474,7 @@ val buildAndroidNativeLibrary by tasks.creating {
             val clean = tasks.create("buildAndroidNativeLibrary_${arch}_clean", Exec::class.java) {
                 // Clean
                 commandLine(
-                    "ndk-build", "clean",
+                    ndkBuildCommand, "clean",
                     "APP_BUILD_SCRIPT=$androidBuildScriptPath",
                     "NDK_PROJECT_PATH=$androidBuildProjectPath",
                     "NDK_APPLICATION_MK=cpp/Android_mk/${arch}.mk"
@@ -484,7 +486,7 @@ val buildAndroidNativeLibrary by tasks.creating {
             val build = tasks.create("buildAndroidNativeLibrary_${arch}_build", Exec::class.java) {
                 // Build the GL C++ library
                 commandLine(
-                    "ndk-build", "-j4",
+                    ndkBuildCommand, "-j4",
                     "APP_BUILD_SCRIPT=$androidBuildScriptPath",
                     "NDK_PROJECT_PATH=$androidBuildProjectPath",
                     "NDK_APPLICATION_MK=cpp/Android_mk/${arch}.mk",
