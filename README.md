@@ -71,6 +71,12 @@ val copyEffekseerNatives by tasks.creating {
                             from(file.path).into("libs/x86").include("*.so")
                         }
                     }
+                    if (file.path.contains("x86_64")) {
+                        wasCopied = true
+                        copy {
+                            from(file.path).into("libs/x86_64").include("*.so")
+                        }
+                    }
 
                     if (wasCopied) {
                         println("Copied Effekseer native files at path: ${file.path} natives from jar: ${nativesFile.name}")
