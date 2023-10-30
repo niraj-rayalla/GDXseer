@@ -77,7 +77,12 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<EffekseerParticleAss
         }
 
         private fun getPathToSubAsset(effectFileHandle: FileHandle, subAssetPath: String): String {
-            return FilePath.getParentPath(effectFileHandle.path()) + "/" + subAssetPath
+            return FilePath.getParentPath(effectFileHandle.path()).let {
+                if (it.isEmpty()) {
+                    subAssetPath
+                }
+                else "$it${File.separator}$subAssetPath"
+            }
         }
 
         private fun getTexturePath(effectFileHandle: FileHandle, textureIndex: Int, textureType: EffekseerTextureType, effekseerEffectAdapter: EffekseerEffectAdapter): String {
