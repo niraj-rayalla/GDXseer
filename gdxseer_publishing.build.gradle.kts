@@ -58,3 +58,12 @@ configure<PublishingExtension> {
         }
     }
 }
+
+configure<SigningExtension> {
+    val key = System.getenv("MIRAGE_SIGNING_KEY")
+    val password = System.getenv("MIRAGE_SIGNING_PASSWORD")
+
+    useInMemoryPgpKeys(key, password)
+    val publishing = (project as org.gradle.api.plugins.ExtensionAware).extensions.getByName("publishing") as org.gradle.api.publish.PublishingExtension
+    sign(publishing.publications)
+}
