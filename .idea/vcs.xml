@@ -28,6 +28,5 @@
     <mapping directory="$PROJECT_DIR$/Effekseer/Downloads/zlib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Effekseer/ResourceData" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Effekseer/TestData" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cpp/Effekseer" vcs="Git" />
   </component>
 </project>

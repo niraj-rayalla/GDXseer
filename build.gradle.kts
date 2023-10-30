@@ -5,18 +5,13 @@ import java.util.Properties
 
 plugins {
     kotlin("jvm")
+    id("maven-publish")
 }
 
 val gdxVersion: String by project
-val libraryVersion: String = "1.0.0"
 
 dependencies {
     implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
 }
 
 //region Java Wrapping of Effekseer C++ using Swig
@@ -711,100 +706,18 @@ val buildIOSMetalLibrary by tasks.creating {
 
 //endregion
 
-//region Local Maven Installs
+//region Maven Publishing
 
-val mavenCommand = if (org.gradle.internal.os.OperatingSystem.current().isWindows) "mvn.cmd" else "mvn"
+apply(from = "gdxseer_publishing.build.gradle.kts")
 
-/**
- * Installs the final core GDXseer library to local maven. Does not depend on the build task so the build task must be called before this, if the library hasn't been built yet.
- */
-val localMavenInstallCore by tasks.creating(Exec::class.java) {
-    commandLine(
-        mavenCommand,
-        "install:install-file",
-        "\"-Dfile=./build/libs/GDXseer.jar\"",
-        "\"-DgroupId=io.github.niraj-rayalla\"",
-        "\"-DartifactId=GDXseer\"",
-        "\"-Dversion=$libraryVersion\"",
-        "\"-Dpackaging=jar\"",
-        "\"-DgeneratePom=true\""
-    )
-}
-
-/**
- * Installs the final desktop GDXseer library to local maven.
- * Does not depend on the build task [buildDesktopLibrary] so the build task must be called before this, if the library hasn't been built yet.
- * Does depend on [localMavenInstallCore] so it's not necessary to call that.
- */
-val localMavenInstallDesktop by tasks.creating(Exec::class.java) {
-    dependsOn(localMavenInstallCore)
-    commandLine(
-        mavenCommand,
-        "install:install-file",
-        "\"-Dfile=./GDXseer-desktop/build/libs/GDXseer-desktop.jar\"",
-        "\"-DgroupId=io.github.niraj-rayalla\"",
-        "\"-DartifactId=GDXseer-desktop\"",
-        "\"-Dversion=$libraryVersion\"",
-        "\"-Dpackaging=jar\"",
-        "\"-DgeneratePom=true\""
-    )
-}
-
-/**
- * Installs the final Android GDXseer library to local maven.
- * Does not depend on the build task [buildAndroidLibrary] so the build task must be called before this, if the library hasn't been built yet.
- * Does depend on [localMavenInstallCore] so it's not necessary to call that.
- */
-val localMavenInstallAndroid by tasks.creating(Exec::class.java) {
-    dependsOn(localMavenInstallCore)
-    commandLine(
-        mavenCommand,
-        "install:install-file",
-        "\"-Dfile=./GDXseer-android/build/libs/GDXseer-android.jar\"",
-        "\"-DgroupId=io.github.niraj-rayalla\"",
-        "\"-DartifactId=GDXseer-android\"",
-        "\"-Dversion=$libraryVersion\"",
-        "\"-Dpackaging=jar\"",
-        "\"-DgeneratePom=true\""
-    )
-}
-
-/**
- * Installs the final iOS using GL GDXseer library to local maven.
- * Does not depend on the build task [buildIOSGLLibrary] so the build task must be called before this, if the library hasn't been built yet.
- * Does depend on [localMavenInstallCore] so it's not necessary to call that.
- */
-val localMavenInstallIOSGL by tasks.creating(Exec::class.java) {
-    dependsOn(localMavenInstallCore)
-    commandLine(
-        mavenCommand,
-        "install:install-file",
-        "\"-Dfile=./GDXseer-ios-GL/build/libs/GDXseer-ios-GL.jar\"",
-        "\"-DgroupId=io.github.niraj-rayalla\"",
-        "\"-DartifactId=GDXseer-ios-GL\"",
-        "\"-Dversion=$libraryVersion\"",
-        "\"-Dpackaging=jar\"",
-        "\"-DgeneratePom=true\""
-    )
-}
-
-/**
- * Installs the final iOS using Metal GDXseer library to local maven.
- * Does not depend on the build task [buildIOSGLLibrary] so the build task must be called before this, if the library hasn't been built yet.
- * Does depend on [localMavenInstallCore] so it's not necessary to call that.
- */
-val localMavenInstallIOSMetal by tasks.creating(Exec::class.java) {
-    dependsOn(localMavenInstallCore)
-    commandLine(
-        mavenCommand,
-        "install:install-file",
-        "\"-Dfile=./GDXseer-ios-Metal/build/libs/GDXseer-ios-Metal.jar\"",
-        "\"-DgroupId=io.github.niraj-rayalla\"",
-        "\"-DartifactId=GDXseer-ios-Metal\"",
-        "\"-Dversion=${libraryVersion}-WIP\"",
-        "\"-Dpackaging=jar\"",
-        "\"-DgeneratePom=true\""
-    )
+publishing {
+    publications {
+        getByName(project.name, MavenPublication::class) {
+            pom {
+                description.set("The base GDXseer library which allows for Effekseer to be used in libGDX projects. This is used by all specific implementations for each platform/renderer.")
+            }
+        }
+    }
 }
 
 //endregion

@@ -1,33 +1,12 @@
 plugins {
     kotlin("jvm")
+    id("maven-publish")
 }
+
+val libraryVersion: String by project
 
 dependencies {
-    api(project(":Metal"))
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-/**
- * Make the jar a fat jar with just the Metal jar. Everything else is in the core GDXseer jar.
- */
-tasks.withType<Jar> {
-    // To avoid the duplicate handling strategy error
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    // To add all of the dependencies
-    from(sourceSets.main.get().output)
-
-    dependsOn(configurations.compileClasspath)
-    from({
-        configurations.compileClasspath.get().filter {
-            // Only include the GDXseer GL jar since all other jars are already included in the core library
-            it.name == "Metal.jar"
-        }.map { zipTree(it) }
-    })
+    api(project(":GDXseer-Metal"))
 }
 
 /**
@@ -42,3 +21,19 @@ tasks.withType<Jar> {
         from("./robovm.xml").into("robovm/ios/")
     }
 }
+//region Maven Publishing
+
+apply(from = "../gdxseer_publishing.build.gradle.kts")
+
+publishing {
+    publications {
+        getByName(project.name, MavenPublication::class) {
+            version = "$libraryVersion-WIP"
+            pom {
+                description.set("The specific GDXseer implementation used for iOS using the Metal renderer.")
+            }
+        }
+    }
+}
+
+//endregion
