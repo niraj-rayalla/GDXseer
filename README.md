@@ -199,6 +199,10 @@ If you're using RoboVM-Metal backend:
     // Dispose entire manager
     gdxseerManager.dispose()
     ```
+   
+### Runtime Caveats
+* When using the GL renderer on iOS, and creating GDXseerGLManager with OpenGLDeviceType.OpenGLES3 causes a crash when rendering. Using OpenGLDeviceType.OpenGLES2 doesn't cause
+the crash. I'm don't have any clue as to why this happens. 
 
 # Examples
 Look in path `/examples` for all the example sub-projects available.
