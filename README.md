@@ -207,17 +207,11 @@ If you want to build the libraries yourself, follow these steps, or not, your ch
 2. Install Cmake (https://cmake.org/download/) and the desired C++ compiler, such as g++ 
 3. Clone this repository
 4. Run `git submodule update --init --recursive` to pull the Effekseer repository along with all its submodules.
-5. Run one of the build Gradle tasks such as `./gradlew :buildDesktopLibrary`. The following are all possible build tasks:
+5. Run `./gradlew publishToMavenLocal` to build all sub-projects, or call one of the specific build Gradle tasks such as `./gradlew :buildDesktopLibrary`. The following are all possible build tasks:
     * `buildDesktopLibrary`
     * `buildAndroidLibrary`
     * `buildIOSGLLibrary`
     * `buildIOSMetalLibrary`
-6. You can also optionally run the provided local Maven install tasks if you locally experimenting with changes. The following are all the local Maven install tasks:
-   * `localMavenInstallCore`
-   * `localMavenInstallDesktop`
-   * `localMavenInstallAndroid`
-   * `localMavenInstallIOSGL`
-   * `localMavenInstallIOSMetal`
 
 ### Building Caveats
 * For IOS building, set `iOS_JAVA_HOME` (optional) and `iOS_CODE_SIGN_IDENTITY` in local.properties file. 
@@ -237,7 +231,7 @@ How is the project structured? I would like to know as well. Nvm, it's right her
 
 ### `/build.gradle.kts`:
 Contains tasks (named above) that build the Effekseer C++ code, bridge C++ code for GDXseer, for the appropriate platform, and then build the jar file that contains the built shared library.
-Also contains the Maven local install tasks.
+Also contains Maven publishing tasks.
 
 ### Swig (in `/swig_interface/`)
 Contains the Swig interface files, that determine how Swig should generate the Java wrapper classes from the C++ code.
