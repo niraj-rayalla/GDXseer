@@ -200,6 +200,13 @@ If you're using RoboVM-Metal backend:
     gdxseerManager.dispose()
     ```
 
+# Examples
+Look in path `/examples` for all the example sub-projects available.
+
+Currently there's just one example called `Basic` with one sub-project for each of: desktop, Android, and iOS.
+
+This repository also includes IntelliJ run configurations for quickly running each of the examples sub-projects.
+
 # Building
 If you want to build the libraries yourself, follow these steps, or not, your choice:
 

@@ -1,0 +1,23 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Basic Example iOS" type="com.robovm.idea.running.RoboVmIOSConfigurationType" factoryName="RoboVM iOS">
+    <module name="GDXseer.Example-Basic.ios" />
+    <option name="targetType" value="Simulator" />
+    <option name="deviceArch" value="arm64" />
+    <option name="signingIdentityType" value="AUTO" />
+    <option name="signingIdentity" value="" />
+    <option name="provisioningProfileType" value="AUTO" />
+    <option name="provisioningProfile" value="" />
+    <option name="targetDeviceUDID" value="" />
+    <option name="simArch" value="arm64" />
+    <option name="simulatorType" value="ID" />
+    <option name="simulatorName" value="DBCA65D5-827B-401E-809C-3D15101FB797" />
+    <option name="simulatorSdk" value="-1" />
+    <option name="simulatorLaunchWatch" value="0" />
+    <option name="arguments" value="" />
+    <option name="workingDir" value="" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="Buildr.BeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>

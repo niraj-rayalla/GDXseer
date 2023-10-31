@@ -3,6 +3,14 @@
 import java.io.FileInputStream
 import java.util.Properties
 
+buildscript {
+    val roboVMVersion = "2.3.20"
+
+    dependencies {
+        classpath("com.mobidevelop.robovm:robovm-gradle-plugin:$roboVMVersion")
+    }
+}
+
 plugins {
     kotlin("jvm")
     id("maven-publish")

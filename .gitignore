@@ -27,3 +27,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+examples/**/build
+examples/**/robovm-build
+examples/**/android/libs

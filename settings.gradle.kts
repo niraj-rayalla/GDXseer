@@ -14,6 +14,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
 
@@ -26,3 +27,17 @@ include(":GDXseer-ios-GL")
 include(":Metal")
 project(":Metal").name = "GDXseer-Metal"
 include(":GDXseer-ios-Metal")
+
+// Examples
+
+// Basic
+include(":Example-Basic")
+project(":Example-Basic").projectDir = File(rootDir, "examples/Basic/")
+include(":Example-Basic:core")
+project(":Example-Basic:core").projectDir = File(rootDir, "examples/Basic/core/")
+include(":Example-Basic:desktop")
+project(":Example-Basic:desktop").projectDir = File(rootDir, "examples/Basic/desktop/")
+include(":Example-Basic:android")
+project(":Example-Basic:android").projectDir = File(rootDir, "examples/Basic/android/")
+include(":Example-Basic:ios")
+project(":Example-Basic:ios").projectDir = File(rootDir, "examples/Basic/ios/")

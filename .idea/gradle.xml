@@ -17,6 +17,11 @@
             <option value="$PROJECT_DIR$/GDXseer-ios-Metal" />
             <option value="$PROJECT_DIR$/GL" />
             <option value="$PROJECT_DIR$/Metal" />
+            <option value="$PROJECT_DIR$/examples/Basic" />
+            <option value="$PROJECT_DIR$/examples/Basic/android" />
+            <option value="$PROJECT_DIR$/examples/Basic/core" />
+            <option value="$PROJECT_DIR$/examples/Basic/desktop" />
+            <option value="$PROJECT_DIR$/examples/Basic/ios" />
           </set>
         </option>
       </GradleProjectSettings>
