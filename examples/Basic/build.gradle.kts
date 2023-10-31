@@ -3,8 +3,8 @@ buildscript {
     val roboVMVersion = "2.3.20"
 
     repositories {
-        mavenCentral()
         mavenLocal()
+        mavenCentral()
         maven { url = uri("https://plugins.gradle.org/m2/") }
         maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
         gradlePluginPortal()
