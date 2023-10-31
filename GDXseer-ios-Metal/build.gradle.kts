@@ -15,7 +15,7 @@ dependencies {
 tasks.withType<Jar> {
     dependsOn(":buildIOSMetalFrameworks")
     metaInf {
-        from("./build/GDXseer.xcframework").into("robovm/ios/libs/GDXseer.xcframework")
+        from("$rootDir/release_native_libs/ios/Metal/GDXseer.xcframework").into("robovm/ios/libs/GDXseer.xcframework")
     }
     metaInf {
         from("./robovm.xml").into("robovm/ios/")

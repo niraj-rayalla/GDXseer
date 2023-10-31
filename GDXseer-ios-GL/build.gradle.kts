@@ -13,7 +13,7 @@ dependencies {
 tasks.withType<Jar> {
     dependsOn(":buildIOSGLFrameworks")
     metaInf {
-        from("./build/GDXseer.xcframework").into("robovm/ios/libs/GDXseer.xcframework")
+        from("$rootDir/release_native_libs/ios/GL/GDXseer.xcframework").into("robovm/ios/libs/GDXseer.xcframework")
     }
     metaInf {
         from("./robovm.xml").into("robovm/ios/")

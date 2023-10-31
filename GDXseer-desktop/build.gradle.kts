@@ -12,19 +12,8 @@ dependencies {
  */
 val copyNativeLibs by tasks.creating(Copy::class.java) {
     dependsOn(":buildDesktopNativeLibrary")
-
-    when {
-        org.gradle.internal.os.OperatingSystem.current().isMacOsX -> {
-            from("$rootDir/cmake-macos/cpp/libGDXseer_Effekseer.dylib")
-        }
-        org.gradle.internal.os.OperatingSystem.current().isLinux -> {
-            from("$rootDir/cmake-linux/cpp/libGDXseer_Effekseer.so")
-        }
-        else -> {
-            from("$rootDir/cmake-windows/cpp/Release/GDXseer_Effekseer.dll")
-        }
-    }
-
+    
+    from("$rootDir/release_native_libs/desktop")
 
     val resourcesDir = File("$rootDir/GDXseer-desktop/src/main/resources")
     resourcesDir.mkdirs()

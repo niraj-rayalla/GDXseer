@@ -16,7 +16,7 @@ val copyNativeLibs by tasks.creating(Copy::class.java) {
     val resourcesDir = File("$rootDir/GDXseer-android/src/main/resources")
     resourcesDir.mkdirs()
 
-    from("$rootDir/android-build/libs")
+    from("$rootDir/release_native_libs/android")
     into(resourcesDir)
 }
 

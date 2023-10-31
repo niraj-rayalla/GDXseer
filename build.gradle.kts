@@ -451,6 +451,24 @@ val buildDesktopNativeLibrary: Task by tasks.creating {
     }
     dependsOn(windowsUndoProcessNativeSourceCode)
     windowsUndoProcessNativeSourceCode.shouldRunAfter(cmakeDesktopNativeLibrary)
+
+    // Copy the built native library into the native release directory
+    val copyDesktopNativeLibraryToNativeRelease by tasks.creating(Copy::class.java) {
+        when {
+            org.gradle.internal.os.OperatingSystem.current().isMacOsX -> {
+                from("$rootDir/cmake-macos/cpp/libGDXseer_Effekseer.dylib")
+            }
+            org.gradle.internal.os.OperatingSystem.current().isLinux -> {
+                from("$rootDir/cmake-linux/cpp/libGDXseer_Effekseer.so")
+            }
+            else -> {
+                from("$rootDir/cmake-windows/cpp/Release/GDXseer_Effekseer.dll")
+            }
+        }
+        into("$rootDir/release_native_libs/desktop")
+    }
+    dependsOn(copyDesktopNativeLibraryToNativeRelease)
+    copyDesktopNativeLibraryToNativeRelease.shouldRunAfter(windowsUndoProcessNativeSourceCode)
 }
 
 val ndkBuildCommand = if (org.gradle.internal.os.OperatingSystem.current().isWindows) "ndk-build.cmd" else "ndk-build"
@@ -518,6 +536,14 @@ val buildAndroidNativeLibrary by tasks.creating {
     val build_arm64_v8a = buildForArch("arm64-v8a")
     dependsOn(build_arm64_v8a)
     build_arm64_v8a.shouldRunAfter(build_armeabi_v7a)
+
+    // Copy the built native library into the native release directory
+    val copyAndroidNativeLibraryToNativeRelease by tasks.creating(Copy::class.java) {
+        from("$rootDir/android-build/libs")
+        into("$rootDir/release_native_libs/android")
+    }
+    dependsOn(copyAndroidNativeLibraryToNativeRelease)
+    copyAndroidNativeLibraryToNativeRelease.shouldRunAfter(build_arm64_v8a)
 }
 
 /**
@@ -657,6 +683,14 @@ fun getBuildNativeIOSFrameworks(isUsingMetal: Boolean, deviceBuildSharedLibraryT
         }
         dependsOn(signIOSSharedLib)
         signIOSSharedLib.mustRunAfter(signIOSXCFramework)
+
+        // Copy the built framework into the native release directory
+        val copyIOSXCFrameworkToNativeRelease = tasks.create("copyIOS${renderer}XCFrameworkToNativeRelease", Copy::class.java) {
+            from("$rootDir/GDXseer-ios-$renderer/build/GDXseer.xcframework")
+            into("$rootDir/release_native_libs/ios/$renderer/GDXseer.xcframework")
+        }
+        dependsOn(copyIOSXCFrameworkToNativeRelease)
+        copyIOSXCFrameworkToNativeRelease.shouldRunAfter(signIOSSharedLib)
     }
 }
 
