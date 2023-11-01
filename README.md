@@ -6,7 +6,7 @@ Currently based on versions of:
 * Effekseer: `1.70e`
 * libGDX: `1.12.0`
 
-Basic example that loads, renders, and modifies the effect's color properties at runtime:
+Basic example that loads, renders, and modifies the effect's color properties at runtime every few seconds:
 
 
 https://github.com/niraj-rayalla/GDXseer/assets/5606501/d025ecc2-08c2-4e4f-8744-a30519c0b213
@@ -215,7 +215,7 @@ the crash. I'm don't have any clue as to why this happens.
 Look in path `/examples` for all the example sub-projects available.
 
 Currently there's just one example called `Basic` with one sub-project for each of: desktop, Android, and iOS.
-It shows how to initialize GDXseer, load a particle effect, render it, and also change color properties at rumtime.
+It shows how to initialize GDXseer, load a particle effect, render it, and also change color properties at runtime every few seconds.
 
 This repository also includes IntelliJ run configurations for quickly running each of the examples sub-projects.
 
