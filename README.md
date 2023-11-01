@@ -43,7 +43,7 @@ android {
    dependencies {
       api("io.github.niraj-rayalla:GDXseer-GL:1.0.0")
       api("io.github.niraj-rayalla:GDXseer-android:1.0.0")
-      native("io.github.niraj-rayalla:GDXseer-android:$gdxseerVersion")
+      native("io.github.niraj-rayalla:GDXseer-android:1.0.0")
    }
 }
 
@@ -51,7 +51,7 @@ val copyEffekseerNatives by tasks.creating {
     dependsOn(createNativesLibDirectories)
     doFirst {
         native.copy().files.forEach { nativesFile ->
-            if (nativesFile.name.endsWith("GDXseer-android-${gdxseerVersion}.jar")) {
+            if (nativesFile.name.endsWith("GDXseer-android-1.0.0.jar")) {
                 println("Copying Effekseer natives from jar: ${nativesFile.name}")
 
                 zipTree(nativesFile).files.forEach { file ->
