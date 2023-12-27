@@ -25,10 +25,18 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
 
     companion object {
         /**
-         * Called when the particle effect is loaded.
+         * Called when the particle effect is successfully loaded or failed to load.
          */
-        interface LoadedListener {
-            fun onEffectLoaded()
+        interface LoadingListener {
+            /**
+             * Successfully loaded the given [GDXseerParticleEffect].
+             */
+            fun onEffectSuccessfullyLoaded(gdXseerParticleEffect: GDXseerParticleEffect)
+
+            /**
+             * Failed to load the given [GDXseerParticleEffect] due to optional [Throwable].
+             */
+            fun onEffectFailedToLoad(gdXseerParticleEffect: GDXseerParticleEffect, throwable: Throwable?)
         }
 
         /**
@@ -337,20 +345,26 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      * @return The [AssetDescriptor] used for loading the particle effect at the given [FileHandle] into this instance.
      * The [AssetDescriptor] returned will have its [com.badlogic.gdx.assets.AssetLoaderParameters.loadedCallback] set.
      */
-    fun getAssetDescriptorWithoutLoading(effectFileHandle: FileHandle, loadedListener: LoadedListener?): AssetDescriptor<EffekseerParticleAssetLoader.Companion.Result> {
+    fun getAssetDescriptorWithoutLoading(effectFileHandle: FileHandle, loadingListener: LoadingListener?): AssetDescriptor<EffekseerParticleAssetLoader.Companion.Result> {
         // Create the asset descriptor for sending to the given AssetManager
         val assetDescriptor = EffekseerParticleAssetLoader.getMainFileAssetDescriptor(effectFileHandle, this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification)
 
         // Listen for finished loading
         assetDescriptor.params.loadedCallback = LoadedCallback { assetManager, _, _ ->
-            // Reset the tracked asset manager
-            assetManagerBeingLoadedIn = null
-            // Load the data into the effect
-            val loadedData = assetManager.get(assetDescriptor)
-            loadFromEffectAssetResult(loadedData)
+            try {
+                // Reset the tracked asset manager
+                assetManagerBeingLoadedIn = null
+                // Load the data into the effect
+                val loadedData = assetManager.get(assetDescriptor)
+                loadFromEffectAssetResult(loadedData)
 
-            // Call listener
-            loadedListener?.onEffectLoaded()
+                // Call listener for success
+                loadingListener?.onEffectSuccessfullyLoaded(this)
+            }
+            catch (t: Throwable) {
+                // Call listener for failure
+                loadingListener?.onEffectFailedToLoad(this, t)
+            }
         }
 
         return assetDescriptor
@@ -364,27 +378,27 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
     }
 
     /**
-     * Asynchronously loads the given effect file. An optional [LoadedListener] can be given for listening to when the effect has finished loading.
+     * Asynchronously loads the given effect file. An optional [LoadingListener] can be given for listening to when the effect has finished loading.
      */
-    fun asyncLoad(assetManager: AssetManager, effectFileHandle: FileHandle, loadedListener: LoadedListener) {
+    fun asyncLoad(assetManager: AssetManager, effectFileHandle: FileHandle, loadingListener: LoadingListener) {
         // Track the asset manager for updating load state
         this.assetManagerBeingLoadedIn = assetManager
 
-        val assetDescriptor = this.getAssetDescriptorWithoutLoading(effectFileHandle, loadedListener)
+        val assetDescriptor = this.getAssetDescriptorWithoutLoading(effectFileHandle, loadingListener)
 
         // Now start the load
         assetManager.load(assetDescriptor)
     }
 
     /**
-     * Asynchronously loads the given effect file. An optional [LoadedListener] can be given for listening to when the effect has finished loading.
+     * Asynchronously loads the given effect file. An optional [LoadingListener] can be given for listening to when the effect has finished loading.
      */
-    fun asyncLoad(assetManager: AssetManager, path: String, loadedListener: LoadedListener) {
+    fun asyncLoad(assetManager: AssetManager, path: String, loadingListener: LoadingListener) {
         // Get the file handle
         val effectFileHandle = assetManager.fileHandleResolver.resolve(path)
 
         // Call load() with the generated file handle
-        this.asyncLoad(assetManager, effectFileHandle, loadedListener)
+        this.asyncLoad(assetManager, effectFileHandle, loadingListener)
     }
 
     /**
