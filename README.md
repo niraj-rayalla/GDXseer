@@ -171,8 +171,12 @@ If you're using RoboVM-Metal backend:
     // For immediate loading
     particleEffect.syncLoad(assetManager, "data/tu.efk")
     // For asynchronous loading
-    particleEffect.asyncLoad(assetManager, "data/tu.efk", object: GDXseerParticleEffect.Companion.LoadedListener {
-        override fun onEffectLoaded() {
+    particleEffect.asyncLoad(assetManager, "data/tu.efk", object: GDXseerParticleEffect.Companion.LoadingListener {
+        override fun onEffectSuccessfullyLoaded(gdXseerParticleEffect: GDXseerParticleEffect) {
+            ...
+        }
+   
+        override fun onEffectFailedToLoad(gdXseerParticleEffect: GDXseerParticleEffect, throwable: Throwable?) {
             ...
         }
     })
