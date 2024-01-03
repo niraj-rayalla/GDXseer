@@ -50,9 +50,9 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
         /**
          * @return [FileHandle] that represents the given file path and file type for loading an effect related file.
          */
-        private fun getPathAsFileHandle(path: String, fileType: Files.FileType): FileHandle? {
+        private fun getPathAsFileHandle(app: Application, files: Files, path: String, fileType: Files.FileType): FileHandle? {
             // Simplify/Normalize the given path so that "../" usages are removed.
-            val normalizedPath: String = if (Gdx.app.type == Application.ApplicationType.iOS) {
+            val normalizedPath: String = if (app.type == Application.ApplicationType.iOS) {
                 FilePath.getNormalizedPath(path)
             }
             else {
@@ -60,12 +60,12 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             }
 
             return when (fileType) {
-                Files.FileType.Classpath -> Gdx.files.classpath(normalizedPath)
-                Files.FileType.Internal -> Gdx.files.internal(normalizedPath)
-                Files.FileType.External -> Gdx.files.external(normalizedPath)
-                Files.FileType.Absolute -> Gdx.files.absolute(normalizedPath)
-                Files.FileType.Local -> Gdx.files.local(normalizedPath)
-                else -> Gdx.files.internal(normalizedPath)
+                Files.FileType.Classpath -> files.classpath(normalizedPath)
+                Files.FileType.Internal -> files.internal(normalizedPath)
+                Files.FileType.External -> files.external(normalizedPath)
+                Files.FileType.Absolute -> files.absolute(normalizedPath)
+                Files.FileType.Local -> files.local(normalizedPath)
+                else -> files.internal(normalizedPath)
             }
         }
 
@@ -356,6 +356,9 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
 
     //region State
 
+    private val app: Application
+    private val files: Files
+
     /**
      * Used for loading the sub assets of an effect without calling the [AssetManager]. This is needed because the sub assets
      * are not known until the main body data is loaded into the effect object, and thus we can't add the sub assets to
@@ -375,11 +378,16 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
     /**
      * @param effekseerIsMipMapEnabledDecider Pass in to override if a texture should use mipmaps. If this is null, then mipmaps will always be true.
      */
-    constructor(fileHandleResolver: FileHandleResolver?, effekseerIsMipMapEnabledDecider: EffekseerIsMipMapEnabledDecider?): super(fileHandleResolver) {
+    constructor(
+        fileHandleResolver: FileHandleResolver?, effekseerIsMipMapEnabledDecider: EffekseerIsMipMapEnabledDecider?,
+        app: Application = Gdx.app, files: Files = Gdx.files
+    ): super(fileHandleResolver) {
         this.effekseerIsMipMapEnabledDecider = effekseerIsMipMapEnabledDecider
+        this.app = app
+        this.files = files
     }
 
-    constructor(fileHandleResolver: FileHandleResolver?): this(fileHandleResolver, null)
+    constructor(fileHandleResolver: FileHandleResolver?, app: Application = Gdx.app, files: Files = Gdx.files): this(fileHandleResolver, null, app, files)
 
     //endregion
 
@@ -446,7 +454,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
                 val currentTextureCount: Int = effekseerEffectAdapter.GetTextureCount(textureType)
                 for (i in 0 until currentTextureCount) {
                     val path = getTexturePath(effectFileHandle, i, textureType, effekseerEffectAdapter)
-                    val textureFileHandle = getPathAsFileHandle(path, effectFileHandle.type())
+                    val textureFileHandle = getPathAsFileHandle(this.app, this.files, path, effectFileHandle.type())
                     val cachedLoadedAsset: EffekseerParticleSubAssetLoader.Companion.Result? = getCachedAssetInLoaderOrAssetManager(manager, textureFileHandle!!.path())
                     if (cachedLoadedAsset != null) {
                         result.textures.add(LoadedTextureResult(textureType, i, cachedLoadedAsset))
@@ -467,7 +475,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             result.models = com.badlogic.gdx.utils.Array<EffekseerParticleSubAssetLoader.Companion.Result>(false, modelCount)
             for (i in 0 until modelCount) {
                 val path = getModelPath(effectFileHandle, i, effekseerEffectAdapter)
-                val modelFileHandle = getPathAsFileHandle(path, effectFileHandle.type())
+                val modelFileHandle = getPathAsFileHandle(this.app, this.files, path, effectFileHandle.type())
                 val cachedLoadedAsset: EffekseerParticleSubAssetLoader.Companion.Result? = getCachedAssetInLoaderOrAssetManager(manager, modelFileHandle!!.path())
                 if (cachedLoadedAsset != null) {
                     result.models.add(cachedLoadedAsset)
@@ -487,7 +495,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             result.materials = com.badlogic.gdx.utils.Array<EffekseerParticleSubAssetLoader.Companion.Result>(false, materialCount)
             for (i in 0 until materialCount) {
                 val path = getMaterialPath(effectFileHandle, i, effekseerEffectAdapter)
-                val materialFileHandle = getPathAsFileHandle(path, effectFileHandle.type())
+                val materialFileHandle = getPathAsFileHandle(this.app, this.files, path, effectFileHandle.type())
                 val cachedLoadedAsset: EffekseerParticleSubAssetLoader.Companion.Result? = getCachedAssetInLoaderOrAssetManager(manager, materialFileHandle!!.path())
                 if (cachedLoadedAsset != null) {
                     result.materials.add(cachedLoadedAsset)
