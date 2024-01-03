@@ -34,7 +34,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
         /**
          * The string that is appended to the end of an efk file to be loaded by [EffekseerParticleAssetLoader].
          */
-        private const val MAIN_EFK_FILE_POSTFIX = "_main"
+        private const val MAIN_EFK_FILE_POSTFIX = "_GDXseer"
 
         /**
          * All types of textures.
