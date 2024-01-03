@@ -10,7 +10,6 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
 import com.badlogic.gdx.files.FileHandle
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectMap
 import io.github.niraj_rayalla.gdxseer.adapter_effekseer.EffekseerEffectAdapter
@@ -21,6 +20,7 @@ import io.github.niraj_rayalla.gdxseer.adapter_effekseer.ModelRefWrapper
 import io.github.niraj_rayalla.gdxseer.adapter_effekseer.TextureRefWrapper
 import io.github.niraj_rayalla.gdxseer.loader.EffekseerParticleAssetLoader.Companion.Result
 import io.github.niraj_rayalla.gdxseer.utils.FilePath
+import io.github.niraj_rayalla.gdxseer.utils.withNewPath
 import java.io.File
 
 /**
@@ -32,10 +32,9 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
     companion object {
 
         /**
-         * Used for prefixing the path for the main file so that [AssetManager] doesn't complain about existing path even though
-         * we're loading a different result.
+         * The string that is appended to the end of an efk file to be loaded by [EffekseerParticleAssetLoader].
          */
-        private var prefixForMainFilePath = ""
+        private const val MAIN_EFK_FILE_POSTFIX = "_main"
 
         /**
          * All types of textures.
@@ -45,14 +44,6 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             EffekseerTextureType.Normal,
             EffekseerTextureType.Distortion
         )
-
-        init {
-            val array = CharArray(6)
-            for (i in array.indices) {
-                array[i] = (MathUtils.random.nextFloat() * 26 + 65).toInt().toChar()
-            }
-            prefixForMainFilePath = String(array)
-        }
 
         //region File Paths
 
@@ -112,20 +103,20 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
         ): AssetDescriptor<Result> {
             val parameters = Parameters()
             parameters.set(effectFileHandle, effekseerManagerAdapter, effekseerEffectAdapter, magnification)
-            return AssetDescriptor(
-                FileHandle(prefixForMainFilePath + effectFileHandle.path()),
-                Result::class.java, parameters
-            )
+            return AssetDescriptor(effectFileHandle.withNewPath("${effectFileHandle.path()}$MAIN_EFK_FILE_POSTFIX"), Result::class.java, parameters)
         }
 
         /**
-         * @return A [AssetDescriptor] for loading the given effect related file handle.
+         * @return A new [AssetDescriptor] instance for loading the given effect related file handle.
          */
         private fun getAssetDescriptorForSubAssetFileHandle(
             fileHandle: FileHandle,
             parameters: EffekseerParticleSubAssetLoader.Companion.Parameters?
         ): AssetDescriptor<EffekseerParticleSubAssetLoader.Companion.Result> {
-            return AssetDescriptor(fileHandle, EffekseerParticleSubAssetLoader.Companion.Result::class.java, parameters)
+            return AssetDescriptor(
+                fileHandle,
+                EffekseerParticleSubAssetLoader.Companion.Result::class.java, parameters
+            )
         }
 
         //endregion
