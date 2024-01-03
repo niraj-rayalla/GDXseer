@@ -35,14 +35,7 @@ class BasicExampleApplicationAdapter(val gdxseerManagerCreator: (camera: Camera)
 
     private val random = RandomXS128()
 
-    private val assetManger = ExampleAssetManager().apply {
-        setLoader(EffekseerParticleSubAssetLoader.Companion.Result::class.java, null, EffekseerParticleSubAssetLoader(this.fileHandleResolver))
-        setLoader(EffekseerParticleAssetLoader.Companion.Result::class.java, null, EffekseerParticleAssetLoader(this.fileHandleResolver, object: EffekseerIsMipMapEnabledDecider {
-            override fun isMipMapEnabledForTextureFile(textureFileHandle: FileHandle): Boolean {
-                return true
-            }
-        }))
-    }
+    private lateinit var assetManger: ExampleAssetManager
 
     private lateinit var camera: PerspectiveCamera
     private lateinit var gdxseerManger: GDXseerManager<*>
@@ -62,6 +55,16 @@ class BasicExampleApplicationAdapter(val gdxseerManagerCreator: (camera: Camera)
     override fun create() {
         super.create()
 
+        // Create the asset manager
+        this.assetManger = ExampleAssetManager().apply {
+            setLoader(EffekseerParticleSubAssetLoader.Companion.Result::class.java, null, EffekseerParticleSubAssetLoader(this.fileHandleResolver))
+            setLoader(EffekseerParticleAssetLoader.Companion.Result::class.java, null, EffekseerParticleAssetLoader(this.fileHandleResolver, object: EffekseerIsMipMapEnabledDecider {
+                override fun isMipMapEnabledForTextureFile(textureFileHandle: FileHandle): Boolean {
+                    return true
+                }
+            }))
+        }
+
         // Initialize GDXseer
         GDXseer.init()
 
@@ -80,7 +83,7 @@ class BasicExampleApplicationAdapter(val gdxseerManagerCreator: (camera: Camera)
         this.particleEffect = GDXseerParticleEffect(this.gdxseerManger)
         this.particleEffect.syncLoad(this.assetManger, Gdx.files.getFileHandle("magma_effect.efk", Files.FileType.Internal))
         this.assetManger.finishLoading()
-        // Start the playing the animation of the particle effect now
+        // Start playing the animation of the particle effect now
         this.particleEffect.play()
 
         // Get the particle effect nodes for dynamic editing
