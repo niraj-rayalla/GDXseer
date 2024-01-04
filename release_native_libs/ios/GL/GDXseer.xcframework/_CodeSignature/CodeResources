@@ -14,7 +14,7 @@
 		</data>
 		<key>ios-arm64/GDXseer.framework/Info.plist</key>
 		<data>
-		h2hPoUJYSn3iDk2AXoZ1fakCwIY=
+		ZSSHV3276lZDzFNGhjcnHpK6IcY=
 		</data>
 		<key>ios-arm64_x86_64-simulator/GDXseer.framework/Frameworks/libGDXseer_Effekseer.dylib</key>
 		<data>
@@ -22,15 +22,15 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/GDXseer.framework/GDXseer</key>
 		<data>
-		hiO+hsjRM7jJKoq2SlfmbN8/4YA=
+		/zXBBlp5WuQVutkIt3z8a8F7cVM=
 		</data>
 		<key>ios-arm64_x86_64-simulator/GDXseer.framework/Info.plist</key>
 		<data>
-		nq5GfDplganL42poJLEBIDW14kI=
+		qKxxOq94b2xAqMkhvEacWnEvmOM=
 		</data>
 		<key>ios-arm64_x86_64-simulator/GDXseer.framework/_CodeSignature/CodeResources</key>
 		<data>
-		HllRv0cbINPcaF/yPaH4SxOWWkY=
+		0LLV00kJRrcZ19H0YtuJrPGyrV8=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -61,11 +61,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			h2hPoUJYSn3iDk2AXoZ1fakCwIY=
+			ZSSHV3276lZDzFNGhjcnHpK6IcY=
 			</data>
 			<key>hash2</key>
 			<data>
-			lnncm2AMj7TDkFnEc9ODYJtDcEAV/fpCuUO/MVP6tAc=
+			DmXkeywVp5MND8TagzcHvSDV2KNzUZZQ13wFTo1p5NA=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/GDXseer.framework/Frameworks/libGDXseer_Effekseer.dylib</key>
@@ -83,33 +83,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hiO+hsjRM7jJKoq2SlfmbN8/4YA=
+			/zXBBlp5WuQVutkIt3z8a8F7cVM=
 			</data>
 			<key>hash2</key>
 			<data>
-			CkqOJwjHHkmDZsxpmmBPKSVuI33JVzO1XUDNYxtHf6A=
+			owvnvmd5bgvPANpVdOna+/iDTTIWyDbU/sYpJe0wCrA=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/GDXseer.framework/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			nq5GfDplganL42poJLEBIDW14kI=
+			qKxxOq94b2xAqMkhvEacWnEvmOM=
 			</data>
 			<key>hash2</key>
 			<data>
-			xIuVfEcqlC3TzvEKjNTsXmykL4j0PbOC0+rywdaund0=
+			fk+VcquyL47lsi0j/V75IWk0lZIspZzV3hdECk8RE8Q=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/GDXseer.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			HllRv0cbINPcaF/yPaH4SxOWWkY=
+			0LLV00kJRrcZ19H0YtuJrPGyrV8=
 			</data>
 			<key>hash2</key>
 			<data>
-			1Qi1M84fE1DqKFN1rn2ayybooCDinq4CAbcruolwCiI=
+			8pIi2gvujGTS1j1+k7WBM2mNjFqi8aXE7m8mraJzM4U=
 			</data>
 		</dict>
 	</dict>
