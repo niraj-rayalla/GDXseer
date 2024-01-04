@@ -3,12 +3,11 @@ package io.github.niraj_rayalla.gdxseer.example
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
 import com.badlogic.gdx.utils.Logger
-import io.github.niraj_rayalla.gdxseer.loader.DirectAssetAdder
 
 /**
- * An [AssetManager] that implements [DirectAssetAdder] to avoid temporary caching of loaded GDXseer assets.
+ * An [AssetManager] that has a logger set.
  */
-class ExampleAssetManager: AssetManager, DirectAssetAdder {
+class ExampleAssetManager: AssetManager {
 
     //region Constructors
 
@@ -22,14 +21,6 @@ class ExampleAssetManager: AssetManager, DirectAssetAdder {
 
     init {
         this.logger = Logger(ExampleAssetManager::class.simpleName!!, Logger.DEBUG)
-    }
-
-    //endregion
-
-    //region DirectAssetAdder
-
-    override fun <T> addAssetDirectly(fileName: String, type: Class<T>, asset: T) {
-        this.addAsset(fileName, type, asset)
     }
 
     //endregion
