@@ -25,17 +25,7 @@ class EffekseerParticleSubAssetLoader(resolver: FileHandleResolver?): Asynchrono
         /**
          * Parameters needed to load [EffekseerParticleSubAssetLoader].
          */
-        class Parameters: AssetLoaderParameters<Result?>() {
-            /**
-             * This is used for caching an existing result into an [AssetManager] that doesn't have it or tracking the data of a loaded sub asset.
-             */
-            var loadedResult: Result? = null
-
-            fun resetWithoutRecycling() {
-                loadedResult = null
-                loadedCallback = null
-            }
-        }
+        class Parameters: AssetLoaderParameters<Result?>()
 
         /**
          * Contains the data for any file loaded that is used in an Effekseer effect.
@@ -82,6 +72,12 @@ class EffekseerParticleSubAssetLoader(resolver: FileHandleResolver?): Asynchrono
         //endregion
     }
 
+    //region State
+
+    private var loadedResult: Result? = null
+
+    //endregion
+
     //region Overrides
 
     override fun getDependencies(fileName: String, file: FileHandle, parameter: Parameters): Array<AssetDescriptor<*>>? {
@@ -89,13 +85,16 @@ class EffekseerParticleSubAssetLoader(resolver: FileHandleResolver?): Asynchrono
     }
 
     override fun loadAsync(manager: AssetManager, fileName: String, file: FileHandle, parameter: Parameters) {
-        if (parameter.loadedResult == null) {
-            parameter.loadedResult = ResultImpl(file, file.readBytes())
-        }
+        this.loadedResult = ResultImpl(file, file.readBytes())
+    }
+
+    override fun unloadAsync(manager: AssetManager?, fileName: String?, file: FileHandle?, parameter: Parameters?) {
+        super.unloadAsync(manager, fileName, file, parameter)
+        this.loadedResult = null
     }
 
     override fun loadSync(manager: AssetManager, fileName: String, file: FileHandle, parameter: Parameters): Result? {
-        return parameter.loadedResult
+        return this.loadedResult
     }
 
     //endregion

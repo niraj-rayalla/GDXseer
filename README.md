@@ -141,9 +141,6 @@ If you're using RoboVM-Metal backend:
 1. Call `GDXseer.init()` in the core libGDX module during the creation of the app.
 2. Set the GDX asset loaders used to load the assets used by Effekseer in a GDX manner:
     ```
-    // Ideally use an AssetManager that implements DirectAssetAdder for faster loading such as the provided class: AssetManagerWithDirectAssetAdder
-    val assetManager = AssetManagerWithDirectAssetAdder(fileHandleResolver)
-    -- OR --
     val assetManager = AssetManager(fileHandleResolver)
     
     assetManager.apply {
