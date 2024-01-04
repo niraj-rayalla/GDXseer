@@ -73,16 +73,19 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             }
         }
 
-        private fun getTexturePath(app: Application, effectFileHandle: FileHandle, textureIndex: Int, textureType: EffekseerTextureType, effekseerEffectAdapter: EffekseerEffectAdapter): String {
-            return getPathToSubAsset(app, effectFileHandle, effekseerEffectAdapter.GetTexturePath(textureIndex, textureType))
+        private fun getTextureFileHandle(app: Application, files: Files, effectFileHandle: FileHandle, textureIndex: Int, textureType: EffekseerTextureType, effekseerEffectAdapter: EffekseerEffectAdapter): FileHandle {
+            val path = getPathToSubAsset(app, effectFileHandle, effekseerEffectAdapter.GetTexturePath(textureIndex, textureType))
+            return getPathAsFileHandle(files, path, effectFileHandle.type())!!
         }
 
-        private fun getModelPath(app: Application, effectFileHandle: FileHandle, modelIndex: Int, effekseerEffectAdapter: EffekseerEffectAdapter): String {
-            return getPathToSubAsset(app, effectFileHandle, effekseerEffectAdapter.GetModelPath(modelIndex))
+        private fun getModelFileHandle(app: Application, files: Files, effectFileHandle: FileHandle, modelIndex: Int, effekseerEffectAdapter: EffekseerEffectAdapter): FileHandle {
+            val path = getPathToSubAsset(app, effectFileHandle, effekseerEffectAdapter.GetModelPath(modelIndex))
+            return getPathAsFileHandle(files, path, effectFileHandle.type())!!
         }
 
-        private fun getMaterialPath(app: Application, effectFileHandle: FileHandle, materialIndex: Int, effekseerEffectAdapter: EffekseerEffectAdapter): String {
-            return getPathToSubAsset(app, effectFileHandle, effekseerEffectAdapter.GetMaterialPath(materialIndex))
+        private fun getMaterialFileHandle(app: Application, files: Files, effectFileHandle: FileHandle, materialIndex: Int, effekseerEffectAdapter: EffekseerEffectAdapter): FileHandle {
+            val path = getPathToSubAsset(app, effectFileHandle, effekseerEffectAdapter.GetMaterialPath(materialIndex))
+            return getPathAsFileHandle(files, path, effectFileHandle.type())!!
         }
 
         //endregion
@@ -423,23 +426,20 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             for (textureType in textureTypes) {
                 val currentTextureCount: Int = effekseerEffectAdapter.GetTextureCount(textureType)
                 for (i in 0 until currentTextureCount) {
-                    val path = getTexturePath(this.app, effectFileHandle, i, textureType, effekseerEffectAdapter)
-                    val textureFileHandle = getPathAsFileHandle(this.files, path, effectFileHandle.type())!!
+                    val textureFileHandle = getTextureFileHandle(this.app, this.files, effectFileHandle, i, textureType, effekseerEffectAdapter)
                     dependencies.add(getAssetDescriptorForSubAssetFileHandle(textureFileHandle, EffekseerParticleSubAssetLoader.Companion.Parameters()))
                 }
             }
 
             // Add the models
             for (i in 0 until result.modelCount) {
-                val path = getModelPath(this.app, effectFileHandle, i, effekseerEffectAdapter)
-                val modelFileHandle = getPathAsFileHandle(this.files, path, effectFileHandle.type())!!
+                val modelFileHandle = getModelFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter)
                 dependencies.add(getAssetDescriptorForSubAssetFileHandle(modelFileHandle, EffekseerParticleSubAssetLoader.Companion.Parameters()))
             }
 
             // Add the materials
             for (i in 0 until result.materialCount) {
-                val path = getMaterialPath(this.app, effectFileHandle, i, effekseerEffectAdapter)
-                val materialFileHandle = getPathAsFileHandle(this.files, path, effectFileHandle.type())!!
+                val materialFileHandle = getMaterialFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter)
                 dependencies.add(getAssetDescriptorForSubAssetFileHandle(materialFileHandle, EffekseerParticleSubAssetLoader.Companion.Parameters()))
             }
 
@@ -467,7 +467,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             for (textureType in textureTypes) {
                 val currentTextureCount: Int = effekseerEffectAdapter.GetTextureCount(textureType)
                 for (i in 0 until currentTextureCount) {
-                    val path = getTexturePath(this.app, effectFileHandle, i, textureType, effekseerEffectAdapter)
+                    val path = getTextureFileHandle(this.app, this.files, effectFileHandle, i, textureType, effekseerEffectAdapter).path()
                     val loadedSubAsset = manager.get(path, EffekseerParticleSubAssetLoader.Companion.Result::class.java)
                     result.textures.add(LoadedTextureResult(textureType, i, loadedSubAsset))
                 }
@@ -476,7 +476,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             // Add the models
             result.models = com.badlogic.gdx.utils.Array<EffekseerParticleSubAssetLoader.Companion.Result>(false, result.modelCount)
             for (i in 0 until result.modelCount) {
-                val path = getModelPath(this.app, effectFileHandle, i, effekseerEffectAdapter)
+                val path = getModelFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter).path()
                 val loadedSubAsset = manager.get(path, EffekseerParticleSubAssetLoader.Companion.Result::class.java)
                 result.models.add(loadedSubAsset)
             }
@@ -484,7 +484,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             // Add the materials
             result.materials = com.badlogic.gdx.utils.Array<EffekseerParticleSubAssetLoader.Companion.Result>(false, result.materialCount)
             for (i in 0 until result.materialCount) {
-                val path = getMaterialPath(this.app, effectFileHandle, i, effekseerEffectAdapter)
+                val path = getMaterialFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter).path()
                 val loadedSubAsset = manager.get(path, EffekseerParticleSubAssetLoader.Companion.Result::class.java)
                 result.materials.add(loadedSubAsset)
             }
