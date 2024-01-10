@@ -155,12 +155,14 @@ If you're using RoboVM-Metal backend:
         }))
     }
     ```
-3. Create the GDXseer manager object:
+3. Create and initialize the GDXseer manager object:
     ```
     // For GL
     val gdxseerManager = GDXseerGLManager(1000, true, camera, renderContext, OpenGLDeviceType.OpenGLES3)
     // For Metal
     val gdxseerManager = GDXseerMetalManager(1000, true, camera, renderContext)
+    // Initialize the manager
+    gdxseerManager.initialize()
     ```
 4. Load particle effects by doing the following:
     ```
