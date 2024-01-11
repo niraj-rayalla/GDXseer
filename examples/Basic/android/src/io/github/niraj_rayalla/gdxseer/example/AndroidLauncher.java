@@ -18,7 +18,7 @@ public class AndroidLauncher extends AndroidApplication {
 
         // Create the adapter
         BasicExampleApplicationAdapter adapter = new BasicExampleApplicationAdapter(
-                camera -> new GDXseerGLManager(1000, true, camera, null, OpenGLDeviceType.OpenGLES3)
+                () -> new GDXseerGLManager(1000, true, null, OpenGLDeviceType.OpenGLES3)
         );
 
         // Initialize 3d app

@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Files
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.math.RandomXS128
@@ -13,19 +12,23 @@ import io.github.niraj_rayalla.gdxseer.GDXseer
 import io.github.niraj_rayalla.gdxseer.GDXseerManager
 import io.github.niraj_rayalla.gdxseer.GDXseerParticleEffect
 import io.github.niraj_rayalla.gdxseer.effekseer.AllTypeColorParameter
+import io.github.niraj_rayalla.gdxseer.example.BasicExampleApplicationAdapter.Companion.COLOR_CHANGE_INTERVAL_SECONDS
 import io.github.niraj_rayalla.gdxseer.loader.EffekseerIsMipMapEnabledDecider
 import io.github.niraj_rayalla.gdxseer.loader.EffekseerParticleAssetLoader
 import io.github.niraj_rayalla.gdxseer.loader.EffekseerParticleSubAssetLoader
 import io.github.niraj_rayalla.gdxseer.managedeffekseer.data.GDXseerAllTypeColorParameter
 import io.github.niraj_rayalla.gdxseer.managedeffekseer.nodes.GDXseerEffectNodeRing
 import io.github.niraj_rayalla.gdxseer.managedeffekseer.nodes.GDXseerEffectNodeSprite
-import io.github.niraj_rayalla.gdxseer.example.BasicExampleApplicationAdapter.Companion.COLOR_CHANGE_INTERVAL_SECONDS
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * The [ApplicationAdapter] used for the Basic example application.
  * Loads and shows the Suzuki01 magma effect and changes the colors of some of the nodes in the effect every [COLOR_CHANGE_INTERVAL_SECONDS] seconds.
  */
-class BasicExampleApplicationAdapter(val gdxseerManagerCreator: (camera: Camera)->GDXseerManager<*>): ApplicationAdapter() {
+class BasicExampleApplicationAdapter(private val gdxseerManagerCreator: ()->GDXseerManager<*>): ApplicationAdapter() {
 
     companion object {
         private const val COLOR_CHANGE_INTERVAL_SECONDS = 2f
@@ -75,8 +78,64 @@ class BasicExampleApplicationAdapter(val gdxseerManagerCreator: (camera: Camera)
         }
 
         // Create the GDXseer manager used to manage Effekseer effects
-        this.gdxseerManger = this.gdxseerManagerCreator(this.camera).apply {
-            initialize()
+        val shouldInitializeGDXManagerInOneStep = false
+        if (shouldInitializeGDXManagerInOneStep) {
+            val time = System.nanoTime()
+            this.gdxseerManger = this.gdxseerManagerCreator.invoke().apply { initializeAll() }
+            println("GDXseer manger instance complete creation time: ${(System.nanoTime() - time).toDouble() / 1_000_000.0} ms")
+        }
+        else {
+            var time: Long
+
+            // Make the GDXseer manger instance
+            this.gdxseerManger = runBlocking {
+                this.async(Dispatchers.Default) {
+                    time = System.nanoTime()
+                    val result = gdxseerManagerCreator.invoke()
+                    println("GDXseer manger instance creation time: ${(System.nanoTime() - time).toDouble() / 1_000_000.0} ms")
+                    result
+                }.await()
+            }
+
+            // Step1 initialization
+            time = System.nanoTime()
+            runBlocking {
+                this.launch(Dispatchers.Default) {
+                    time = System.nanoTime()
+                    gdxseerManger.initializeStep1CreateManagerAdapter()
+                    println("Step1 initialization time: ${(System.nanoTime() - time).toDouble() / 1_000_000.0} ms")
+                }.join()
+            }
+
+            // Step2 initialization
+            time = System.nanoTime()
+            this.gdxseerManger.initializeStep2CreateRenderer()
+            println("Step2 initialization time: ${(System.nanoTime() - time).toDouble() / 1_000_000.0} ms")
+
+            // Step3 initialization
+            time = System.nanoTime()
+            this.gdxseerManger.initializeStep3CreateSubRenderers()
+            println("Step3 initialization time: ${(System.nanoTime() - time).toDouble() / 1_000_000.0} ms")
+
+            // Step4 initialization
+            time = System.nanoTime()
+            runBlocking {
+                this.launch(Dispatchers.Default) {
+                    time = System.nanoTime()
+                    gdxseerManger.initializeStep4CreateLoaders()
+                    println("Step4 initialization time: ${(System.nanoTime() - time).toDouble() / 1_000_000.0} ms")
+                }.join()
+            }
+
+            // Step5 initialization
+            time = System.nanoTime()
+            runBlocking {
+                this.launch(Dispatchers.Default) {
+                    time = System.nanoTime()
+                    gdxseerManger.initializeStep5Finish()
+                    println("Step5 initialization time: ${(System.nanoTime() - time).toDouble() / 1_000_000.0} ms")
+                }.join()
+            }
         }
 
         // Load the example Effekseer particle effect immediately
@@ -120,7 +179,7 @@ class BasicExampleApplicationAdapter(val gdxseerManagerCreator: (camera: Camera)
         }
 
         // Render the Effekseer effects
-        this.gdxseerManger.draw(deltaTime)
+        this.gdxseerManger.draw(deltaTime, this.camera)
     }
 
     override fun dispose() {

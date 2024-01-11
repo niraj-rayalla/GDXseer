@@ -13,8 +13,8 @@ object DesktopLauncher {
         config.setBackBufferConfig(8, 8, 8, 8, 24, 0, 2)
         config.setWindowedMode(1024, 1024)
         Lwjgl3Application(
-            BasicExampleApplicationAdapter { camera ->
-                GDXseerGLManager(1000, true, camera, null, OpenGLDeviceType.OpenGL3)
+            BasicExampleApplicationAdapter {
+                GDXseerGLManager(1000, true, null, OpenGLDeviceType.OpenGL3)
             },
             config
         )

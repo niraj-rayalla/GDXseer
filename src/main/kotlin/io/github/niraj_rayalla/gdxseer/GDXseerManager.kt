@@ -16,7 +16,12 @@ import io.github.niraj_rayalla.gdxseer.effekseer.EffekseerManagerParameters.Draw
  * The base abstract class used to manage an Effekseer manager instance (by wrapping an [EffekseerManagerAdapter]) and includes relevant GDX logic. This is the main entry class
  * for making use of Effekseer particle effects.
  *
- * MUST CALL [initialize] before an instance of this class is used.
+ * MUST CALL [initializeAll] or all the initialize step methods, such as [initializeStep1CreateManagerAdapter], [initializeStep2CreateRenderer], etc.., before an instance of
+ * this [GDXseerManager] is used to render particle effects.
+ * The initialize step methods are there to split the entire initialization process of the [EffekseerManagerAdapter] used by a [GDXseerManager] so that GL thread doesn't
+ * need to run the entire initialization process at once if not desired.
+ * Each of the initialize step methods must be run sequentially according to their number, but not all of them are required to be run from the GL thread. Check each step for
+ * determining if it should be called from the GL thread.
  *
  * All GDX relevant logic lives in this class, but not all properties and methods of the Effekseer manager object are available here. Use [effekseerManagerAdapter],
  * which is the [EffekseerManagerAdapter] being wrapped by this class, to access all of the JVM accessible Effekseer logic.
@@ -24,7 +29,7 @@ import io.github.niraj_rayalla.gdxseer.effekseer.EffekseerManagerParameters.Draw
  * This will be implemented by each renderer backend used (such as OpenGL or Metal).
  *
  * Override the following protected methods for customizing what happens during a draw call:
- *  [shouldCameraBeUpdatedInDraw],
+ *  [shouldCameraBeUpdatedInUpdate],
  *  [onPreDraw],
  *  [onPostDraw]
  */
@@ -32,7 +37,6 @@ import io.github.niraj_rayalla.gdxseer.effekseer.EffekseerManagerParameters.Draw
 abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
     protected val maxSpriteCount: Int,
     protected val autoFlip: Boolean = true,
-    camera: Camera,
     /**
      * An optional [RenderContext] used to reduce graphics calls.
      */
@@ -69,14 +73,8 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
         private set
 
     /**
-     * The [Camera] instance being used in GDX to render the scene.
-     */
-    var camera: Camera = camera
-        protected set
-
-    /**
-     * Can set to a [Viewport] instance that will be used to determine the render size when [camera] is an [OrthographicCamera]. Set to null
-     * to not use a custom viewport and instead use the render size from [camera]. Is null by default.
+     * Can set to a [Viewport] instance that will be used to determine the render size when the camera being used during rendering is an [OrthographicCamera]. Set to null
+     * to not use a custom viewport and instead use the render size from the camera being used. Is null by default.
      */
     var viewport: Viewport? = null
 
@@ -107,10 +105,56 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
     //region Init
 
     /**
-     * Call before any use of this manager object.
+     * Creates the Effekseer manager adapter instance and sets [effekseerManagerAdapter] to the created instance.
+     * NOT required to be run on the GL thread.
      */
-    fun initialize() {
-        this.effekseerManagerAdapter = this.createEffekseerManagerAdapter().apply { Initialize() }
+    fun initializeStep1CreateManagerAdapter() {
+        this.effekseerManagerAdapter = this.createEffekseerManagerAdapter()
+    }
+
+    /**
+     * Creates the Effekseer renderer needed to render all effects.
+     * REQUIRED to be run on the GL thread.
+     */
+    fun initializeStep2CreateRenderer() {
+        this.effekseerManagerAdapter.InitializeStep1_CreateRenderer()
+    }
+
+    /**
+     * Creates the Effekseer "sub" renderers (sprite, model, track, etc... renderers) which will be used by the renderer created in [initializeStep2CreateRenderer].
+     * REQUIRED to be run on the GL thread.
+     */
+    fun initializeStep3CreateSubRenderers() {
+        this.effekseerManagerAdapter.InitializeStep2_CreateSubRenderers()
+    }
+
+    /**
+     * Creates the asset loaders that Effekseer uses to load effect data.
+     * NOT required to be run on the GL thread.
+     */
+    fun initializeStep4CreateLoaders() {
+        this.effekseerManagerAdapter.InitializeStep3_CreateLoaders()
+    }
+
+    /**
+     * Must be called after all the other steps to finish initialization.
+     * NOT required to be run on the GL thread.
+     */
+    fun initializeStep5Finish() {
+        this.effekseerManagerAdapter.InitializeStep4_Finish()
+
+        // Check that the manager adapter has successfully initialized
+        if (!this.effekseerManagerAdapter.GetHasSuccessfullyInitialized()) {
+            throw RuntimeException("Failed to initialize the Effekseer manager instance of type ${this.getEffekseerManagerAdapterName()} and max sprite count of " + maxSpriteCount)
+        }
+    }
+
+    /**
+     * Calls all initialization steps in this one call, if the split of initialization steps is not needed for performance.
+     */
+    fun initializeAll() {
+        this.effekseerManagerAdapter = this.createEffekseerManagerAdapter()
+        this.effekseerManagerAdapter.InitializeAll()
 
         // Check that the manager adapter has successfully initialized
         if (!this.effekseerManagerAdapter.GetHasSuccessfullyInitialized()) {
@@ -155,9 +199,9 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
     //region Protected Methods
 
     /**
-     * @return True, if [camera]'s [Camera.update] should be called each frame, otherwise false. Default value is false.
+     * @return True, if the given [Camera]'s [Camera.update] should be called during rendering, otherwise false. Default value is false.
      */
-    protected open fun shouldCameraBeUpdatedInDraw(): Boolean {
+    protected open fun shouldCameraBeUpdatedInUpdate(): Boolean {
         return false
     }
 
@@ -208,12 +252,11 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
      * If you only draw the simulation once per frame, you can call [draw] instead which calls this update method and then the Effekseer draw method.
      * @param delta The time in seconds since the last frame.
      */
-    open fun update(delta: Float) {
+    open fun update(delta: Float, camera: Camera) {
         this.timeInSeconds += delta
-        val camera = this.camera
 
         // If the LibGDX camera state should be updated here
-        if (shouldCameraBeUpdatedInDraw()) {
+        if (shouldCameraBeUpdatedInUpdate()) {
             camera.update()
         }
 
@@ -283,10 +326,11 @@ abstract class GDXseerManager<MA: EffekseerManagerAdapter>(
      * This calls the updates methods and then draws all added particle effects. Update [drawParameter] before this call to further affect how the particles are drawn.
      * If you want to draw multiple times do NOT use this method. Call [update] and then call [drawAfterUpdate] however many times draw calls are needed.
      * @param delta The time in seconds since the last frame.
+     * @param camera The [Camera] instance used for rendering the particle effects.
      */
-    open fun draw(delta: Float) {
+    open fun draw(delta: Float, camera: Camera) {
         // Update
-        this.update(delta)
+        this.update(delta, camera)
 
         // Draw
         this.drawAfterUpdate()

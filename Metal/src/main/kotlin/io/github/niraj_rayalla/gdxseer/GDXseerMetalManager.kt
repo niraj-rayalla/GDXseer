@@ -1,6 +1,5 @@
 package io.github.niraj_rayalla.gdxseer
 
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext
 import io.github.niraj_rayalla.gdxseer.effekseer_metal.EffekseerMetalManagerAdapter
 
@@ -11,12 +10,11 @@ import io.github.niraj_rayalla.gdxseer.effekseer_metal.EffekseerMetalManagerAdap
 class GDXseerMetalManager(
     maxSpriteCount: Int,
     autoFlip: Boolean = true,
-    camera: Camera,
     /**
      * An optional [RenderContext] used to reduce graphics calls.
      */
     renderContext: RenderContext?
-): GDXseerManager<EffekseerMetalManagerAdapter>(maxSpriteCount, autoFlip, camera, renderContext) {
+): GDXseerManager<EffekseerMetalManagerAdapter>(maxSpriteCount, autoFlip, renderContext) {
 
     //region Properties
 

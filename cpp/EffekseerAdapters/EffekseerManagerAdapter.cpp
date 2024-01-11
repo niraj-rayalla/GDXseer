@@ -26,7 +26,7 @@ EffekseerManagerAdapter::~EffekseerManagerAdapter() {
     renderer.Reset();
 }
 
-void EffekseerManagerAdapter::Initialize() {
+void EffekseerManagerAdapter::InitializeStep1_CreateRenderer() {
     // Create the Effekseer renderer object to use by calling this virtual method that should be implemented in sub-classes.
     this->renderer = CreateRenderer(this->spriteMaxCount).rendererRef;
 
@@ -39,6 +39,13 @@ void EffekseerManagerAdapter::Initialize() {
 
     // Set to normal render mode
     this->renderer->SetRenderMode(Effekseer::RenderMode::Normal);
+}
+
+void EffekseerManagerAdapter::InitializeStep2_CreateSubRenderers() {
+    // Check successful creation
+    if (this->manager == nullptr || this->renderer == nullptr) {
+        return;
+    }
 
     // Set all renderer instances for each type by using the created renderer object
     this->manager->SetSpriteRenderer(renderer->CreateSpriteRenderer());
@@ -46,15 +53,36 @@ void EffekseerManagerAdapter::Initialize() {
     this->manager->SetRingRenderer(renderer->CreateRingRenderer());
     this->manager->SetTrackRenderer(renderer->CreateTrackRenderer());
     this->manager->SetModelRenderer(renderer->CreateModelRenderer());
+}
+
+void EffekseerManagerAdapter::InitializeStep3_CreateLoaders() {
+    // Check successful creation
+    if (this->manager == nullptr || this->renderer == nullptr) {
+        return;
+    }
 
     // Set the loaders
     this->setting->SetModelLoader(renderer->CreateModelLoader());
     this->setting->SetMaterialLoader(renderer->CreateMaterialLoader());
     this->setting->SetTextureLoader(renderer->CreateTextureLoader());
     this->manager->SetCurveLoader(Effekseer::MakeRefPtr<Effekseer::CurveLoader>());
+}
+
+void EffekseerManagerAdapter::InitializeStep4_Finish() {
+    // Check successful creation
+    if (this->manager == nullptr || this->renderer == nullptr) {
+        return;
+    }
 
     // Done initialization
     this->hasSuccessfullyInitialized = true;
+}
+
+void EffekseerManagerAdapter::InitializeAll() {
+    this->InitializeStep1_CreateRenderer();
+    this->InitializeStep2_CreateSubRenderers();
+    this->InitializeStep3_CreateLoaders();
+    this->InitializeStep4_Finish();
 }
 
 bool EffekseerManagerAdapter::GetHasSuccessfullyInitialized() {

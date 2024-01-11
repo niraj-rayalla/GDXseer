@@ -1,6 +1,5 @@
 package io.github.niraj_rayalla.gdxseer
 
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext
 import io.github.niraj_rayalla.gdxseer.effekseer_gl.EffekseerGLManagerAdapter
 import io.github.niraj_rayalla.gdxseer.effekseer_gl.OpenGLDeviceType
@@ -12,7 +11,6 @@ import io.github.niraj_rayalla.gdxseer.effekseer_gl.OpenGLDeviceType
 class GDXseerGLManager(
     maxSpriteCount: Int,
     autoFlip: Boolean = true,
-    camera: Camera,
     /**
      * An optional [RenderContext] used to reduce graphics calls.
      */
@@ -21,7 +19,7 @@ class GDXseerGLManager(
      * The version of Open GL to use.
      */
     val openGLDeviceType: OpenGLDeviceType
-): GDXseerManager<EffekseerGLManagerAdapter>(maxSpriteCount, autoFlip, camera, renderContext) {
+): GDXseerManager<EffekseerGLManagerAdapter>(maxSpriteCount, autoFlip, renderContext) {
 
     //region Properties
 

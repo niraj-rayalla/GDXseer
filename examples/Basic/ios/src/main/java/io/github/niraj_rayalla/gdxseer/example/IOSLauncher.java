@@ -20,7 +20,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
 
         // Create the adapter
         BasicExampleApplicationAdapter adapter = new BasicExampleApplicationAdapter(
-                camera -> new GDXseerGLManager(1000, true, camera, null, OpenGLDeviceType.OpenGLES2)
+                () -> new GDXseerGLManager(1000, true, null, OpenGLDeviceType.OpenGLES2)
         );
 
         return new IOSApplication(adapter, config);

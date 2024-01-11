@@ -28,7 +28,11 @@ public:
 	EffekseerManagerAdapter(int32_t spriteMaxCount, bool autoFlip = true);
 	virtual ~EffekseerManagerAdapter();
 
-    void Initialize();
+    void InitializeStep1_CreateRenderer();
+    void InitializeStep2_CreateSubRenderers();
+    void InitializeStep3_CreateLoaders();
+    void InitializeStep4_Finish();
+    void InitializeAll();
 
 	bool GetHasSuccessfullyInitialized();
 
