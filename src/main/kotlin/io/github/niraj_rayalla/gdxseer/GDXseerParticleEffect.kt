@@ -347,7 +347,7 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      */
     fun getAssetDescriptorWithoutLoading(effectFileHandle: FileHandle, loadingListener: LoadingListener?): AssetDescriptor<EffekseerParticleAssetLoader.Companion.Result> {
         // Create the asset descriptor for sending to the given AssetManager
-        val assetDescriptor = EffekseerParticleAssetLoader.getMainFileAssetDescriptor(effectFileHandle, this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification)
+        val assetDescriptor = EffekseerParticleAssetLoader.getMainFileAssetDescriptor(effectFileHandle, this.manager.effekseerManagerAdapter, this, this.magnification)
 
         // Listen for finished loading
         assetDescriptor.params.loadedCallback = LoadedCallback { assetManager, _, _ ->
@@ -374,7 +374,7 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      * Loads the particle loaded effect data ([EffekseerParticleAssetLoader.Result]) into this instance.
      */
     fun loadFromEffectAssetResult(result: EffekseerParticleAssetLoader.Companion.Result) {
-        result.loadIntoEffect(this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification)
+        result.loadIntoEffect(this.manager.effekseerManagerAdapter, this, this.magnification)
     }
 
     /**
@@ -405,7 +405,7 @@ open class GDXseerParticleEffect(val manager: GDXseerManager<*>): Disposable {
      * Synchronously loads the given effect file.
      */
     fun syncLoad(assetManager: AssetManager, effectFileHandle: FileHandle) {
-        EffekseerParticleAssetLoader.syncLoad(assetManager, effectFileHandle, this.manager.effekseerManagerAdapter, this.effekseerEffectAdapter, this.magnification)
+        EffekseerParticleAssetLoader.syncLoad(assetManager, effectFileHandle, this.manager.effekseerManagerAdapter, this, this.magnification)
     }
 
     /**

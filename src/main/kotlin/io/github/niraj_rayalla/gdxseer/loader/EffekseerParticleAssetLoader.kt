@@ -9,8 +9,10 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
 import com.badlogic.gdx.files.FileHandle
+import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectMap
+import io.github.niraj_rayalla.gdxseer.GDXseerParticleEffect
 import io.github.niraj_rayalla.gdxseer.adapter_effekseer.EffekseerEffectAdapter
 import io.github.niraj_rayalla.gdxseer.adapter_effekseer.EffekseerManagerAdapter
 import io.github.niraj_rayalla.gdxseer.adapter_effekseer.EffekseerTextureType
@@ -97,10 +99,10 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
          */
         @Suppress("MemberVisibilityCanBePrivate")
         fun getMainFileAssetDescriptor(
-            effectFileHandle: FileHandle, effekseerManagerAdapter: EffekseerManagerAdapter?, effekseerEffectAdapter: EffekseerEffectAdapter?, magnification: Float
+            effectFileHandle: FileHandle, effekseerManagerAdapter: EffekseerManagerAdapter?, gdxseerParticleEffect: GDXseerParticleEffect?, magnification: Float
         ): AssetDescriptor<Result> {
             val parameters = Parameters()
-            parameters.set(effectFileHandle, effekseerManagerAdapter, effekseerEffectAdapter, magnification)
+            parameters.set(effectFileHandle, effekseerManagerAdapter, gdxseerParticleEffect, magnification)
             return AssetDescriptor(effectFileHandle, Result::class.java, parameters)
         }
 
@@ -159,13 +161,13 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
 
             var effectFileHandle: FileHandle? = null
             var effekseerManagerAdapter: EffekseerManagerAdapter? = null
-            var effekseerEffectAdapter: EffekseerEffectAdapter? = null
+            var gdxseerParticleEffect: GDXseerParticleEffect? = null
             var magnification = 0f
             internal var result: Result? = null
 
-            fun set(effectFileHandle: FileHandle?, effekseerManagerAdapter: EffekseerManagerAdapter?, effekseerEffectAdapter: EffekseerEffectAdapter?, magnification: Float) {
+            fun set(effectFileHandle: FileHandle?, effekseerManagerAdapter: EffekseerManagerAdapter?, gdxseerParticleEffect: GDXseerParticleEffect?, magnification: Float) {
                 this.effectFileHandle = effectFileHandle
-                this.effekseerEffectAdapter = effekseerEffectAdapter
+                this.gdxseerParticleEffect = gdxseerParticleEffect
                 this.effekseerManagerAdapter = effekseerManagerAdapter
                 this.magnification = magnification
                 result = null
@@ -183,8 +185,8 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
          */
         class Result internal constructor(
             @Suppress("MemberVisibilityCanBePrivate")
-            val loadedWithEffekseerEffectAdapter: EffekseerEffectAdapter
-        ) {
+            val loadedWithGDXseerParticleEffect: GDXseerParticleEffect
+        ): Disposable {
 
             //region State
 
@@ -198,6 +200,14 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             internal lateinit var textures: com.badlogic.gdx.utils.Array<LoadedTextureResult>
             internal lateinit var models: com.badlogic.gdx.utils.Array<EffekseerParticleSubAssetLoader.Companion.Result>
             internal lateinit var materials: com.badlogic.gdx.utils.Array<EffekseerParticleSubAssetLoader.Companion.Result>
+
+            //endregion
+
+            //region Overrides
+
+            override fun dispose() {
+                this.loadedWithGDXseerParticleEffect.dispose()
+            }
 
             //endregion
 
@@ -282,16 +292,16 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             /**
              * Loads the effect sub asset references in this result instance into the given [EffekseerManagerAdapter].
              */
-            fun loadIntoEffect(effekseerManagerAdapter: EffekseerManagerAdapter, effekseerEffectAdapter: EffekseerEffectAdapter, magnification: Float) {
+            fun loadIntoEffect(effekseerManagerAdapter: EffekseerManagerAdapter, gdxseerParticleEffect: GDXseerParticleEffect, magnification: Float) {
                 try {
-                    if (this.loadedWithEffekseerEffectAdapter !== effekseerEffectAdapter) {
+                    if (this.loadedWithGDXseerParticleEffect !== gdxseerParticleEffect) {
                         // Main file load
-                        if (!effekseerEffectAdapter.load(effekseerManagerAdapter, this.effectFileData, this.effectFileData.size, magnification)) {
+                        if (!gdxseerParticleEffect.effekseerEffectAdapter.load(effekseerManagerAdapter, this.effectFileData, this.effectFileData.size, magnification)) {
                             throw Exception("Failed to load main Effekseer particle file " + this.effectFileHandle.toString())
                         }
 
                         // Sub assets load
-                        setSubAssetsInEffect(effekseerEffectAdapter)
+                        setSubAssetsInEffect(gdxseerParticleEffect.effekseerEffectAdapter)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -337,11 +347,11 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
         @Throws(IllegalStateException::class)
         fun syncLoad(
             assetManager: AssetManager, effectFileHandle: FileHandle,
-            effekseerManagerAdapter: EffekseerManagerAdapter, effekseerEffectAdapter: EffekseerEffectAdapter,
+            effekseerManagerAdapter: EffekseerManagerAdapter, gdxseerParticleEffect: GDXseerParticleEffect,
             magnification: Float
         ) {
             // Request load
-            val mainAssetDescriptor: AssetDescriptor<Result> = getMainFileAssetDescriptor(effectFileHandle, effekseerManagerAdapter, effekseerEffectAdapter, magnification)
+            val mainAssetDescriptor: AssetDescriptor<Result> = getMainFileAssetDescriptor(effectFileHandle, effekseerManagerAdapter, gdxseerParticleEffect, magnification)
             assetManager.load(mainAssetDescriptor)
 
             // Wait for load to finish
@@ -349,7 +359,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
 
             // Now send the loaded file data to the effect if it wasn't already sent
             val loadedData: Result = assetManager.get(mainAssetDescriptor)
-            loadedData.loadIntoEffect(effekseerManagerAdapter, effekseerEffectAdapter, magnification)
+            loadedData.loadIntoEffect(effekseerManagerAdapter, gdxseerParticleEffect, magnification)
         }
     }
 
@@ -396,10 +406,10 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
         val parameter = parameter ?: throw Exception("Need ${EffekseerParticleSubAssetLoader.Companion.Parameters::class.qualifiedName} to load an Effekseer particle effect.")
         // Check that the manager and effect cores are available
         val effekseerManagerAdapter = checkNotNull(parameter.effekseerManagerAdapter) { "${EffekseerManagerAdapter::class.simpleName} is needed to load Effekseer effects." }
-        val effekseerEffectAdapter = checkNotNull(parameter.effekseerEffectAdapter) { "${EffekseerEffectAdapter::class.simpleName} is needed to load Effekseer effects." }
+        val gdxseerParticleEffect = checkNotNull(parameter.gdxseerParticleEffect) { "${EffekseerEffectAdapter::class.simpleName} is needed to load Effekseer effects." }
 
         // Create the result object that will be returned at the end
-        val result = Result(effekseerEffectAdapter)
+        val result = Result(gdxseerParticleEffect)
         parameter.result = result
 
         // Get the efk file data
@@ -410,36 +420,36 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
 
         // Don't continue if the manager adapter has already been deleted
         if (EffekseerManagerAdapter.getCPtr(effekseerManagerAdapter) != 0L) {
-            effekseerEffectAdapter.load(effekseerManagerAdapter, efkFileData, efkFileData.size, parameter.magnification)
+            gdxseerParticleEffect.effekseerEffectAdapter.load(effekseerManagerAdapter, efkFileData, efkFileData.size, parameter.magnification)
 
             result.textureCount = 0
             for (textureType in textureTypes) {
-                result.textureCount += effekseerEffectAdapter.GetTextureCount(textureType)
+                result.textureCount += gdxseerParticleEffect.effekseerEffectAdapter.GetTextureCount(textureType)
             }
-            result.modelCount = effekseerEffectAdapter.GetModelCount()
-            result.materialCount = effekseerEffectAdapter.GetMaterialCount()
+            result.modelCount = gdxseerParticleEffect.effekseerEffectAdapter.GetModelCount()
+            result.materialCount = gdxseerParticleEffect.effekseerEffectAdapter.GetMaterialCount()
 
             // Now create the dependencies list that will contain all the dependencies of the particle effect
             val dependencies = com.badlogic.gdx.utils.Array<AssetDescriptor<*>>(false, result.textureCount + result.modelCount + result.materialCount)
 
             // Load and add the textures
             for (textureType in textureTypes) {
-                val currentTextureCount: Int = effekseerEffectAdapter.GetTextureCount(textureType)
+                val currentTextureCount: Int = gdxseerParticleEffect.effekseerEffectAdapter.GetTextureCount(textureType)
                 for (i in 0 until currentTextureCount) {
-                    val textureFileHandle = getTextureFileHandle(this.app, this.files, effectFileHandle, i, textureType, effekseerEffectAdapter)
+                    val textureFileHandle = getTextureFileHandle(this.app, this.files, effectFileHandle, i, textureType, gdxseerParticleEffect.effekseerEffectAdapter)
                     dependencies.add(getAssetDescriptorForSubAssetFileHandle(textureFileHandle, EffekseerParticleSubAssetLoader.Companion.Parameters()))
                 }
             }
 
             // Add the models
             for (i in 0 until result.modelCount) {
-                val modelFileHandle = getModelFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter)
+                val modelFileHandle = getModelFileHandle(this.app, this.files, effectFileHandle, i, gdxseerParticleEffect.effekseerEffectAdapter)
                 dependencies.add(getAssetDescriptorForSubAssetFileHandle(modelFileHandle, EffekseerParticleSubAssetLoader.Companion.Parameters()))
             }
 
             // Add the materials
             for (i in 0 until result.materialCount) {
-                val materialFileHandle = getMaterialFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter)
+                val materialFileHandle = getMaterialFileHandle(this.app, this.files, effectFileHandle, i, gdxseerParticleEffect.effekseerEffectAdapter)
                 dependencies.add(getAssetDescriptorForSubAssetFileHandle(materialFileHandle, EffekseerParticleSubAssetLoader.Companion.Parameters()))
             }
 
@@ -455,7 +465,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
 
     override fun loadAsync(manager: AssetManager, fileName: String?, file: FileHandle?, parameter: Parameters) {
         val effectFileHandle = parameter.effectFileHandle!!
-        val effekseerEffectAdapter = parameter.effekseerEffectAdapter!!
+        val effekseerEffectAdapter = parameter.gdxseerParticleEffect!!
 
         // Create the result object that will be returned at the end
         val result = parameter.result!!
@@ -465,9 +475,9 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             // Load and add the textures
             result.textures = com.badlogic.gdx.utils.Array<LoadedTextureResult>(false, result.textureCount)
             for (textureType in textureTypes) {
-                val currentTextureCount: Int = effekseerEffectAdapter.GetTextureCount(textureType)
+                val currentTextureCount: Int = effekseerEffectAdapter.effekseerEffectAdapter.GetTextureCount(textureType)
                 for (i in 0 until currentTextureCount) {
-                    val path = getTextureFileHandle(this.app, this.files, effectFileHandle, i, textureType, effekseerEffectAdapter).path()
+                    val path = getTextureFileHandle(this.app, this.files, effectFileHandle, i, textureType, effekseerEffectAdapter.effekseerEffectAdapter).path()
                     val loadedSubAsset = manager.get(path, EffekseerParticleSubAssetLoader.Companion.Result::class.java)
                     result.textures.add(LoadedTextureResult(textureType, i, loadedSubAsset))
                 }
@@ -476,7 +486,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             // Add the models
             result.models = com.badlogic.gdx.utils.Array<EffekseerParticleSubAssetLoader.Companion.Result>(false, result.modelCount)
             for (i in 0 until result.modelCount) {
-                val path = getModelFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter).path()
+                val path = getModelFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter.effekseerEffectAdapter).path()
                 val loadedSubAsset = manager.get(path, EffekseerParticleSubAssetLoader.Companion.Result::class.java)
                 result.models.add(loadedSubAsset)
             }
@@ -484,7 +494,7 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
             // Add the materials
             result.materials = com.badlogic.gdx.utils.Array<EffekseerParticleSubAssetLoader.Companion.Result>(false, result.materialCount)
             for (i in 0 until result.materialCount) {
-                val path = getMaterialFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter).path()
+                val path = getMaterialFileHandle(this.app, this.files, effectFileHandle, i, effekseerEffectAdapter.effekseerEffectAdapter).path()
                 val loadedSubAsset = manager.get(path, EffekseerParticleSubAssetLoader.Companion.Result::class.java)
                 result.materials.add(loadedSubAsset)
             }
@@ -501,9 +511,9 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
         val result = parameter.result!!
 
         // Load the sub assets needed in this effect into Effekseer
-        result.loadSubAssetsIntoEffekseer(parameter.effekseerEffectAdapter!!, this.effekseerIsMipMapEnabledDecider)
+        result.loadSubAssetsIntoEffekseer(parameter.gdxseerParticleEffect!!.effekseerEffectAdapter, this.effekseerIsMipMapEnabledDecider)
         // Set the sub asset references needed in this effect
-        result.setSubAssetsInEffect(parameter.effekseerEffectAdapter!!)
+        result.setSubAssetsInEffect(parameter.gdxseerParticleEffect!!.effekseerEffectAdapter)
 
         return parameter.result!!
     }
