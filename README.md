@@ -5,6 +5,7 @@ Currently based on versions of:
 
 * Effekseer: `1.70e`
 * libGDX: `1.12.1`
+* roboVM: `2.3.21` - used for iOS
 
 Basic example that loads, renders, and modifies the effect's color properties at runtime every few seconds:
 
