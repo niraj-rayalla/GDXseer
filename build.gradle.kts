@@ -390,6 +390,7 @@ val buildDesktopNativeLibrary: Task by tasks.creating {
     val windowsProcessFile = File("Effekseer/Dev/Cpp/Effekseer/Effekseer/Network/Effekseer.Session.cpp")
     val windowsProcessNativeSourceCode: Task by tasks.creating {
         doLast {
+            /*
             if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
                 val lines = windowsProcessFile.readLines()
                 val hasIncludeAlgorithmLine = lines.indexOf(windowsIncludeAlgorithmLine)
@@ -418,6 +419,8 @@ val buildDesktopNativeLibrary: Task by tasks.creating {
                     hasProcessedWindowsNativeSourceCode = true
                 }
             }
+
+             */
         }
     }
     dependsOn(windowsProcessNativeSourceCode)
