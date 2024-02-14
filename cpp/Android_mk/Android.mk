@@ -80,46 +80,53 @@ LOCAL_SRC_FILES += \
     $(LIB_SRC_PATH)/Model/Model.cpp \
     $(LIB_SRC_PATH)/Model/ModelLoader.cpp \
     $(LIB_SRC_PATH)/Model/SplineGenerator.cpp \
-    $(LIB_SRC_PATH)/Network/Effekseer.Client.cpp \
+    $(LIB_SRC_PATH)/Effekseer.Client.cpp \
+    $(LIB_SRC_PATH)/Effekseer.Server.cpp \
+    $(LIB_SRC_PATH)/Effekseer.Socket.cpp
+    #$(LIB_SRC_PATH)/Network/Effekseer.Client.cpp \
     $(LIB_SRC_PATH)/Network/Effekseer.Server.cpp \
     $(LIB_SRC_PATH)/Network/Effekseer.Session.cpp \
     $(LIB_SRC_PATH)/Network/Effekseer.Socket.cpp
 
 LIB_SRC_PATH := $(LOCAL_PATH)/Effekseer/Dev/Cpp/EffekseerMaterialCompiler
 LOCAL_SRC_FILES += \
-	$(LIB_SRC_PATH)/OpenGL/EffekseerMaterialCompilerGL.cpp \
 	$(LIB_SRC_PATH)/Common/ShaderGeneratorCommon.cpp \
-	$(LIB_SRC_PATH)/GLSLGenerator/ShaderGenerator.cpp
+	$(LIB_SRC_PATH)/GLSLGenerator/ShaderGenerator.cpp \
+	$(LIB_SRC_PATH)/OpenGL/EffekseerMaterialCompilerGL.cpp
 
 LIB_SRC_PATH := $(LOCAL_PATH)/Effekseer/Dev/Cpp/EffekseerRendererCommon
 LOCAL_SRC_FILES += \
     $(LIB_SRC_PATH)/EffekseerRenderer.CommonUtils.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.DDSTextureLoader.cpp \
+    $(LIB_SRC_PATH)/EffekseerRenderer.IndexBufferBase.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.ModelRendererBase.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.PngTextureLoader.cpp \
+    $(LIB_SRC_PATH)/EffekseerRenderer.RenderStateBase.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.Renderer.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.Renderer_Impl.cpp \
-    $(LIB_SRC_PATH)/EffekseerRenderer.RenderStateBase.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.RibbonRendererBase.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.RingRendererBase.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.SpriteRendererBase.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.TGATextureLoader.cpp \
     $(LIB_SRC_PATH)/EffekseerRenderer.TrackRendererBase.cpp \
-    $(LIB_SRC_PATH)/GraphicsDeviceCPU.cpp \
+    $(LIB_SRC_PATH)/EffekseerRenderer.VertexBufferBase.cpp \
     $(LIB_SRC_PATH)/ModelLoader.cpp \
     $(LIB_SRC_PATH)/TextureLoader.cpp \
+    #$(LIB_SRC_PATH)/GraphicsDeviceCPU.cpp \
     $(LIB_SRC_PATH)/VertexBuffer.cpp
 
 LIB_SRC_PATH := $(LOCAL_PATH)/Effekseer/Dev/Cpp/EffekseerRendererGL/EffekseerRenderer
 LOCAL_SRC_FILES += \
 	$(LIB_SRC_PATH)/EffekseerRendererGL.DeviceObject.cpp \
 	$(LIB_SRC_PATH)/EffekseerRendererGL.GLExtension.cpp \
-	$(LIB_SRC_PATH)/EffekseerRendererGL.GPUTimer.cpp \
+	$(LIB_SRC_PATH)/EffekseerRendererGL.IndexBuffer.cpp \
 	$(LIB_SRC_PATH)/EffekseerRendererGL.MaterialLoader.cpp \
 	$(LIB_SRC_PATH)/EffekseerRendererGL.ModelRenderer.cpp \
-	$(LIB_SRC_PATH)/EffekseerRendererGL.Renderer.cpp \
 	$(LIB_SRC_PATH)/EffekseerRendererGL.RenderState.cpp \
+	$(LIB_SRC_PATH)/EffekseerRendererGL.Renderer.cpp \
 	$(LIB_SRC_PATH)/EffekseerRendererGL.Shader.cpp \
+	$(LIB_SRC_PATH)/EffekseerRendererGL.VertexArray.cpp \
+	$(LIB_SRC_PATH)/EffekseerRendererGL.VertexBuffer.cpp \
 	$(LIB_SRC_PATH)/GraphicsDevice.cpp
 
 include $(BUILD_SHARED_LIBRARY)

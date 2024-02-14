@@ -11,7 +11,7 @@
 
 // All classes in Parameter/BasicSettings.h
 %rename("ParameterCommonValues", fullname=1) "Effekseer::ParameterCommonValues";
-%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/BasicSettings.h"
+//%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/BasicSettings.h"
 
 // ParameterEasingFloat in Parameter/Easing.h
 %rename("ParameterEasingFloat", fullname=1) "Effekseer::ParameterEasingFloat";
@@ -107,11 +107,11 @@ namespace Effekseer {
 
 // All classes/structs in Parameter/LOD.h
 %rename("ParameterLODs", fullname=1) "Effekseer::ParameterLODs";
-%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/LOD.h"
+//%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/LOD.h"
 
 // All classes/structs in Parameter/KillRules.h
 %rename("KillRulesParameter", fullname=1) "Effekseer::KillRulesParameter";
-%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/KillRules.h"
+//%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/KillRules.h"
 
 // All classes/structs in Parameter/Translation.h
 %rename("ParameterTranslationType", fullname=1) "Effekseer::ParameterTranslationType";
@@ -150,7 +150,7 @@ namespace Effekseer {
 
 // All classes/structs in Parameter/DepthParameter.h
 %rename("ParameterDepthValues", fullname=1) "Effekseer::ParameterDepthValues";
-%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/DepthParameter.h"
+//%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/DepthParameter.h"
 
 // All classes/structs in Parameter/AlphaCutoff.h
 %rename("ParameterCustomDataFixed", fullname=1) "Effekseer::ParameterCustomDataFixed";
@@ -163,7 +163,7 @@ namespace Effekseer {
 
 // All classes/structs in Parameter/Sound.h
 %rename("ParameterSound", fullname=1) "Effekseer::ParameterSound";
-%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Sound.h"
+//%include "/cpp/Effekseer/Dev/Cpp/Effekseer/Effekseer/Parameter/Sound.h"
 
 // All classes/structs in Parameter/CustomData.h
 %rename("ParameterCustomData", fullname=1) "Effekseer::ParameterCustomData";
