@@ -4,7 +4,7 @@ This is a library written in Kotlin to be used in conjunction with libGDX (https
 Currently based on versions of:
 
 * Effekseer: `1.70e`
-* libGDX: `1.12.0`
+* libGDX: `1.12.1`
 
 Basic example that loads, renders, and modifies the effect's color properties at runtime every few seconds:
 
