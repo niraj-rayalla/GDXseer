@@ -294,14 +294,16 @@ class EffekseerParticleAssetLoader: AsynchronousAssetLoader<Result, EffekseerPar
              */
             fun loadIntoEffect(effekseerManagerAdapter: EffekseerManagerAdapter, gdxseerParticleEffect: GDXseerParticleEffect, magnification: Float) {
                 try {
-                    if (this.loadedWithGDXseerParticleEffect !== gdxseerParticleEffect) {
-                        // Main file load
-                        if (!gdxseerParticleEffect.effekseerEffectAdapter.load(effekseerManagerAdapter, this.effectFileData, this.effectFileData.size, magnification)) {
-                            throw Exception("Failed to load main Effekseer particle file " + this.effectFileHandle.toString())
-                        }
+                    if (EffekseerManagerAdapter.getCPtr(effekseerManagerAdapter) != 0L) {
+                        if (this.loadedWithGDXseerParticleEffect !== gdxseerParticleEffect) {
+                            // Main file load
+                            if (!gdxseerParticleEffect.effekseerEffectAdapter.load(effekseerManagerAdapter, this.effectFileData, this.effectFileData.size, magnification)) {
+                                throw Exception("Failed to load main Effekseer particle file " + this.effectFileHandle.toString())
+                            }
 
-                        // Sub assets load
-                        setSubAssetsInEffect(gdxseerParticleEffect.effekseerEffectAdapter)
+                            // Sub assets load
+                            setSubAssetsInEffect(gdxseerParticleEffect.effekseerEffectAdapter)
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
